@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "usbprison", "usbprison.csproj", "{327DA715-2B35-5600-56D3-18FB28324AC2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{327DA715-2B35-5600-56D3-18FB28324AC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{327DA715-2B35-5600-56D3-18FB28324AC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{327DA715-2B35-5600-56D3-18FB28324AC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{327DA715-2B35-5600-56D3-18FB28324AC2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ABA99942-5951-4DB0-B60C-68B0C41F4254}
+	EndGlobalSection
+EndGlobal

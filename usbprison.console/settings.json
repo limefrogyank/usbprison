@@ -1,0 +1,34 @@
+{
+  "TrackedDevicesList": [
+    {
+      "CustomText": null,
+      "WindowsId": null,
+      "Name": "Fire",
+      "Pid": 1505,
+      "Vid": 6473,
+      "SerialNumber": "G001KT062397003L",
+      "Guid": "9b50dd7e-5cfa-45f3-8893-e47b38b81b9f",
+      "Id": "G001KT062397003L"
+    },
+    {
+      "CustomText": null,
+      "WindowsId": null,
+      "Name": "Pixel Fold",
+      "Pid": 20199,
+      "Vid": 6353,
+      "SerialNumber": "37031FDHS001HT",
+      "Guid": "2b8d335e-d3dd-4140-9f9e-f0ff3ffe1568",
+      "Id": "37031FDHS001HT"
+    },
+    {
+      "CustomText": null,
+      "WindowsId": null,
+      "Name": "Unknown",
+      "Pid": 20199,
+      "Vid": 6353,
+      "SerialNumber": null,
+      "Guid": "fbfcf233-9d3a-4263-b663-5801d42d7103",
+      "Id": "6353:20199"
+    }
+  ]
+}

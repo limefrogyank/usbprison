@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:PageBase
+    x:Class="usbprison.maui.Pages.DevicesView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:usbprison.maui.Pages"
+    xmlns:model="clr-namespace:usbprison;assembly=usbprison.lib"
+    xmlns:rxui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
+    xmlns:sflist="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+    xmlns:vm="clr-namespace:usbprison;assembly=usbprison.lib"
+    Title="Live Devices"
+    x:DataType="{x:Type vm:DevicesViewModel}"
+    x:TypeArguments="vm:DevicesViewModel">
+    <Grid ColumnDefinitions="2*,3*" RowDefinitions="*,Auto">
+        <Label Grid.Row="1" Text="test" />
+        <sflist:SfListView
+            ItemsSource="{Binding Devices}"
+            SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
+            SelectionMode="Single">
+            <sflist:SfListView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Margin="5">
+                        <Label Text="{Binding Name}" />
+                        <Label Text="{Binding SerialNumber}" />
+                    </StackLayout>
+                </DataTemplate>
+            </sflist:SfListView.ItemTemplate>
+        </sflist:SfListView>
+        <rxui:ViewModelViewHost Grid.Column="1" ViewModel="{Binding SingleDeviceViewModel}" />
+        <!--<local:SingleDeviceView Grid.Column="1" ViewModel="{Binding SingleDeviceViewModel, Mode=OneWay}" />-->
+
+    </Grid>
+</local:PageBase>

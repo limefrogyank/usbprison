@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:ViewBase
+    x:Class="usbprison.maui.Pages.SingleDeviceView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:usbprison.maui.Pages"
+    xmlns:model="clr-namespace:usbprison;assembly=usbprison.lib"
+    xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Converters;assembly=CommunityToolkit.Maui"
+    xmlns:vm="clr-namespace:usbprison;assembly=usbprison.lib"
+    x:DataType="vm:SingleDeviceViewModel"
+    x:TypeArguments="vm:SingleDeviceViewModel">
+    <local:ViewBase.Resources>
+        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+    </local:ViewBase.Resources>
+    <VerticalStackLayout>
+        <Label Text="{Binding Device.Name}" />
+        <Label Text="{Binding Device.Vid}" />
+        <Label Text="{Binding Device.Pid}" />
+        <Label Text="{Binding Device.SerialNumber}" />
+
+        <Label Text="Readable Label:" />
+        <Entry Text="{Binding CustomText, Mode=TwoWay}" />
+
+        <Button
+            Command="{Binding ActivateDeviceCommand}"
+            IsVisible="{Binding IsDeviceTracked, Converter={StaticResource InvertedBoolConverter}}"
+            Text="Track Device on Tracking Tab" />
+        <Button
+            Command="{Binding DeactivateDeviceCommand}"
+            IsVisible="{Binding IsDeviceTracked}"
+            Text="Untrack Device" />
+    </VerticalStackLayout>
+</local:ViewBase>

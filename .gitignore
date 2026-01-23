@@ -1,0 +1,10 @@
+.vs
+usbprison.console/.vscode
+usbprison.console/bin
+usbprison.console/obj
+usbprison.console/logs
+usbprison.lib/bin
+usbprison.lib/obj
+usbprison.maui/bin
+usbprison.maui/obj
+

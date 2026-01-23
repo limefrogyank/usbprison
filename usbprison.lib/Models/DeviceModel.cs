@@ -1,0 +1,67 @@
+namespace usbprison
+{
+    public class TrackedDeviceModel : DeviceModel
+    {
+        public TrackedDeviceModel() { }
+        public TrackedDeviceModel(DeviceModel device) 
+        {
+            WindowsId = device.WindowsId;
+            Name = device.Name;
+            Pid = device.Pid;
+            Vid = device.Vid;
+            SerialNumber = device.SerialNumber;
+        }
+        public string? CustomText { get; set; }
+    }
+
+    public class DeviceModel
+    {
+        public string? WindowsId { get; set; }
+        public string Name { get; set; }
+        public ushort Pid { get; set; }
+        public ushort Vid { get; set; }
+        public string? SerialNumber { get; set; }
+
+
+        public string Guid => System.Guid.NewGuid().ToString();
+
+        public string Id
+        {
+            get
+            {
+                if (WindowsId!= null)
+                {
+                    return WindowsId;
+                }
+                else if (SerialNumber != null)
+                {
+                    return SerialNumber;
+                }
+                else if (Pid != 0 && Vid != 0)
+                {
+                    return $"{Vid}:{Pid}";
+                }
+                else
+                {
+                    return Guid;
+                }
+            }
+        }
+
+        public DeviceModel()
+        {
+            Name = "Unknown Device";
+            Pid = 0;
+            Vid = 0;
+            SerialNumber = null;
+        }
+
+        public DeviceModel(string name, ushort pid, ushort vid, string? serialNumber)
+        {
+            Name = name;
+            Pid = pid;
+            Vid = vid;
+            SerialNumber = serialNumber;
+        }
+    }
+}
