@@ -21,98 +21,160 @@ namespace usbprison
     using ReactiveMarbles.ObservableEvents;
     using System.Reactive;
     using ReactiveUI.SourceGenerators;
+    using Splat;
 
     public partial class SingleDeviceView : ReactiveFrameView<SingleDeviceViewModel>
     {
         readonly CompositeDisposable _disposable = new CompositeDisposable();
         private DeviceListView deviceListView = new DeviceListView();
-        //private ObservableCollection<string> data = new ObservableCollection<string> { "Device 1", "Device 2", "Device 3" };
-        //public ObservableCollection<DeviceModel> Devices = new ObservableCollection<DeviceModel>();
-        //        private Terminal.Gui.Views.Label label;
-        //      private Terminal.Gui.Views.Button button1;
 
         private Terminal.Gui.Views.ListView listView = new ListView();
-        private TextField custom;
+        private Label _vid;
+        private Label _name;
+        private Label _pid;
+        private Label _serial;
+        private TextField _custom;
+        private Button _enableButton;
+        private Button _disableButton;
 
         public SingleDeviceView()
         {
             //ViewModel = viewModel;
             InitializeComponent();
 
+            // var test = _activationFetcherCache;
+            // var test2 = AppLocator.Current
+            //            .GetServices<IActivationForViewFetcher?>()
+            //            .Aggregate((count: 0, viewFetcher: default(IActivationForViewFetcher?)), (acc, x) =>
+            //            {
+            //                var score = x?.GetAffinityForView(this.GetType()) ?? 0;
+            //                return score > acc.count ? (score, x) : acc;
+            //            });
             // DOESN'T WORK
             this.WhenActivated(disposables =>
             {
                 // Bindings go here
-                Globals.App.Invoke(() =>
-                {
-                    Terminal.Gui.Views.MessageBox.Query(Globals.App, "3333", "Register 3333 clicked!", "Ok");
-                });
+                // Globals.App.Invoke(() =>
+                // {
+                //     Terminal.Gui.Views.MessageBox.Query(Globals.App, "3333", "Register 3333 clicked!", "Ok");
+                // });
+                this.WhenAnyValue(x=>x.ViewModel.Device.Name).Select(x=> $"Device Details - {x}").BindTo(this, x=>x.Title).DisposeWith(disposables);
+                //this.Title = $"Device Details - {ViewModel!.Device.Name}";
+
+                this.WhenAnyValue(x=>x.ViewModel!.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(_name, view=> view.Text).DisposeWith(disposables);
+                this.WhenAnyValue(x=>x.ViewModel!.Device.Vid).Select(x => "VID: " + (x != 0 ? x.ToString() : "")).BindTo(_vid, view=> view.Text).DisposeWith(disposables);
+                this.WhenAnyValue(x=>x.ViewModel!.Device.Pid).Select(x => "PID: " + (x != 0 ? x.ToString() : "")).BindTo(_pid, view=> view.Text).DisposeWith(disposables);
+                this.WhenAnyValue(x=>x.ViewModel!.Device.SerialNumber).Select(x => "Serial: " + (x != null ? x : "")).BindTo(_serial, view=> view.Text).DisposeWith(disposables);
+                this.WhenAnyValue(x=>x.ViewModel!.CustomText).BindTo(_custom, view=> view.Text).DisposeWith(disposables);
+                
+                this.WhenAnyValue(x => x.ViewModel!.IsDeviceTracked).Select(x => !x).BindTo(_enableButton, x => x.Visible).DisposeWith(disposables);
+                _enableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x =>x.ViewModel!.ActivateDeviceCommand).DisposeWith(disposables);
+                this.WhenAnyValue(x => x.ViewModel!.IsDeviceTracked).BindTo(_disableButton, x => x.Visible).DisposeWith(disposables);
+                _disableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x => x.ViewModel!.DeactivateDeviceCommand).DisposeWith(disposables);
+
             });
 
+            this.Activated.Subscribe(x =>
+            {
+                Log.Information("SingleDeviceView Activated");
+            });
+
+            this.Activate();
         }
+
+        public override void Activate()
+        {
+            base.Activate();
+        }
+
+
+        // private static readonly MemoizingMRUCache<Type, IActivationForViewFetcher?> _activationFetcherCache =
+        // new(
+        //     (t, _) =>
+        //         AppLocator.Current
+        //                .GetServices<IActivationForViewFetcher?>()
+        //                .Aggregate((count: 0, viewFetcher: default(IActivationForViewFetcher?)), (acc, x) =>
+        //                {
+        //                    var score = x?.GetAffinityForView(t) ?? 0;
+        //                    return score > acc.count ? (score, x) : acc;
+        //                }).viewFetcher,
+        //     64);
 
         private void InitializeComponent()
         {
-            var condition = this.WhenAnyValue(x=>x.ViewModel).WhereNotNull();
-            condition.Subscribe(x => {
-                this.Title = $"Device Details - {x.Device.Name}";
-            }).DisposeWith(_disposable);
+            // var condition = this.WhenAnyValue(x=>x.ViewModel).WhereNotNull();
+            // condition.Subscribe(x => {
+            //     this.Title = $"Device Details - {x.Device.Name}";
+
+            //     this.WhenAnyValue(x=>x.ViewModel!.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(_name, view=> view.Text).DisposeWith(_disposable);
+            //     this.WhenAnyValue(x=>x.ViewModel!.Device.Vid).Select(x => "VID: " + (x != 0 ? x.ToString() : "")).BindTo(_vid, view=> view.Text).DisposeWith(_disposable);
+            //     this.WhenAnyValue(x=>x.ViewModel!.Device.Pid).Select(x => "PID: " + (x != 0 ? x.ToString() : "")).BindTo(_pid, view=> view.Text).DisposeWith(_disposable);
+            //     this.WhenAnyValue(x=>x.ViewModel!.Device.SerialNumber).Select(x => "Serial: " + (x != null ? x : "")).BindTo(_serial, view=> view.Text).DisposeWith(_disposable);
+            //     this.WhenAnyValue(x=>x.ViewModel!.CustomText).BindTo(_custom, view=> view.Text).DisposeWith(_disposable);
+                
+            //     this.WhenAnyValue(x => x.ViewModel!.IsDeviceTracked).Select(x => !x).BindTo(_enableButton, x => x.Visible).DisposeWith(_disposable);
+            //     _enableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x =>x.ViewModel!.ActivateDeviceCommand).DisposeWith(_disposable);
+            //     this.WhenAnyValue(x => x.ViewModel!.IsDeviceTracked).BindTo(_disableButton, x => x.Visible).DisposeWith(_disposable);
+            //     _disableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x => x.ViewModel!.DeactivateDeviceCommand).DisposeWith(_disposable);
+
+
+            // }).DisposeWith(_disposable);
             
-            var name = new Terminal.Gui.Views.Label();
-            name.Y = 1;
-            name.Text = "TEST";
-            condition.Select(x=>x.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(name, x => x.Text).DisposeWith(_disposable);
+            _name = new Terminal.Gui.Views.Label();
+            _name.Y = 1;
+            _name.Text = "TEST";
+            //condition.Select(x=>x.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(name, x => x.Text).DisposeWith(_disposable);
 
 
             //.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(name, x => x.Text).DisposeWith(_disposable);
-            var vid = new Terminal.Gui.Views.Label();
-            vid.Y = 2;
-            condition.Select(x => x.Device.Vid).Select(x => "VID: " + (x != 0 ? x.ToString() : "")).BindTo(vid, x => x.Text).DisposeWith(_disposable);
+            _vid = new Terminal.Gui.Views.Label();
+            _vid.Y = 2;
+           // condition.Select(x => x.Device.Vid).Select(x => "VID: " + (x != 0 ? x.ToString() : "")).BindTo(vid, x => x.Text).DisposeWith(_disposable);
             //this.WhenAnyValue(x => x.ViewModel.Device.Vid).Select(x => "VID: " + (x != 0 ? x.ToString() : "")).BindTo(vid, x => x.Text).DisposeWith(_disposable);
             
-            var pid = new Terminal.Gui.Views.Label();
-            pid.Y = 3;
+            _pid = new Terminal.Gui.Views.Label();
+            _pid.Y = 3;
             //this.WhenAnyValue(x => x.ViewModel.Device.Pid).Select(x => "PID: " + (x != 0 ? x.ToString() : "")).BindTo(pid, x => x.Text).DisposeWith(_disposable);
-            condition.Select(x => x.Device.Pid).Select(x => "PID: " + (x != 0 ? x.ToString() : "")).BindTo(pid, x => x.Text).DisposeWith(_disposable);
+            //condition.Select(x => x.Device.Pid).Select(x => "PID: " + (x != 0 ? x.ToString() : "")).BindTo(pid, x => x.Text).DisposeWith(_disposable);
             
-            var serial = new Terminal.Gui.Views.Label();
-            serial.Y = 4;
-            condition.Select(x => x.Device.SerialNumber).Select(x => "Serial: " + (x != null ? x : "")).BindTo(serial, x => x.Text).DisposeWith(_disposable);
+            _serial = new Terminal.Gui.Views.Label();
+            _serial.Y = 4;
+            //condition.Select(x => x.Device.SerialNumber).Select(x => "Serial: " + (x != null ? x : "")).BindTo(serial, x => x.Text).DisposeWith(_disposable);
 
-            custom = new Terminal.Gui.Views.TextField();
-            custom.Y = 5;
-            custom.Width = Dim.Fill();
+            _custom = new Terminal.Gui.Views.TextField();
+            _custom.Y = 5;
+            _custom.Width = Dim.Fill();
             //condition.Select(x => x.Device.CustomText).Select(x => "Serial: " + (x != null ? x : "")).BindTo(serial, x => x.Text).DisposeWith(_disposable);
-            custom.TextChanged += (sender, args) =>
+            _custom.TextChanged += (sender, args) =>
             {
                 if (ViewModel != null)
                 {
-                    ViewModel.CustomText = custom.Text.ToString();
+                    ViewModel.CustomText = _custom.Text.ToString();
                 }
             };
 
 
 
-            var button = new Terminal.Gui.Views.Button();
-            button.Y = 6;
-            button.Text = "Track Device on Main Screen";
-            condition.Select(x=>x.IsDeviceTracked).Select(x => !x).BindTo(button, x => x.Visible).DisposeWith(_disposable);
-//            this.WhenAnyValue(x => x.ViewModel.IsDeviceTracked).Select(x => !x).BindTo(button, x => x.Visible).DisposeWith(_disposable);
+            _enableButton = new Terminal.Gui.Views.Button();
+            _enableButton.Y = 6;
+            _enableButton.Text = "Track Device on Main Screen";
+            //this.OneWayBind(ViewModel, vm=> vm.IsDeviceTracked, view=> button.Visible).DisposeWith(_disposable);
+            //this.WhenAnyValue(x => x.ViewModel.IsDeviceTracked).Select(x => !x).BindTo(button, x => x.Visible).DisposeWith(_disposable);
             //button.Accepting += (sender, args) => {};
-            button.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x => x.ViewModel.ActivateDeviceCommand);
+            
 
-            var button2 = new Terminal.Gui.Views.Button();
-            button2.Y = 7;
-            button2.Text = "Untrack Device ";
-            condition.Select(x => x.IsDeviceTracked).BindTo(button2, x => x.Visible).DisposeWith(_disposable);
+            _disableButton = new Terminal.Gui.Views.Button();
+            _disableButton.Y = 6;
+            _disableButton.Text = "Untrack Device ";
+            //condition.Select(x => x.IsDeviceTracked).BindTo(button2, x => x.Visible).DisposeWith(_disposable);
+            //this.OneWayBind(ViewModel, vm=> vm.IsDeviceTracked, view=> button2.Visible).DisposeWith(_disposable);
             //this.WhenAnyValue(x => x.ViewModel.IsDeviceTracked).BindTo(button2, x => x.Visible).DisposeWith(_disposable);
             //button.Accepting += (sender, args) => {};
-            button2.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x => x.ViewModel.DeactivateDeviceCommand);
+            
 
 
 
-
-            this.Add(name, vid, pid, serial, custom, button, button2);
+            this.Add(_name, _vid, _pid, _serial, _custom, _enableButton, _disableButton);
         }
 
         private void OnRegisterDevice()

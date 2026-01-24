@@ -55,7 +55,7 @@ namespace usbprison
             ViewModel.WhenAnyValue(x => x.TrackedDevices)
                 .Select(x =>
                 {
-                    var collection = new CollectionEx<TrackedDeviceViewModel>(x, s => s.Device.Name + (s.IsPluggedIn ? " (Plugged In)" : ""));
+                    var collection = new CollectionEx<TrackedDeviceViewModel>(x, s => (s.DisplayName ?? s.Device.Name) + (s.IsPluggedIn ? " (Plugged In)" : ""));
                     return collection;
                 })
 

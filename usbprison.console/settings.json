@@ -1,13 +1,13 @@
 {
   "TrackedDevicesList": [
     {
-      "CustomText": null,
+      "CustomText": "Aurelie\u0027s Fire",
       "WindowsId": null,
       "Name": "Fire",
       "Pid": 1505,
       "Vid": 6473,
       "SerialNumber": "G001KT062397003L",
-      "Guid": "9b50dd7e-5cfa-45f3-8893-e47b38b81b9f",
+      "Guid": "556c995c-7887-4068-b08a-bfb441ecc260",
       "Id": "G001KT062397003L"
     },
     {
@@ -17,18 +17,8 @@
       "Pid": 20199,
       "Vid": 6353,
       "SerialNumber": "37031FDHS001HT",
-      "Guid": "2b8d335e-d3dd-4140-9f9e-f0ff3ffe1568",
+      "Guid": "d75fb2e6-92bc-4998-b37e-56d2dd57decf",
       "Id": "37031FDHS001HT"
-    },
-    {
-      "CustomText": null,
-      "WindowsId": null,
-      "Name": "Unknown",
-      "Pid": 20199,
-      "Vid": 6353,
-      "SerialNumber": null,
-      "Guid": "fbfcf233-9d3a-4263-b663-5801d42d7103",
-      "Id": "6353:20199"
     }
   ]
 }

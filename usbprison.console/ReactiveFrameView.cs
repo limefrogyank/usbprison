@@ -58,7 +58,7 @@ namespace usbprison
         {
         }
 
-        public virtual void Dispose()
+        public new virtual void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -81,7 +81,7 @@ namespace usbprison
                     .RefCount(2);
 
             viewModelChanged
-                .Skip(1) // Skip the initial value to avoid unnecessary re-render when ViewModel changes
+                //.Skip(1) // Skip the initial value to avoid unnecessary re-render when ViewModel changes
                 .Subscribe(_ => this.SetNeedsDraw())
                 .DisposeWith(_compositeDisposable);
 
@@ -97,7 +97,10 @@ namespace usbprison
                             eh => x.PropertyChanged += eh,
                             eh => x.PropertyChanged -= eh))
                 .Switch()
-                .Subscribe(_ => this.SetNeedsDraw())
+                .Subscribe(_ => 
+                {
+                    this.SetNeedsDraw();    
+                })
                 .DisposeWith(_compositeDisposable);
         }
 

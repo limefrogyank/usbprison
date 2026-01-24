@@ -15,6 +15,7 @@ using System.Reflection;
 using Microsoft.JavaScript.NodeApi.Runtime;
 using Microsoft.JavaScript.NodeApi;
 using usbprison.lib.Services;
+using ReactiveUI.TerminalGui;
 //using Splat.Serilog;
 
 
@@ -46,7 +47,8 @@ using (Globals.App)
     RxApp.MainThreadScheduler = TerminalScheduler.Default;
     RxApp.TaskpoolScheduler = TaskPoolScheduler.Default;
     //Splat.Locator.CurrentMutable.UseSerilogFullLogger();
-    Splat.Locator.CurrentMutable.Register<IActivationForViewFetcher>(() => new CanActivateViewFetcher());
+    Splat.Locator.CurrentMutable.UnregisterAll<IActivationForViewFetcher>();
+    Splat.Locator.CurrentMutable.RegisterConstant<IActivationForViewFetcher>(new ActivationForViewFetcher());
     Splat.Locator.CurrentMutable.RegisterConstant<UDPService>(new UDPService());
     Splat.Locator.CurrentMutable.RegisterConstant<DebugService>(new DebugService());
     Splat.Locator.CurrentMutable.RegisterConstant<IUSBService>(new USBService());

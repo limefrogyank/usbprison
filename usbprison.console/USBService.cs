@@ -47,7 +47,7 @@ namespace usbprison
 
             _deviceEvents.Subscribe(ev =>
             {
-                Log.Information("USB Event: " + ev);
+                //Log.Information("USB Event: " + ev);
             });
         }
 

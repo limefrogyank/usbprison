@@ -6,6 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="C:\Users\leemc\.nuget\packages\microsoft.javascript.nodeapi\0.9.18\contentFiles\any\net9.0\import.cjs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="LibUsbDotNet" Version="3.0.167-alpha" />
     <PackageReference Include="Microsoft.JavaScript.LibNode" Version="20.1800.215" />
     <PackageReference Include="Microsoft.JavaScript.NodeApi" Version="0.9.18" />
@@ -22,6 +25,15 @@
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     <!-- <PackageReference Include="Splat.Serilog" Version="19.2.1" /> -->
     <PackageReference Include="Terminal.Gui" Version="2.0.0-develop.4761" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="C:\Users\leemc\.nuget\packages\microsoft.javascript.libnode.win-x64\20.1800.215\runtimes\win-x64\native\libnode.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="C:\Users\leemc\.nuget\packages\microsoft.javascript.libnode.win-x64\20.1800.215\runtimes\win-x64\native\libnode.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="C:\Users\leemc\.nuget\packages\microsoft.javascript.libnode.win-x64\20.1800.215\runtimes\win-x64\native\libnode.dll" />
   </ItemGroup>
 
 <ItemGroup>
