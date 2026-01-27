@@ -88,7 +88,7 @@ namespace usbprison
 
             this.Add(singleDeviceView);
 
-            listView.Events().SelectedItemChanged.Select(x => x.Item).InvokeCommand(this, x => x.ViewModel.ListViewSelectionChangedCommand);
+            listView.Events().ValueChanged.Select(x => x.NewValue).InvokeCommand(this, x => x.ViewModel.ListViewSelectionChangedCommand);
 
 
 

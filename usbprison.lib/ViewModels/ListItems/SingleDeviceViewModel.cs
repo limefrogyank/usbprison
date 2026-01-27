@@ -1,7 +1,6 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
-using LibUsbDotNet;
 using ReactiveUI;
 using ReactiveUI.SourceGenerators;
 

@@ -22,9 +22,10 @@ namespace usbprison
             InitializeComponent();
             
             // Handle selection change
-            listView.SelectedItemChanged += (sender, args) =>
+            listView.ValueChanged += (sender, args) =>
             {
-                this.Title = $"Selected: {data[args.Item.Value]}";
+                if (args.NewValue.HasValue)
+                    this.Title = $"Selected: {data[args.NewValue.Value]}";
             };
         }
 
@@ -60,7 +61,7 @@ namespace usbprison
             
             data = new ObservableCollection<string>{"Device 1", "Device 2", "Device 3"};
             this.listView.SetSource(data);
-            listView.SelectedItemChanged += (s, e) => { };
+            
             this.Add(this.listView);
             
             

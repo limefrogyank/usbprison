@@ -81,6 +81,8 @@ namespace usbprison
 
         public bool SuspendCollectionChangedEvent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        public int MaxItemLength => 80;
+
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         public void Dispose()
