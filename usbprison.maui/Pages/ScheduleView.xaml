@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:PageBase
+    x:Class="usbprison.maui.Pages.ScheduleView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:usbprison.maui.Pages"
+    xmlns:model="clr-namespace:usbprison;assembly=usbprison.lib"
+    xmlns:sflist="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+    xmlns:vm="clr-namespace:usbprison;assembly=usbprison.lib"
+    Title="Schedule"
+    x:DataType="vm:ScheduleViewModel"
+    x:TypeArguments="vm:ScheduleViewModel">
+    <Grid>
+        <CollectionView ItemsSource="{Binding DailySchedules}" SelectionMode="None">
+            <CollectionView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid Padding="0,0,0,20" ColumnDefinitions="*,2*,2*">
+                        <Label FontAttributes="Bold" Text="Day of Week" />
+                        <Label
+                            Grid.Column="1"
+                            FontAttributes="Bold"
+                            Text="Lockdown Start" />
+                        <Label
+                            Grid.Column="2"
+                            FontAttributes="Bold"
+                            Text="Lockdown End" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.HeaderTemplate>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:DailyScheduleViewModel">
+                    <Grid ColumnDefinitions="*,2*,2*">
+                        <Label Text="{Binding DayOfWeek}" />
+                        <TimePicker Grid.Column="1" Time="{Binding StartTime, Mode=TwoWay}" />
+                        <TimePicker Grid.Column="2" Time="{Binding EndTime, Mode=TwoWay}" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</local:PageBase>

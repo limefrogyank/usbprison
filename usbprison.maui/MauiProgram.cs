@@ -9,9 +9,8 @@ using Splat;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using System.Reactive.Concurrency;
+using usbprison.lib.Models;
 using usbprison.lib.Services;
-using usbprison.maui.Pages;
-using usbprison.maui.Services;
 
 namespace usbprison.maui
 {
@@ -49,27 +48,33 @@ namespace usbprison.maui
     		builder.Logging.AddDebug();
     		builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
-            Locator.CurrentMutable.RegisterConstant<UDPService>(new UDPService());
-#if WINDOWS
+            var settingsService = new SettingsService(true);
+            Locator.CurrentMutable.RegisterConstant<ISettingsService>(settingsService);
+            var deviceInfo = new GenericDeviceInfo
+            {
+                Name = DeviceInfo.Name,
+                Manufacturer = DeviceInfo.Manufacturer,
+                Model = DeviceInfo.Model,
+                Version = DeviceInfo.VersionString,
+                Platform = DeviceInfo.Platform.ToString(),
+                Idiom = DeviceInfo.Idiom.ToString(),
+                DeviceType = DeviceInfo.DeviceType.ToString()
 
-            Locator.CurrentMutable.RegisterConstant<IUSBService>(new USBService());
+            };
+            var udpService = new UDPService(deviceInfo);
+            Locator.CurrentMutable.RegisterConstant<UDPService>(udpService);
+#if WINDOWS
+            var usbService = new USBService();
+            Locator.CurrentMutable.RegisterConstant<IUSBService>(usbService);
+            Locator.CurrentMutable.RegisterConstant<BroadcastService>( new BroadcastService(settingsService, udpService));
 #endif
+
             
-            Locator.CurrentMutable.RegisterConstant<ISettingsService>( new SettingsService(true));
 
 #if !WINDOWS
             builder.Services.AddNotifications();
-            //builder.Services.AddJob(ReceiveUDPJob.Job);
 #endif
-            //builder.Services.AddSingleton<ProjectRepository>();
-            //builder.Services.AddSingleton<TaskRepository>();
-            //builder.Services.AddSingleton<CategoryRepository>();
-            //builder.Services.AddSingleton<TagRepository>();
-            //builder.Services.AddSingleton<SeedDataService>();
-            //builder.Services.AddSingleton<ModalErrorHandler>();
-            //builder.Services.AddSingleton<MainPageModel>();
-            //builder.Services.AddSingleton<ProjectListPageModel>();
-            //builder.Services.AddSingleton<ManageMetaPageModel>();
+
 
             Log.Logger = new LoggerConfiguration()
                  .MinimumLevel.Verbose() // Verbose includes Trace and Debug
@@ -81,10 +86,12 @@ namespace usbprison.maui
             .WithViewsFromAssembly(typeof(App).Assembly)
             .WithRegistration(locator =>
             {
+#if WINDOWS
                 locator.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
                 locator.RegisterLazySingleton<DevicesViewModel>(()=> new DevicesViewModel());
                 locator.RegisterLazySingleton<TrackingViewModel>(() => new TrackingViewModel());
-
+                locator.RegisterLazySingleton<ScheduleViewModel>(() => new ScheduleViewModel());
+#endif
                 locator.RegisterLazySingleton<ReceiverViewModel> (()=> new ReceiverViewModel());
                 locator.RegisterLazySingleton<LogViewModel>(() => new LogViewModel());
                 //locator.RegisterViewForViewModel<RootPage,RootViewModel>();

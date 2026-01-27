@@ -27,12 +27,14 @@ namespace usbprison.lib.Services
         private Subject<string> _notificationSubject = new Subject<string>();
         public IObservable<string> NotificationReceived => _notificationSubject.AsObservable();
 
-        private Subject<List<TrackedDeviceModel>> _lastestDevicesSubject = new Subject<List<TrackedDeviceModel>>();
-        public IObservable<List<TrackedDeviceModel>> LastestDevicesReceived => _lastestDevicesSubject.AsObservable();
+        private Subject<List<SimpleTrackedDeviceViewModel>> _lastestDevicesSubject = new Subject<List<SimpleTrackedDeviceViewModel>>();
+        public IObservable<List<SimpleTrackedDeviceViewModel>> LastestDevicesReceived => _lastestDevicesSubject.AsObservable();
 
+        private GenericDeviceInfo _deviceInfo;
 
-        public UDPService()
+        public UDPService(GenericDeviceInfo info)
         {
+            _deviceInfo = info;
             //_udpClient = new System.Net.Sockets.UdpClient(UDPService.PORT);
             _mainEndpoint = new IPEndPoint(IPAddress.Broadcast, UDPService.MainPort);
             _backgroundEndpoint = new IPEndPoint(IPAddress.Broadcast, UDPService.BackgroundPort);
@@ -64,7 +66,9 @@ namespace usbprison.lib.Services
                                 _notificationSubject.OnNext(udpmessage.Message ?? "");
                                 break;
                             case UDPMessageType.List:
-                                _lastestDevicesSubject.OnNext(udpmessage.PluggedDevices ?? new List<TrackedDeviceModel>());
+                                var plugged = udpmessage.PluggedDevices?.Select(x => new SimpleTrackedDeviceViewModel(x, true, udpmessage.SenderId)).ToList() ?? new List<SimpleTrackedDeviceViewModel>();
+                                var unplugged = udpmessage.MissingDevices?.Select(x => new SimpleTrackedDeviceViewModel(x, false, udpmessage.SenderId)).ToList() ?? new List<SimpleTrackedDeviceViewModel>();
+                                _lastestDevicesSubject.OnNext(plugged.Concat(unplugged).ToList());
                                 break;
                             default:
                                 break;
@@ -131,6 +135,8 @@ namespace usbprison.lib.Services
         {
             try
             {
+                //add on deviceinfo before sending message
+                message.SenderId = string.Join(',', _deviceInfo.Name, _deviceInfo.Version);
                 byte[] data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
                 using var udpClient = new UdpClient() { EnableBroadcast = true };
                 switch (message.MessageType)

@@ -36,7 +36,7 @@ namespace usbprison
             set => ViewModel = (DevicesViewModel)value;
 #pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         }
-
+        
         public DevicesView(DevicesViewModel viewModel)
         {
             ViewModel = viewModel;

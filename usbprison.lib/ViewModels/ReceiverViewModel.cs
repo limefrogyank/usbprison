@@ -13,6 +13,7 @@ using System.Text;
 using usbprison.lib.Models;
 using Serilog;
 using usbprison.lib.Services;
+using DynamicData.Binding;
 
 namespace usbprison
 {
@@ -22,9 +23,10 @@ namespace usbprison
 
         [ObservableAsProperty] private string _latestMessage = string.Empty;
 
-        SourceCache<TrackedDeviceModel, string> _devicesCache = new SourceCache<TrackedDeviceModel,string>(x=>x.Id);
+        SourceCache<SimpleTrackedDeviceViewModel, string> _devicesCache = new SourceCache<SimpleTrackedDeviceViewModel, string>(x=>x.Device.Id);
 
         public ReadOnlyObservableCollection<SimpleTrackedDeviceViewModel> Devices { get; }
+        public ReadOnlyObservableCollection<GroupedItems<SimpleTrackedDeviceViewModel,string,bool>> GroupedDevices { get; }
 
         private readonly Interaction<UDPMessage, Task> testNotification = new Interaction<UDPMessage, Task>();
         public Interaction<UDPMessage, Task> TestNotification => this.testNotification;
@@ -34,24 +36,27 @@ namespace usbprison
             _udpService = udpservice!;
 
             _devicesCache.Connect()
-                .Transform(x=> new SimpleTrackedDeviceViewModel(x))
+                .Group(x=>x.InPrison)
+                .Transform(x=>new GroupedItems<SimpleTrackedDeviceViewModel,string, bool>(x.Key ? "In Prison" : "Free", x, RxSchedulers.MainThreadScheduler))
                 .ObserveOn(RxSchedulers.MainThreadScheduler)
-                .Bind(out var devices)
+                .SortAndBind(out var devices, SortExpressionComparer<GroupedItems<SimpleTrackedDeviceViewModel, string,bool>>.Descending(x=>x.Name))
                 .Subscribe();
-            Devices = devices;
+            GroupedDevices = devices;
             Log.Information("ReceiverViewModel initialized");
             _latestMessageHelper = _udpService.NotificationReceived.ObserveOn(RxSchedulers.MainThreadScheduler).ToProperty(this, x => x.LatestMessage);
 
-            _udpService.LastestDevicesReceived.ObserveOn(RxSchedulers.MainThreadScheduler).Subscribe(async devicesPresent =>
+            _udpService.LastestDevicesReceived.ObserveOn(RxSchedulers.MainThreadScheduler).Subscribe(async devices =>
             {
+               
                 var lastDevices = _devicesCache.Items;
-                var toRemove = lastDevices.Where(ed => !devicesPresent.Any(dp => dp.Id == ed.Id)).ToList();
-                var toAdd = devicesPresent.Where(ed => !lastDevices.Any(ld => ld.Id == ed.Id)).ToList();
-                _devicesCache.Edit(updater =>
-                {
-                    updater.RemoveKeys(toRemove.Select(ed => ed.Id));
-                    updater.AddOrUpdate(toAdd);
-                });
+                //var toRemove = lastDevices.Where(ed => !devices.Any(dp => dp.Id == ed.Id)).ToList();
+                //var toAdd = devices.Where(ed => !lastDevices.Any(ld => ld.Id == ed.Id)).ToList();
+                //_devicesCache.Edit(updater =>
+                //{
+                //    updater.RemoveKeys(toRemove.Select(ed => ed.Id));
+                //    updater.AddOrUpdate(toAdd);
+                //});
+                _devicesCache.AddOrUpdate(devices);
 
                 //RxSchedulers.MainThreadScheduler.Schedule("TEST", (x,y) =>
                 //{

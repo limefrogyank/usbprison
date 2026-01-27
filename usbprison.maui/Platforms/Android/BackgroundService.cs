@@ -50,7 +50,18 @@ namespace usbprison.maui.Platforms.Android
 
         private  async Task<Result> RunAsyncTask()
         {
-            var udpService = new usbprison.lib.Services.UDPService();
+            var deviceInfo = new GenericDeviceInfo
+            {
+                Name = DeviceInfo.Name,
+                Manufacturer = DeviceInfo.Manufacturer,
+                Model = DeviceInfo.Model,
+                Version = DeviceInfo.VersionString,
+                Platform = DeviceInfo.Platform.ToString(),
+                Idiom = DeviceInfo.Idiom.ToString(),
+                DeviceType = DeviceInfo.DeviceType.ToString()
+
+            };
+            var udpService = new usbprison.lib.Services.UDPService(deviceInfo);
             var cts = new CancellationTokenSource();
             var message = await udpService.ListenOnceAsync(cts.Token);
 

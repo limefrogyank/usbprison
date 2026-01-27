@@ -1,0 +1,20 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://aka.ms/vscode-debugger
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/usbprison.console/bin/Debug/net10.0/usbprison.exe", // Adjust the path and framework version if needed
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "externalTerminal"
+        }
+    ]
+}

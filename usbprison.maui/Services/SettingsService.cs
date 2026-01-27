@@ -5,54 +5,62 @@ using ReactiveUI;
 
 namespace usbprison
 {
-    public partial class SettingsService : ReactiveObject, ISettingsService
+    public partial class SettingsService : SettingsServiceBase
     {
-        //public bool StartMinimized { get; set; } = false;
-        //public bool CloseToTray { get; set; } = true;
-        //public bool MinimizeToTray { get; set; } = true;
-        //public bool ShowNotifications { get; set; } = true;
+       
+        //[JsonIgnore] public SourceCache<DailySchedule, DayOfWeek> DailySchedule { get; } = new SourceCache<DailySchedule, DayOfWeek>(x => x.DayOfWeek);
+        //public List<DailySchedule> DailyScheduleList
+        //{
+        //    get => DailySchedule.Items.ToList();
+        //    set
+        //    {
+        //        DailySchedule.Clear();
+        //        foreach (var item in value)
+        //        {
+        //            DailySchedule.AddOrUpdate(item);
+        //        }
+        //    }
+        //}
 
-        [JsonIgnore] public SourceCache<TrackedDeviceModel, string> TrackedDevices { get; } = new SourceCache<TrackedDeviceModel, string>(dev => dev.Id ?? System.Guid.NewGuid().ToString());
-        public List<TrackedDeviceModel> TrackedDevicesList
-        {
-            get => TrackedDevices.Items.ToList();
-            set
-            {
-                TrackedDevices.Clear();
-                foreach (var device in value)
-                {
-                    TrackedDevices.AddOrUpdate(device);
-                }
-            }
-        }
+        //[JsonIgnore] public SourceCache<TrackedDeviceModel, string> TrackedDevices { get; } = new SourceCache<TrackedDeviceModel, string>(dev => dev.Id ?? System.Guid.NewGuid().ToString());
+        //public List<TrackedDeviceModel> TrackedDevicesList
+        //{
+        //    get => TrackedDevices.Items.ToList();
+        //    set
+        //    {
+        //        TrackedDevices.Clear();
+        //        foreach (var device in value)
+        //        {
+        //            TrackedDevices.AddOrUpdate(device);
+        //        }
+        //    }
+        //}
 
-        private void LoadSettings()
+        protected override void LoadSettings()
         {
             try
             {
                 var settingsJson = Preferences.Default.Get<string>("SettingsService", "{}");
                 var settings = System.Text.Json.JsonSerializer.Deserialize<SettingsService>(settingsJson);
-                //if (!System.IO.File.Exists("settings.json"))
-                //{
-                //    var writer = System.IO.File.CreateText("settings.json");
-                //    writer.Write(@"{
-                //    ""StartMinimized"": false,
-                //    ""CloseToTray"": true,
-                //    ""MinimizeToTray"": true,
-                //    ""ShowNotifications"": true,
-                //    ""TrackedDevicesList"": []
-                //    }");
-                //    writer.Dispose();
-
-                //}
-                //var settingsJson = System.IO.File.ReadAllText("settings.json");
-                //var settings = System.Text.Json.JsonSerializer.Deserialize<SettingsService>(settingsJson);
+                
                 if (settings != null)
                 {
-                    //this.StartMinimized = settings.StartMinimized;
-                    //this.CloseToTray = settings.CloseToTray;
-                    //this.MinimizeToTray = settings.MinimizeToTray;
-                    //this.ShowNotifications = settings.ShowNotifications;
+                    if (settings.DailyScheduleList == null || settings.DailyScheduleList.Count == 0)
+                    {
+                        // not initialized yet, do it now
+                        settings.DailyScheduleList = new List<DailySchedule>
+                        {
+                            new DailySchedule{DayOfWeek=DayOfWeek.Sunday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Monday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Tuesday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Wednesday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Thursday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Friday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Saturday}
+                        };
+                    }
+                    this.DailyScheduleList = settings.DailyScheduleList;
+                    
 
                     this.TrackedDevicesList = settings.TrackedDevicesList;
                 }
@@ -63,7 +71,7 @@ namespace usbprison
             }
         }
 
-        public Task SaveSettingsAsync()
+        public override Task SaveSettingsAsync()
         {
 
             var settingsJson = System.Text.Json.JsonSerializer.Serialize<SettingsService>(this, new System.Text.Json.JsonSerializerOptions() { WriteIndented = true });
@@ -72,25 +80,36 @@ namespace usbprison
             //return System.IO.File.WriteAllTextAsync("settings.json", settingsJson);
         }
 
-        public SettingsService(bool uselessParameter)
-        {
-            LoadSettings();
+        public SettingsService() : base() { }
+        public SettingsService(bool uselessParameter) : base(uselessParameter) { }
 
-            TrackedDevices.Connect()
-                .ToCollection()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(
-                    async x =>
-                    {
-                        //Terminal.Gui.Views.MessageBox.Query(Globals.App,"Saving Settings","Saving settings...", "Ok");
-                        await SaveSettingsAsync();
-                    }
-                );
-        }
+        //public SettingsService(bool uselessParameter)
+        //{
+        //    LoadSettings();
 
-        public SettingsService() { }
+        //    TrackedDevices.Connect()
+        //        .ToCollection()
+        //        .ObserveOn(RxApp.MainThreadScheduler)
+        //        .Subscribe(
+        //            async x =>
+        //            {
+        //                await SaveSettingsAsync();
+        //            }
+        //        );
+        //    DailySchedule.Connect()
+        //        .ToCollection()
+        //        .ObserveOn(RxApp.MainThreadScheduler)
+        //        .Subscribe(
+        //            async x =>
+        //            {
+        //                await SaveSettingsAsync();
+        //            }
+        //        );
+        //}
+
+        //public SettingsService() { }
 
 
-        
+
     }
 }

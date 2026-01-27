@@ -1,0 +1,15 @@
+{
+  "DailyScheduleList": [],
+  "TrackedDevicesList": [
+    {
+      "CustomText": "Aurelie\u0027s Fire",
+      "WindowsId": null,
+      "Name": "Fire",
+      "Pid": 1505,
+      "Vid": 6473,
+      "SerialNumber": "G001KT062397003L",
+      "Guid": "04e21592-b8e0-4015-a7f0-16d6804cfe3a",
+      "Id": "USB\\VID_6473\u0026PID_1505\\G001KT062397003L"
+    }
+  ]
+}

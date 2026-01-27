@@ -22,11 +22,21 @@
             IsReadOnly="True"
             Placeholder="Receiver text goes here..."
             Text="{Binding LatestMessage, Mode=TwoWay}" />
-        <sflist:SfListView
+        <CollectionView
             Grid.Row="2"
-            ItemsSource="{Binding Devices}"
+            IsGrouped="True"
+            ItemsSource="{Binding GroupedDevices}"
             SelectionMode="None">
-            <sflist:SfListView.HeaderTemplate>
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <Label
+                        Margin="0,20,0,20"
+                        FontAttributes="Bold"
+                        FontSize="Title"
+                        Text="{Binding Name}" />
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            <!--<CollectionView.HeaderTemplate>
                 <DataTemplate>
                     <Grid Margin="5" ColumnDefinitions="*, *">
                         <Label FontAttributes="Bold" Text="Device Name" />
@@ -36,15 +46,16 @@
                             Text="Unique Id" />
                     </Grid>
                 </DataTemplate>
-            </sflist:SfListView.HeaderTemplate>
-            <sflist:SfListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid ColumnDefinitions="*,*">
-                        <Label Text="{Binding DisplayName}" />
+            </CollectionView.HeaderTemplate>-->
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:SimpleTrackedDeviceViewModel">
+                    <FlexLayout Wrap="Wrap">
+                        <Label Margin="0,0,20,0" Text="{Binding DisplayName}" />
                         <Label Grid.Column="1" Text="{Binding Device.SerialNumber}" />
-                    </Grid>
+                        <Label Grid.Column="2" Text="{Binding MachineId}" />
+                    </FlexLayout>
                 </DataTemplate>
-            </sflist:SfListView.ItemTemplate>
-        </sflist:SfListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </Grid>
 </rxui:ReactiveContentPage>

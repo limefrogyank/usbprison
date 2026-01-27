@@ -1,21 +1,19 @@
-﻿using usbprison;
+﻿using ReactiveUI;
+using ReactiveUI.Builder;
+using ReactiveUI.TerminalGui;
+using Serilog;
+using Splat;
+using System.Reactive.Concurrency;
+using System.Reflection;
 using Terminal.Gui;
 using Terminal.Gui.App;
 using Terminal.Gui.Drawing;
 using Terminal.Gui.Input;
 using Terminal.Gui.ViewBase;
 using Terminal.Gui.Views;
-using ReactiveUI;
-using System.Reactive.Concurrency;
-
-using Microsoft.Extensions.Logging;
-using Splat;
-using Serilog;
-using System.Reflection;
-using Microsoft.JavaScript.NodeApi.Runtime;
-using Microsoft.JavaScript.NodeApi;
+using usbprison;
+using usbprison.lib.Models;
 using usbprison.lib.Services;
-using ReactiveUI.TerminalGui;
 //using Splat.Serilog;
 
 
@@ -26,49 +24,64 @@ Log.Logger = new LoggerConfiguration()
          .CreateLogger();
 
 
-// // Find the path to the libnode binary for the current platform.
-// string baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-// string libnodePath = Path.Combine(baseDir,  "libnode.dll");
-// NodeEmbeddingPlatformSettings platformSettings = new NodeEmbeddingPlatformSettings
-// {
-//     LibNodePath = libnodePath
-// };
-// NodeEmbeddingPlatform nodejsPlatform = new(platformSettings);
-// Globals.NodejsRuntime = nodejsPlatform.CreateThreadRuntime(baseDir,
-//     new NodeEmbeddingRuntimeSettings
-//     {
-//         MainScript =
-//             "globalThis.require = require('module').createRequire(process.execPath);\n"
-//     });
-
-
 using (Globals.App)
 {
+    var rxapp = RxAppBuilder.CreateReactiveUIBuilder()     
+            //.WithViewsFromAssembly(typeof(Program).Assembly)
+            .WithRegistration(locator =>
+            {
+                locator.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
+                locator.RegisterLazySingleton<DevicesViewModel>(() => new DevicesViewModel());
+                locator.RegisterLazySingleton<TrackingViewModel>(() => new TrackingViewModel());
+                locator.RegisterLazySingleton<ScheduleViewModel>(() => new ScheduleViewModel());
+
+                locator.RegisterLazySingleton<ReceiverViewModel>(() => new ReceiverViewModel());
+                locator.RegisterLazySingleton<LogViewModel>(() => new LogViewModel());
+                //locator.RegisterViewForViewModel<RootPage,RootViewModel>();
+                //locator.RegisterViewForViewModel<MainView, MainViewModel>(); 
+                //locator.RegisterViewForViewModel<SingleDeviceView, SingleDeviceViewModel>();
+                ////locator.RegisterViewForViewModel<DevicesView, DevicesViewModel>();
+                //locator.RegisterViewForViewModel<TrackingView, TrackingViewModel>();
+            })
+            .BuildApp();
+
     RxApp.MainThreadScheduler = TerminalScheduler.Default;
     RxApp.TaskpoolScheduler = TaskPoolScheduler.Default;
     //Splat.Locator.CurrentMutable.UseSerilogFullLogger();
     Splat.Locator.CurrentMutable.UnregisterAll<IActivationForViewFetcher>();
     Splat.Locator.CurrentMutable.RegisterConstant<IActivationForViewFetcher>(new ActivationForViewFetcher());
-    Splat.Locator.CurrentMutable.RegisterConstant<UDPService>(new UDPService());
+
+    var settingsService = new SettingsService(true);
+    Locator.CurrentMutable.RegisterConstant<ISettingsService>(settingsService);
+
+    var deviceInfo = new GenericDeviceInfo
+    {
+        Name = Environment.MachineName,
+        Manufacturer = "",
+        Model = "",
+        Version = Environment.OSVersion.VersionString,
+        Platform = "",
+        Idiom = "",
+        DeviceType = ""
+
+    };
+    var udpService = new UDPService(deviceInfo);
+    Locator.CurrentMutable.RegisterConstant<UDPService>(udpService);
+
     Splat.Locator.CurrentMutable.RegisterConstant<DebugService>(new DebugService());
     Splat.Locator.CurrentMutable.RegisterConstant<IUSBService>(new USBService());
-    Splat.Locator.CurrentMutable.RegisterConstant<ISettingsService>(new SettingsService(true));
-    
+
+    Splat.Locator.CurrentMutable.RegisterConstant<BroadcastService>(new BroadcastService(settingsService, udpService));
+
     Splat.Locator.CurrentMutable.Register<SingleDeviceView>(() => new SingleDeviceView());
 
-    // Globals.NodejsRuntime.RunAsync(() =>
-    // {
-    //     JSValue sendmailPackage = Globals.NodejsRuntime.Import("sendmail");
-    //     sendmailPackage.As<
-    //     JSValue.RunScript("console.log('Hello from JS!');");
-    //     return Task.CompletedTask;
-    // });
+
 
     var top = new Window();
     top.Add(new MainView(new MainViewModel()));
     Globals.App.Run(top);
     top.Dispose();
-    //Globals.NodejsRuntime.Dispose();
+
 }
 
 public static class Globals
@@ -76,7 +89,7 @@ public static class Globals
     private static IApplication? _app;
     public static IApplication App => _app ??= Application.Create().Init();
 
-    public static NodeEmbeddingThreadRuntime? NodejsRuntime {get;set;} = null;
+
 }
 
 

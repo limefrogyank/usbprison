@@ -27,7 +27,7 @@ namespace usbprison
         private Subject<Unit> _manualRefreshSubject = new Subject<Unit>();
         public IObservable<Unit> ManualRefreshRequested => _manualRefreshSubject.AsObservable();
 
-        public ReadOnlyObservableCollection<GroupedItems<TrackedDeviceViewModel>> Groups { get; }
+        public ReadOnlyObservableCollection<GroupedItems<TrackedDeviceViewModel, string,bool>> Groups { get; }
 
         public TrackingViewModel()
         {
@@ -76,34 +76,34 @@ namespace usbprison
 
             transformedTrackedDevices.Connect();
 
-            var timer = new System.Timers.Timer(10000); //every 10 seconds
-            timer.Elapsed += async (s, e) =>
-            {
-                // regular app use
-                await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage
-                {
-                    MessageType = lib.Models.UDPMessageType.Notify,
-                    Message = $"There are {TrackedDevices.Where(x => x.IsPluggedIn).Count()} device(s) in prison"
-                });
-                await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage 
-                { 
-                    MessageType = lib.Models.UDPMessageType.List, 
-                    PluggedDevices = TrackedDevices.Where(x => x.IsPluggedIn).Select(x=> x.Device).ToList(),
-                    MissingDevices = TrackedDevices.Where(x => !x.IsPluggedIn).Select(x => x.Device).ToList()
-                });
+            //var timer = new System.Timers.Timer(5000); //every 5 seconds
+            //timer.Elapsed += async (s, e) =>
+            //{
+            //    // regular app use
+            //    await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage
+            //    {
+            //        MessageType = lib.Models.UDPMessageType.Notify,
+            //        Message = $"There are {TrackedDevices.Where(x => x.IsPluggedIn).Count()} device(s) in prison"
+            //    });
+            //    await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage 
+            //    { 
+            //        MessageType = lib.Models.UDPMessageType.List, 
+            //        PluggedDevices = TrackedDevices.Where(x => x.IsPluggedIn).Select(x=> x.Device).ToList(),
+            //        MissingDevices = TrackedDevices.Where(x => !x.IsPluggedIn).Select(x => x.Device).ToList()
+            //    });
 
-                // background monitoring use
-                await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage
-                {
-                    MessageType = lib.Models.UDPMessageType.Alert,
-                    Message = $"There are {TrackedDevices.Where(x => x.IsPluggedIn).Count()} device(s) in prison",
-                    PluggedDevices = TrackedDevices.Where(x => x.IsPluggedIn).Select(x => x.Device).ToList(),
-                    MissingDevices = TrackedDevices.Where(x => !x.IsPluggedIn).Select(x => x.Device).ToList()
-                });
+            //    // background monitoring use
+            //    await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage
+            //    {
+            //        MessageType = lib.Models.UDPMessageType.Alert,
+            //        Message = $"There are {TrackedDevices.Where(x => x.IsPluggedIn).Count()} device(s) in prison",
+            //        PluggedDevices = TrackedDevices.Where(x => x.IsPluggedIn).Select(x => x.Device).ToList(),
+            //        MissingDevices = TrackedDevices.Where(x => !x.IsPluggedIn).Select(x => x.Device).ToList()
+            //    });
                
 
-            };
-            timer.Enabled = true;
+            //};
+            //timer.Enabled = true;
         }
     }
 }

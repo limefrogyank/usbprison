@@ -18,23 +18,11 @@ namespace usbprison.lib.Models
 
     public class UDPMessage
     {
+        public string SenderId { get; set; } = string.Empty;
         public UDPMessageType MessageType { get; set; }
         public string? Message { get; set; }
         public List<TrackedDeviceModel>? MissingDevices { get; set; }
         public List<TrackedDeviceModel>? PluggedDevices { get; set; }
-        //{
-        //    get
-        //    {
-        //        if (MessageType == UDPMessageType.List)
-        //        {
-        //            return System.Text.Json.JsonSerializer.Deserialize<List<DeviceModel>>(Message) ?? new List<DeviceModel>();
-        //        }
-        //        else
-        //        {
-        //            return new List<DeviceModel>();
-        //        }
-        //    }
-        //}
 
     }
 

@@ -4,19 +4,14 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Remove="C:\Users\leemc\.nuget\packages\microsoft.javascript.nodeapi\0.9.18\contentFiles\any\net9.0\import.cjs" />
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="LibUsbDotNet" Version="3.0.167-alpha" />
-    <PackageReference Include="Microsoft.JavaScript.LibNode" Version="20.1800.215" />
-    <PackageReference Include="Microsoft.JavaScript.NodeApi" Version="0.9.18" />
-    <PackageReference Include="Microsoft.JavaScript.NodeApi.DotNetHost" Version="0.9.18" />
-    <PackageReference Include="Microsoft.JavaScript.NodeApi.Generator" Version="0.9.18" />
     <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.3.1" />
     <PackageReference Include="ReactiveUI" Version="22.3.1" />
-    <PackageReference Include="ReactiveUI.SourceGenerators" Version="2.5.1">
+    <PackageReference Include="ReactiveUI.SourceGenerators" Version="2.6.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -24,23 +19,8 @@
     <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     <!-- <PackageReference Include="Splat.Serilog" Version="19.2.1" /> -->
-    <PackageReference Include="Terminal.Gui" Version="2.0.0-develop.4761" />
+    <PackageReference Include="Terminal.Gui" Version="2.0.0-develop.4944" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="C:\Users\leemc\.nuget\packages\microsoft.javascript.libnode.win-x64\20.1800.215\runtimes\win-x64\native\libnode.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="C:\Users\leemc\.nuget\packages\microsoft.javascript.libnode.win-x64\20.1800.215\runtimes\win-x64\native\libnode.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="C:\Users\leemc\.nuget\packages\microsoft.javascript.libnode.win-x64\20.1800.215\runtimes\win-x64\native\libnode.dll" />
-  </ItemGroup>
-
-<ItemGroup>
-  <None Include="$(NuGetPackageRoot)microsoft.javascript.libnode.win-x64\20.1800.215\runtimes\win-x64\native\libnode.dll">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </None>
-</ItemGroup>
 
 <ItemGroup>
   <ProjectReference Include="..\usbprison.lib\usbprison.lib.csproj" />
