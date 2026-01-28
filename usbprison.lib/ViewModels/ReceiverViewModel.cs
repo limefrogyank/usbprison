@@ -36,8 +36,10 @@ namespace usbprison
             _udpService = udpservice!;
 
             _devicesCache.Connect()
+                .ExpireAfter(x => TimeSpan.FromSeconds(5), RxSchedulers.MainThreadScheduler)
                 .Group(x=>x.InPrison)
                 .Transform(x=>new GroupedItems<SimpleTrackedDeviceViewModel,string, bool>(x.Key ? "In Prison" : "Free", x, RxSchedulers.MainThreadScheduler))
+                
                 .ObserveOn(RxSchedulers.MainThreadScheduler)
                 .SortAndBind(out var devices, SortExpressionComparer<GroupedItems<SimpleTrackedDeviceViewModel, string,bool>>.Descending(x=>x.Name))
                 .Subscribe();

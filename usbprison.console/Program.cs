@@ -51,6 +51,9 @@ using (Globals.App)
     Splat.Locator.CurrentMutable.UnregisterAll<IActivationForViewFetcher>();
     Splat.Locator.CurrentMutable.RegisterConstant<IActivationForViewFetcher>(new ActivationForViewFetcher());
 
+    var ipService = new IPService();
+    Locator.CurrentMutable.RegisterConstant<IIPService>(ipService);
+
     var settingsService = new SettingsService(true);
     Locator.CurrentMutable.RegisterConstant<ISettingsService>(settingsService);
 
@@ -65,7 +68,7 @@ using (Globals.App)
         DeviceType = ""
 
     };
-    var udpService = new UDPService(deviceInfo);
+    var udpService = new UDPService(deviceInfo,ipService);
     Locator.CurrentMutable.RegisterConstant<UDPService>(udpService);
 
     Splat.Locator.CurrentMutable.RegisterConstant<DebugService>(new DebugService());

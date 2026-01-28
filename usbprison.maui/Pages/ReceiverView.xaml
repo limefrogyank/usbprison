@@ -49,11 +49,13 @@
             </CollectionView.HeaderTemplate>-->
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:SimpleTrackedDeviceViewModel">
-                    <FlexLayout Wrap="Wrap">
-                        <Label Margin="0,0,20,0" Text="{Binding DisplayName}" />
-                        <Label Grid.Column="1" Text="{Binding Device.SerialNumber}" />
-                        <Label Grid.Column="2" Text="{Binding MachineId}" />
-                    </FlexLayout>
+                    <Border Stroke="White" StrokeShape="RoundRectangle 5" StrokeThickness="1" Margin="4" Padding="4" >
+                        <FlexLayout Wrap="Wrap">
+                            <Label Margin="0,0,20,0" Text="{Binding DisplayName}" />
+                            <Label Grid.Column="1" Text="{Binding Device.Id}" />
+                            <Label Grid.Column="2" Text="{Binding MachineId}" />
+                        </FlexLayout>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

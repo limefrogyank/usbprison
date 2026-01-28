@@ -78,6 +78,7 @@
 		<PackageReference Include="Syncfusion.Maui.ListView" Version="32.1.23" />
 		<PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.8" />
 		<PackageReference Include="System.Management" Version="10.0.2" />
+		<PackageReference Include="WifiManager.Maui" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

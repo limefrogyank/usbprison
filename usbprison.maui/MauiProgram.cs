@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using MauiWifiManager;
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
@@ -22,6 +23,7 @@ namespace usbprison.maui
             builder
                 .UseMauiApp<App>()
                 .UseShiny() // THIS IS REQUIRED FOR SHINY ON MAUI
+                .UseMauiWifiManager() // needed to get IP address to calculate subnet mask for UDP broadcasting, helps get around virtual adapters which fail when using 255.255.255.255
                 .UseMauiCommunityToolkit()
                 .ConfigureSyncfusionToolkit()
                 .ConfigureSyncfusionCore()
@@ -61,7 +63,9 @@ namespace usbprison.maui
                 DeviceType = DeviceInfo.DeviceType.ToString()
 
             };
-            var udpService = new UDPService(deviceInfo);
+            var ipService = new IPService();
+            Locator.CurrentMutable.RegisterConstant<IIPService>(ipService);
+            var udpService = new UDPService(deviceInfo, ipService);
             Locator.CurrentMutable.RegisterConstant<UDPService>(udpService);
 #if WINDOWS
             var usbService = new USBService();

@@ -17,8 +17,8 @@ namespace usbprison.lib.Services
         public static int MainPort = 49111;
         public static int BackgroundPort = 49112;
         //private readonly UdpClient _udpClient;
-        private readonly IPEndPoint _mainEndpoint;
-        private readonly IPEndPoint _backgroundEndpoint;
+        //private readonly IPEndPoint _mainEndpoint;
+        //private readonly IPEndPoint _backgroundEndpoint;
         private CancellationTokenSource? _cancelTokenForListen;
 
         private Subject<string> _rawMessageSubject = new Subject<string>();
@@ -31,24 +31,37 @@ namespace usbprison.lib.Services
         public IObservable<List<SimpleTrackedDeviceViewModel>> LastestDevicesReceived => _lastestDevicesSubject.AsObservable();
 
         private GenericDeviceInfo _deviceInfo;
+        private readonly IIPService _ipService;
 
-        public UDPService(GenericDeviceInfo info)
+        private IPAddress? _broadcastAddress = null;
+
+        public UDPService(GenericDeviceInfo info, IIPService iPService)
         {
             _deviceInfo = info;
+            _ipService = iPService;
             //_udpClient = new System.Net.Sockets.UdpClient(UDPService.PORT);
-            _mainEndpoint = new IPEndPoint(IPAddress.Broadcast, UDPService.MainPort);
-            _backgroundEndpoint = new IPEndPoint(IPAddress.Broadcast, UDPService.BackgroundPort);
+            //_mainEndpoint = new IPEndPoint(IPAddress.Broadcast, UDPService.MainPort);
+            //_backgroundEndpoint = new IPEndPoint(IPAddress.Broadcast, UDPService.BackgroundPort);
         }
 
         public async Task StartListening()
         {
+            if (_broadcastAddress == null)
+            {
+                _broadcastAddress = await _ipService.GetBroadcastAddress();
+                if (_broadcastAddress == null)
+                {
+                    Log.Warning("Could not determine broadcast address, using default");
+                    _broadcastAddress = IPAddress.Broadcast;
+                }
+            }
             _cancelTokenForListen = new CancellationTokenSource();
             await Task.Run(() => ReceiveLoopAsync(_cancelTokenForListen.Token));
         }
 
         private async Task ReceiveLoopAsync(CancellationToken token)
         {
-            using var udpClient = new UdpClient(UDPService.MainPort) { EnableBroadcast = true };
+            using var udpClient = new UdpClient(new IPEndPoint(_broadcastAddress!, MainPort)) { EnableBroadcast = true };
             try
             {
                 while (!token.IsCancellationRequested)
@@ -88,7 +101,16 @@ namespace usbprison.lib.Services
 
         public async Task<UDPMessage?> ListenOnceAsync(CancellationToken token)
         {
-            using var udpClient = new UdpClient(UDPService.BackgroundPort) { EnableBroadcast = true };
+            if (_broadcastAddress == null)
+            {
+                _broadcastAddress = await _ipService.GetBroadcastAddress();
+                if (_broadcastAddress == null)
+                {
+                    Log.Warning("Could not determine broadcast address, using default");
+                    _broadcastAddress = IPAddress.Broadcast;
+                }
+            }
+            using var udpClient = new UdpClient(new IPEndPoint(_broadcastAddress, BackgroundPort)) { EnableBroadcast = true };
             try
             {
 
@@ -133,21 +155,37 @@ namespace usbprison.lib.Services
 
         public async Task BroadcastMessageAsync(UDPMessage message, bool standard = true)
         {
+            if (_broadcastAddress == null)
+            {
+                _broadcastAddress = await _ipService.GetBroadcastAddress();
+                if (_broadcastAddress == null)
+                {
+                    Log.Warning("Could not determine broadcast address, using default");
+                    _broadcastAddress = IPAddress.Broadcast;
+                }
+            }
             try
             {
                 //add on deviceinfo before sending message
                 message.SenderId = string.Join(',', _deviceInfo.Name, _deviceInfo.Version);
                 byte[] data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
-                using var udpClient = new UdpClient() { EnableBroadcast = true };
+
+                using var udpClient = new UdpClient();
                 switch (message.MessageType)
                 {
                     case UDPMessageType.List:
                     case UDPMessageType.Notify:
-                        await udpClient.SendAsync(data, data.Length, _mainEndpoint);
+                        //using (var udpClient = new UdpClient(new IPEndPoint(_broadcastAddress, MainPort)) { EnableBroadcast = true })
+                        //{
+                            var sent = await udpClient.SendAsync(data, data.Length, new IPEndPoint(_broadcastAddress, MainPort));// _mainEndpoint);
+                        //}2
                         break;
                     case UDPMessageType.OK:
                     case UDPMessageType.Alert:
-                        await udpClient.SendAsync(data, data.Length, _backgroundEndpoint);
+                        //using (var udpClient = new UdpClient(new IPEndPoint(_broadcastAddress, BackgroundPort)) { EnableBroadcast = true })
+                        //{
+                            var sent2 = await udpClient.SendAsync(data, data.Length, new IPEndPoint(_broadcastAddress, BackgroundPort));// _mainEndpoint);
+                        //}
                         break;
                 }
 

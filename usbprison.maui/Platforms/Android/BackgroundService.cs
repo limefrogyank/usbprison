@@ -11,7 +11,9 @@ using Shiny.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using usbprison;
 using usbprison.lib.Models;
+using usbprison.lib.Services;
 using usbprison.maui.Services;
 
 namespace usbprison.maui.Platforms.Android
@@ -61,7 +63,8 @@ namespace usbprison.maui.Platforms.Android
                 DeviceType = DeviceInfo.DeviceType.ToString()
 
             };
-            var udpService = new usbprison.lib.Services.UDPService(deviceInfo);
+            var ipService = new IPService();
+            var udpService = new UDPService(deviceInfo, ipService);
             var cts = new CancellationTokenSource();
             var message = await udpService.ListenOnceAsync(cts.Token);
 
