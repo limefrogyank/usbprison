@@ -30,9 +30,16 @@ namespace usbprison
             //         break;
             //     }
             // }
+#if Linux
+            Log.Information($"Local IP Address: {address}");
+            var broadcast = IPAddress.Broadcast;
+            Log.Information($"Broadcast IP Address: {broadcast}");
+#else
             Log.Information($"Local IP Address: {address}");
             var broadcast = address?.GetBroadcastAddress(address.GetSubnetMask());
             Log.Information($"Broadcast IP Address: {broadcast}");
+#endif
+
             return Task.FromResult(broadcast);
         }
     }
