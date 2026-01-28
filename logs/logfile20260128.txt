@@ -1,0 +1,6 @@
+2026-01-28 16:25:03.040 -05:00 [INF] created device: Fire
+2026-01-28 16:25:03.364 -05:00 [INF] created device: Fire
+2026-01-28 16:25:03.366 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 16:25:03.367 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 16:25:03.392 -05:00 [INF] Created a new collection
+2026-01-28 16:25:03.423 -05:00 [INF] Created a new collection
