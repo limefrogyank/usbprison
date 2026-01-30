@@ -27,7 +27,7 @@ namespace usbprison
         private Subject<Unit> _manualRefreshSubject = new Subject<Unit>();
         public IObservable<Unit> ManualRefreshRequested => _manualRefreshSubject.AsObservable();
 
-        public ReadOnlyObservableCollection<GroupedItems<TrackedDeviceViewModel, string,bool>> Groups { get; }
+        //public ReadOnlyObservableCollection<GroupedItems<TrackedDeviceViewModel, string,bool>> Groups { get; }
 
         public TrackingViewModel()
         {

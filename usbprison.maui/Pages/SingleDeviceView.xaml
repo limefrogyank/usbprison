@@ -13,10 +13,39 @@
         <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
     </local:ViewBase.Resources>
     <VerticalStackLayout>
-        <Label Text="{Binding Device.Name}" />
-        <Label Text="{Binding Device.Vid}" />
-        <Label Text="{Binding Device.Pid}" />
-        <Label Text="{Binding Device.SerialNumber}" />
+        <Label>
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Name:&#x20;" />
+                    <Span Text="{Binding Device.Name}" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label>
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Vid:&#x20;" />
+                    <Span Text="{Binding Device.VidHex}" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label>
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Pid:&#x20;" />
+                    <Span Text="{Binding Device.PidHex}" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label>
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Serial:&#x20;" />
+                    <Span Text="{Binding Device.SerialNumber}" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+
 
         <Label Text="Readable Label:" />
         <Entry Text="{Binding CustomText, Mode=TwoWay}" />

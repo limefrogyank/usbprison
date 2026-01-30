@@ -29,13 +29,13 @@ namespace usbprison
         private DeviceListView deviceListView = new DeviceListView();
 
         private Terminal.Gui.Views.ListView listView = new ListView();
-        private Label _vid;
-        private Label _name;
-        private Label _pid;
-        private Label _serial;
-        private TextField _custom;
-        private Button _enableButton;
-        private Button _disableButton;
+        private Label _vid = null!;
+        private Label _name = null!;
+        private Label _pid = null!;
+        private Label _serial = null!;
+        private TextField _custom = null!;
+        private Button _enableButton = null!;
+        private Button _disableButton = null!;
 
         public SingleDeviceView()
         {
@@ -58,15 +58,15 @@ namespace usbprison
                 // {
                 //     Terminal.Gui.Views.MessageBox.Query(Globals.App, "3333", "Register 3333 clicked!", "Ok");
                 // });
-                this.WhenAnyValue(x=>x.ViewModel.Device.Name).Select(x=> $"Device Details - {x}").BindTo(this, x=>x.Title).DisposeWith(disposables);
+                this.WhenAnyValue(x=>x.ViewModel!.Device.Name).Select(x=> $"Device Details - {x}").BindTo(this, x=>x.Title).DisposeWith(disposables);
                 //this.Title = $"Device Details - {ViewModel!.Device.Name}";
 
                 this.WhenAnyValue(x=>x.ViewModel!.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(_name, view=> view.Text).DisposeWith(disposables);
-                this.WhenAnyValue(x=>x.ViewModel!.Device.Vid).Select(x => "VID: " + (x != 0 ? x.ToString() : "")).BindTo(_vid, view=> view.Text).DisposeWith(disposables);
-                this.WhenAnyValue(x=>x.ViewModel!.Device.Pid).Select(x => "PID: " + (x != 0 ? x.ToString() : "")).BindTo(_pid, view=> view.Text).DisposeWith(disposables);
+                this.WhenAnyValue(x=>x.ViewModel!.Device.VidHex).Select(x => "VID: " + x).BindTo(_vid, view=> view.Text).DisposeWith(disposables);
+                this.WhenAnyValue(x=>x.ViewModel!.Device.PidHex).Select(x => "PID: " + x).BindTo(_pid, view=> view.Text).DisposeWith(disposables);
                 this.WhenAnyValue(x=>x.ViewModel!.Device.SerialNumber).Select(x => "Serial: " + (x != null ? x : "")).BindTo(_serial, view=> view.Text).DisposeWith(disposables);
                 this.WhenAnyValue(x=>x.ViewModel!.CustomText).BindTo(_custom, view=> view.Text).DisposeWith(disposables);
-                
+                                                
                 this.WhenAnyValue(x => x.ViewModel!.IsDeviceTracked).Select(x => !x).BindTo(_enableButton, x => x.Visible).DisposeWith(disposables);
                 _enableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x =>x.ViewModel!.ActivateDeviceCommand).DisposeWith(disposables);
                 this.WhenAnyValue(x => x.ViewModel!.IsDeviceTracked).BindTo(_disableButton, x => x.Visible).DisposeWith(disposables);
@@ -82,69 +82,26 @@ namespace usbprison
             this.Activate();
         }
 
-        public override void Activate()
-        {
-            base.Activate();
-        }
-
-
-        // private static readonly MemoizingMRUCache<Type, IActivationForViewFetcher?> _activationFetcherCache =
-        // new(
-        //     (t, _) =>
-        //         AppLocator.Current
-        //                .GetServices<IActivationForViewFetcher?>()
-        //                .Aggregate((count: 0, viewFetcher: default(IActivationForViewFetcher?)), (acc, x) =>
-        //                {
-        //                    var score = x?.GetAffinityForView(t) ?? 0;
-        //                    return score > acc.count ? (score, x) : acc;
-        //                }).viewFetcher,
-        //     64);
 
         private void InitializeComponent()
         {
-            // var condition = this.WhenAnyValue(x=>x.ViewModel).WhereNotNull();
-            // condition.Subscribe(x => {
-            //     this.Title = $"Device Details - {x.Device.Name}";
-
-            //     this.WhenAnyValue(x=>x.ViewModel!.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(_name, view=> view.Text).DisposeWith(_disposable);
-            //     this.WhenAnyValue(x=>x.ViewModel!.Device.Vid).Select(x => "VID: " + (x != 0 ? x.ToString() : "")).BindTo(_vid, view=> view.Text).DisposeWith(_disposable);
-            //     this.WhenAnyValue(x=>x.ViewModel!.Device.Pid).Select(x => "PID: " + (x != 0 ? x.ToString() : "")).BindTo(_pid, view=> view.Text).DisposeWith(_disposable);
-            //     this.WhenAnyValue(x=>x.ViewModel!.Device.SerialNumber).Select(x => "Serial: " + (x != null ? x : "")).BindTo(_serial, view=> view.Text).DisposeWith(_disposable);
-            //     this.WhenAnyValue(x=>x.ViewModel!.CustomText).BindTo(_custom, view=> view.Text).DisposeWith(_disposable);
-                
-            //     this.WhenAnyValue(x => x.ViewModel!.IsDeviceTracked).Select(x => !x).BindTo(_enableButton, x => x.Visible).DisposeWith(_disposable);
-            //     _enableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x =>x.ViewModel!.ActivateDeviceCommand).DisposeWith(_disposable);
-            //     this.WhenAnyValue(x => x.ViewModel!.IsDeviceTracked).BindTo(_disableButton, x => x.Visible).DisposeWith(_disposable);
-            //     _disableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x => x.ViewModel!.DeactivateDeviceCommand).DisposeWith(_disposable);
-
-
-            // }).DisposeWith(_disposable);
-            
+           
             _name = new Terminal.Gui.Views.Label();
             _name.Y = 1;
             _name.Text = "TEST";
-            //condition.Select(x=>x.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(name, x => x.Text).DisposeWith(_disposable);
 
-
-            //.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(name, x => x.Text).DisposeWith(_disposable);
             _vid = new Terminal.Gui.Views.Label();
             _vid.Y = 2;
-           // condition.Select(x => x.Device.Vid).Select(x => "VID: " + (x != 0 ? x.ToString() : "")).BindTo(vid, x => x.Text).DisposeWith(_disposable);
-            //this.WhenAnyValue(x => x.ViewModel.Device.Vid).Select(x => "VID: " + (x != 0 ? x.ToString() : "")).BindTo(vid, x => x.Text).DisposeWith(_disposable);
             
             _pid = new Terminal.Gui.Views.Label();
             _pid.Y = 3;
-            //this.WhenAnyValue(x => x.ViewModel.Device.Pid).Select(x => "PID: " + (x != 0 ? x.ToString() : "")).BindTo(pid, x => x.Text).DisposeWith(_disposable);
-            //condition.Select(x => x.Device.Pid).Select(x => "PID: " + (x != 0 ? x.ToString() : "")).BindTo(pid, x => x.Text).DisposeWith(_disposable);
             
             _serial = new Terminal.Gui.Views.Label();
             _serial.Y = 4;
-            //condition.Select(x => x.Device.SerialNumber).Select(x => "Serial: " + (x != null ? x : "")).BindTo(serial, x => x.Text).DisposeWith(_disposable);
 
             _custom = new Terminal.Gui.Views.TextField();
             _custom.Y = 5;
             _custom.Width = Dim.Fill();
-            //condition.Select(x => x.Device.CustomText).Select(x => "Serial: " + (x != null ? x : "")).BindTo(serial, x => x.Text).DisposeWith(_disposable);
             _custom.TextChanged += (sender, args) =>
             {
                 if (ViewModel != null)
@@ -158,21 +115,10 @@ namespace usbprison
             _enableButton = new Terminal.Gui.Views.Button();
             _enableButton.Y = 6;
             _enableButton.Text = "Track Device on Main Screen";
-            //this.OneWayBind(ViewModel, vm=> vm.IsDeviceTracked, view=> button.Visible).DisposeWith(_disposable);
-            //this.WhenAnyValue(x => x.ViewModel.IsDeviceTracked).Select(x => !x).BindTo(button, x => x.Visible).DisposeWith(_disposable);
-            //button.Accepting += (sender, args) => {};
-            
 
             _disableButton = new Terminal.Gui.Views.Button();
             _disableButton.Y = 6;
             _disableButton.Text = "Untrack Device ";
-            //condition.Select(x => x.IsDeviceTracked).BindTo(button2, x => x.Visible).DisposeWith(_disposable);
-            //this.OneWayBind(ViewModel, vm=> vm.IsDeviceTracked, view=> button2.Visible).DisposeWith(_disposable);
-            //this.WhenAnyValue(x => x.ViewModel.IsDeviceTracked).BindTo(button2, x => x.Visible).DisposeWith(_disposable);
-            //button.Accepting += (sender, args) => {};
-            
-
-
 
             this.Add(_name, _vid, _pid, _serial, _custom, _enableButton, _disableButton);
         }

@@ -6,17 +6,17 @@ namespace usbprison.lib.Models
 {
     public class GenericDeviceInfo
     {
-       public string Model { get; set; }
+       public string Model { get; set; } = string.Empty;
 
-        public string Manufacturer { get; set; }
-        public string Name { get; set; }
+        public string Manufacturer { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-        public string Version { get; set; }
+        public string Version { get; set; } = string.Empty;
 
-        public string Platform { get; set; }
+        public string Platform { get; set; } = string.Empty;
 
-        public string Idiom { get; set; }
+        public string Idiom { get; set; } = string.Empty;
 
-        public string DeviceType { get; set; }
+        public string DeviceType { get; set; } = string.Empty;
     }
 }

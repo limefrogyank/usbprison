@@ -56,18 +56,18 @@ namespace usbprison
             _deviceEvents.OnNext("READY");
         }
 
-        public void GetInfoForDevice(DeviceModel device)
-        {
-            using (UsbContext context = new UsbContext())
-            {
-                var finder = new UsbDeviceFinder() { Vid = device.Vid, Pid = device.Pid , SerialNumber = device.SerialNumber};
-                using (var foundDevice = context.Find(finder))
-                {
-                    //  foundDevice.
-                }
+        //public void GetInfoForDevice(DeviceModel device)
+        //{
+        //    using (UsbContext context = new UsbContext())
+        //    {
+        //        var finder = new UsbDeviceFinder() { Vid = device.Vid, Pid = device.Pid , SerialNumber = device.SerialNumber};
+        //        using (var foundDevice = context.Find(finder))
+        //        {
+        //            //  foundDevice.
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {

@@ -29,7 +29,9 @@ namespace usbprison {
 					composite.Add(action (this, state));
 					return false;
 				});
-				composite.Add (Disposable.Create (() => Globals.App.RemoveTimeout (timeout)));
+				if (timeout ==null)
+					throw new Exception("Failed to create timeout");
+                composite.Add (Disposable.Create (() => Globals.App.RemoveTimeout (timeout)));
 				return composite;
 			}
 

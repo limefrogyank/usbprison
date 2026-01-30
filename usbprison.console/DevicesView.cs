@@ -28,7 +28,9 @@ namespace usbprison
         private Terminal.Gui.Views.ListView listView = new ListView();
         //private FrameView rightView;
 
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
         public DevicesViewModel ViewModel { get; set; }
+#pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
         object IViewFor.ViewModel
         {
             get => ViewModel;
@@ -68,6 +70,10 @@ namespace usbprison
             // rightView.Height = Dim.Fill();
             // rightView.TabStop = TabBehavior.TabStop;
             var singleDeviceView = Splat.Locator.Current.GetService<SingleDeviceView>();
+            if (singleDeviceView == null)
+            {
+                throw new Exception("Could not resolve SingleDeviceView from the Splat locator.");
+            }
             singleDeviceView.X = Pos.Right(this.listView) + 1;
             singleDeviceView.Y = 0;
             singleDeviceView.CanFocus = true;

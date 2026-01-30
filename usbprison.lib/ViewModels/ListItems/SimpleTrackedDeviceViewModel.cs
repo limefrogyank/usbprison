@@ -12,7 +12,7 @@ namespace usbprison
     {
         public TrackedDeviceModel Device { get; }
         
-        [ObservableAsProperty] private string _name = "";
+        //[ObservableAsProperty] private string _name = "";
 
         [ObservableAsProperty] private string _displayName = "";
         public string Id => Device.Id;

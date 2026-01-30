@@ -14,6 +14,10 @@ using Serilog;
 using Microsoft.Maui.Controls;
 using Splat;
 using usbprison.lib.Services;
+using System.Text.RegularExpressions;
+using System.Globalization;
+
+
 
 
 
@@ -38,16 +42,14 @@ namespace usbprison
 
         public IObservable<string> DeviceEvents => _deviceEvents;
 
+        private Regex IdParseRegex = new Regex(@"USB\\VID_(\w{4})&PID_(\w{4})(?:&MI_(\w{2}))?\\(.+)");
+
         public USBService()
         {
-           //var udpservice = Locator.Current.GetService<UDPService>();
-           // _udpService = udpservice!;
-
             _deviceCache.Connect()
                 //.ObserveOn(scheduler)
                 .Bind(Devices)
                 .Subscribe();
-
 
             _timer = new System.Timers.Timer(5000);
             _timer.AutoReset = true;
@@ -57,9 +59,6 @@ namespace usbprison
             Timer_Elapsed(this, ElapsedEventArgs.Empty as ElapsedEventArgs);
 #pragma warning restore CS8604 // Possible null reference argument.
 
-                              // notifier = LibUsbDotNet.DeviceNotify.DeviceNotifier();
-                              // notifier = new LibUsbDotNet.DeviceNotify.Linux.LinuxDeviceNotifier();
-                              // notifier.OnDeviceNotify += OnDeviceNotifyEvent;
             _deviceEvents.Subscribe(async x =>
             {
                 Log.Information(x);
@@ -71,19 +70,6 @@ namespace usbprison
         {
             _deviceEvents.OnNext("READY");
         }
-
-        //public void GetInfoForDevice(DeviceModel device)
-        //{
-        //    using (UsbContext context = new UsbContext())
-        //    {
-        //        var finder = new UsbDeviceFinder() { Vid = device.Vid, Pid = device.Pid , SerialNumber = device.SerialNumber};
-        //        using (var foundDevice = context.Find(finder))
-        //        {
-        //            //  foundDevice.
-        //        }
-
-        //    }
-        //}
 
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
@@ -102,77 +88,27 @@ namespace usbprison
                     _deviceEvents.OnNext(string.Format("DeviceID: {0}, PNPDeviceID: {1}, Description: {2}", id, pnp, desc));
                     var deviceModel = new DeviceModel(desc, 0, 0, id);
                     deviceModel.WindowsId = id;
-                    devicesPresent.Add(deviceModel);
+
+                    var match = IdParseRegex.Match(id);
+                    if (match.Success && match.Groups.Count == 5)
+                    {
+                        ushort.TryParse(match.Groups[1].Value, System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var vid);
+                        deviceModel.Vid = vid;
+                        ushort.TryParse(match.Groups[2].Value, System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var pid);
+                        deviceModel.Pid = pid;
+                        ushort.TryParse(match.Groups[3].Value, out var mi);
+                        deviceModel.Mi = mi;
+                        deviceModel.SerialNumber = match.Groups[4].Value.ToString();
+
+
+                        devicesPresent.Add(deviceModel);
+                    }
+
+                    
                 }
                 //_deviceCache.AddOrUpdate(devicesPresent);
             }
-
-
-            
-
-            //using (UsbContext context = new UsbContext())
-            //{
-            //    using (var allDevices = context.List())
-            //    {
-            //        _deviceEvents.OnNext(string.Format("Found {0} Devices", allDevices.Count));
-            //        foreach (UsbDevice device in allDevices)
-            //        {
-
-            //            bool openedDevice = device.TryOpen();
-
-            //            _deviceEvents.OnNext(device.Info.ToString() + "\n");
-
-            //            _deviceEvents.OnNext($"LocationId: {device.BusNumber}");
-            //            for (int i = 0; i < device.PortNumbers.Count; i++)
-            //            {
-            //                if (i == 0)
-            //                    _deviceEvents.OnNext("-");
-            //                _deviceEvents.OnNext($"{device.PortNumbers[i]}");
-            //                if (i != device.PortNumbers.Count - 1)
-            //                    _deviceEvents.OnNext(".");
-            //            }
-            //            _deviceEvents.OnNext("\n");
-
-            //            //Log.Information("Device Found: {0}", device.Info.Product ?? "Unknown");
-            //            devicesPresent.Add(new DeviceModel(device.Info.Product ?? "Unknown", device.ProductId, device.VendorId, device.Info.SerialNumber));
                         
-
-            //            if (!openedDevice)
-            //            {
-            //                _deviceEvents.OnNext("\n");
-            //                _deviceEvents.OnNext("Could not open device for further info.\n");
-            //                _deviceEvents.OnNext(new string('-', 50) + "\n");
-            //                continue;
-            //            }
-
-
-
-            //            foreach (var configInfo in device.Configs)
-            //            {
-            //                _deviceEvents.OnNext($"\t{configInfo.ToString().ReplaceLineEndings("\n\t")}");
-
-            //                ReadOnlyCollection<UsbInterfaceInfo> interfaceList = configInfo.Interfaces;
-            //                for (int iInterface = 0; iInterface < interfaceList.Count; iInterface++)
-            //                {
-            //                    UsbInterfaceInfo interfaceInfo = interfaceList[iInterface];
-            //                    _deviceEvents.OnNext($"\t\t{interfaceInfo.ToString().ReplaceLineEndings("\n\t\t")}");
-
-            //                    ReadOnlyCollection<UsbEndpointInfo> endpointList = interfaceInfo.Endpoints;
-            //                    for (int iEndpoint = 0; iEndpoint < endpointList.Count; iEndpoint++)
-            //                    {
-            //                        _deviceEvents.OnNext($"\t\t\tEndpoint: {iEndpoint}");
-            //                        _deviceEvents.OnNext($"\t\t\t{endpointList[iEndpoint].ToString().ReplaceLineEndings("\n\t\t\t")}");
-            //                    }
-            //                }
-            //            }
-
-            //            device.Close();
-            //            _deviceEvents.OnNext("\n");
-            //            _deviceEvents.OnNext(new string('-', 50) + "\n");
-            //        }
-            //    }
-            //}
-
             //compare current devices to existing devices
             var lastDevices = _deviceCache.Items.ToList();
             var toRemove = lastDevices.Where(ed => !devicesPresent.Any(dp => dp.Id == ed.Id)).ToList();
@@ -182,20 +118,9 @@ namespace usbprison
                 updater.RemoveKeys(toRemove.Select(ed => ed.Id));
                 updater.AddOrUpdate(toAdd);
             });
-            //var listJson= System.Text.Json.JsonSerializer.Serialize(_deviceCache.Items);
-            //_ = _udpService.BroadcastMessageAsync(new lib.Models.UDBMessage { MessageType = lib.Models.UDBMessageType.List, Message = listJson });
+           
         }
 
-        // void OnDeviceNotifyEvent(object? sender, DeviceNotifyEventArgs e)
-        // {
 
-        //     Console.SetCursorPosition(0, Console.CursorTop);
-
-        //     _deviceEvents.OnNext(e.Object is UsbDevice device ? $"Device: {device.Info}" : "No device info");
-        //     _deviceEvents.OnNext(e.ToString()); // Dump the event info to output.
-
-        //     _deviceEvents.OnNext();
-        //     //Console.Write("[Press any key to exit]");
-        // }
     }
 }

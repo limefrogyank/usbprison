@@ -1,4 +1,5 @@
 ﻿using MauiWifiManager;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -21,7 +22,13 @@ namespace usbprison
             }
 
             var ipAddress = new IPAddress(BitConverter.GetBytes(response.Data.IpAddress));
-            var broadcastAddress = ipAddress.GetBroadcastAddress(ipAddress.GetSubnetMask());
+            var subnetmask = ipAddress.GetSubnetMask();
+            if (subnetmask == null)
+            {
+                Log.Warning("Could not determine subnet mask.  Using default broadcast address.");
+                return IPAddress.Broadcast;
+            }
+            var broadcastAddress = ipAddress.GetBroadcastAddress(subnetmask);
             return broadcastAddress;
         }
 

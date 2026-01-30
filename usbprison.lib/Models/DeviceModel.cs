@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace usbprison
 {
     public class TrackedDeviceModel : DeviceModel
@@ -19,7 +21,11 @@ namespace usbprison
         public string? WindowsId { get; set; }
         public string Name { get; set; }
         public ushort Pid { get; set; }
+        [JsonIgnore] public string PidHex => Pid.ToString("X4");
         public ushort Vid { get; set; }
+        [JsonIgnore] public string VidHex => Vid.ToString("X4");
+        public ushort Mi { get; set; }
+        
         public string? SerialNumber { get; set; }
 
 

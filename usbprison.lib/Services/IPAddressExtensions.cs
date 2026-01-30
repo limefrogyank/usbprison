@@ -13,7 +13,7 @@ namespace usbprison
 {
     public static class IPAddressExtensions
     {
-        public static IPAddress GetSubnetMask(this IPAddress ipAddress)
+        public static IPAddress? GetSubnetMask(this IPAddress ipAddress)
         {
             if (ipAddress == null || ipAddress.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
                 throw new ArgumentException("Only valid IPv4 addresses are supported.");

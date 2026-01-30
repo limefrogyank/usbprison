@@ -32,10 +32,13 @@ namespace usbprison
             list.WhenAnyPropertyChanged()
                 .Subscribe(async x =>
                 {
-                    // whenever the list contents change, save settings
-                    x.DailySchedule.LockdownStart = x.StartTime;
-                    x.DailySchedule.LockdownEnd = x.EndTime;
-                    await _settingsService.SaveSettingsAsync().ConfigureAwait(false);
+                    if (x != null)
+                    {
+                        // whenever the list contents change, save settings
+                        x.DailySchedule.LockdownStart = x.StartTime;
+                        x.DailySchedule.LockdownEnd = x.EndTime;
+                        await _settingsService.SaveSettingsAsync().ConfigureAwait(false);
+                    }
                 });
 
             list.Connect();

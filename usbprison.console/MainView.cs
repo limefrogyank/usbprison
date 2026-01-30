@@ -34,9 +34,11 @@ namespace usbprison
 
         public MainViewModel? ViewModel {get;set;}
         object IViewFor.ViewModel {
-			get => ViewModel;
-			set => ViewModel = (MainViewModel) value;
-		}
+			get => ViewModel!;
+#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+            set => ViewModel = (MainViewModel) value;
+#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+        }
 
         public MainView(MainViewModel viewModel)
         {

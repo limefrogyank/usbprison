@@ -25,7 +25,7 @@ namespace usbprison
 
         SourceCache<SimpleTrackedDeviceViewModel, string> _devicesCache = new SourceCache<SimpleTrackedDeviceViewModel, string>(x=>x.Device.Id);
 
-        public ReadOnlyObservableCollection<SimpleTrackedDeviceViewModel> Devices { get; }
+        //public ReadOnlyObservableCollection<SimpleTrackedDeviceViewModel> Devices { get; }
         public ReadOnlyObservableCollection<GroupedItems<SimpleTrackedDeviceViewModel,string,bool>> GroupedDevices { get; }
 
         private readonly Interaction<UDPMessage, Task> testNotification = new Interaction<UDPMessage, Task>();
@@ -36,6 +36,7 @@ namespace usbprison
             _udpService = udpservice!;
 
             _devicesCache.Connect()
+                
                 .ExpireAfter(x => TimeSpan.FromSeconds(5), RxSchedulers.MainThreadScheduler)
                 .Group(x=>x.InPrison)
                 .Transform(x=>new GroupedItems<SimpleTrackedDeviceViewModel,string, bool>(x.Key ? "In Prison" : "Free", x, RxSchedulers.MainThreadScheduler))
@@ -58,6 +59,8 @@ namespace usbprison
                 //    updater.RemoveKeys(toRemove.Select(ed => ed.Id));
                 //    updater.AddOrUpdate(toAdd);
                 //});
+
+
                 _devicesCache.AddOrUpdate(devices);
 
                 //RxSchedulers.MainThreadScheduler.Schedule("TEST", (x,y) =>

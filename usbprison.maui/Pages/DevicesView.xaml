@@ -12,7 +12,7 @@
     x:DataType="{x:Type vm:DevicesViewModel}"
     x:TypeArguments="vm:DevicesViewModel">
     <Grid ColumnDefinitions="2*,3*" RowDefinitions="*,Auto">
-        <Label Grid.Row="1" Text="test" />
+
         <sflist:SfListView
             ItemsSource="{Binding Devices}"
             SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
@@ -21,7 +21,7 @@
                 <DataTemplate>
                     <StackLayout Margin="5">
                         <Label Text="{Binding Name}" />
-                        <Label Text="{Binding SerialNumber}" />
+                        <Label FontSize="Caption" Text="{Binding Id}" />
                     </StackLayout>
                 </DataTemplate>
             </sflist:SfListView.ItemTemplate>
