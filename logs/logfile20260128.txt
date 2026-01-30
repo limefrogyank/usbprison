@@ -4,3 +4,51 @@
 2026-01-28 16:25:03.367 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
 2026-01-28 16:25:03.392 -05:00 [INF] Created a new collection
 2026-01-28 16:25:03.423 -05:00 [INF] Created a new collection
+2026-01-28 17:10:24.202 -05:00 [INF] created device: Fire
+2026-01-28 17:10:24.533 -05:00 [INF] created device: Fire
+2026-01-28 17:10:24.535 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:10:24.535 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:10:24.557 -05:00 [INF] Created a new collection
+2026-01-28 17:10:24.586 -05:00 [INF] Created a new collection
+2026-01-28 17:10:29.463 -05:00 [INF] Local IP Address: 192.168.50.161
+2026-01-28 17:10:29.488 -05:00 [INF] Broadcast IP Address: 192.168.50.255
+2026-01-28 17:12:21.981 -05:00 [INF] created device: Fire
+2026-01-28 17:12:22.305 -05:00 [INF] created device: Fire
+2026-01-28 17:12:22.307 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:12:22.307 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:12:22.329 -05:00 [INF] Created a new collection
+2026-01-28 17:12:22.358 -05:00 [INF] Created a new collection
+2026-01-28 17:12:27.246 -05:00 [INF] Local IP Address: 192.168.50.161
+2026-01-28 17:12:27.258 -05:00 [INF] Broadcast IP Address: 255.255.255.255
+2026-01-28 17:16:49.443 -05:00 [INF] created device: Fire
+2026-01-28 17:16:49.761 -05:00 [INF] created device: Fire
+2026-01-28 17:16:49.763 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:16:49.764 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:16:49.785 -05:00 [INF] Created a new collection
+2026-01-28 17:16:49.814 -05:00 [INF] Created a new collection
+2026-01-28 17:16:54.695 -05:00 [INF] Local IP Address: 192.168.50.161
+2026-01-28 17:16:54.705 -05:00 [INF] Broadcast IP Address: 255.255.255.255
+2026-01-28 17:17:43.113 -05:00 [INF] created device: Fire
+2026-01-28 17:17:43.434 -05:00 [INF] created device: Fire
+2026-01-28 17:17:43.436 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:17:43.437 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:17:43.459 -05:00 [INF] Created a new collection
+2026-01-28 17:17:43.488 -05:00 [INF] Created a new collection
+2026-01-28 17:17:48.367 -05:00 [INF] Local IP Address: 192.168.50.161
+2026-01-28 17:17:48.382 -05:00 [INF] Broadcast IP Address: 255.255.255.255
+2026-01-28 17:19:19.891 -05:00 [INF] created device: Fire
+2026-01-28 17:19:20.209 -05:00 [INF] created device: Fire
+2026-01-28 17:19:20.211 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:19:20.212 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:19:20.233 -05:00 [INF] Created a new collection
+2026-01-28 17:19:20.263 -05:00 [INF] Created a new collection
+2026-01-28 17:19:25.160 -05:00 [INF] Local IP Address: 192.168.50.161
+2026-01-28 17:19:25.182 -05:00 [INF] Broadcast IP Address: 255.255.255.255
+2026-01-28 17:20:34.074 -05:00 [INF] created device: Fire
+2026-01-28 17:20:34.390 -05:00 [INF] created device: Fire
+2026-01-28 17:20:34.392 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:20:34.393 -05:00 [INF] TrackingViewModel detected changed to tracked devices: 1
+2026-01-28 17:20:34.414 -05:00 [INF] Created a new collection
+2026-01-28 17:20:34.443 -05:00 [INF] Created a new collection
+2026-01-28 17:20:39.327 -05:00 [INF] Local IP Address: 192.168.50.161
+2026-01-28 17:20:39.350 -05:00 [INF] Broadcast IP Address: 192.168.50.255

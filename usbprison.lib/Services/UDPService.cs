@@ -170,7 +170,7 @@ namespace usbprison.lib.Services
                 message.SenderId = string.Join(',', _deviceInfo.Name, _deviceInfo.Version);
                 byte[] data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
 
-                using var udpClient = new UdpClient();
+                using var udpClient = new UdpClient() { EnableBroadcast = true, ExclusiveAddressUse=false, MulticastLoopback=false };
                 switch (message.MessageType)
                 {
                     case UDPMessageType.List:

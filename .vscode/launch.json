@@ -25,13 +25,24 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
-            "console": "integratedTerminal",
-            "pipeTransport": {
-                "pipeProgram": "ssh",
-                "pipeArgs": [],
-                "debuggerPath": "sudo ~/vsdbg/vsdbg",
-                "pipeCwd": "${workspaceRoot}",
-            }
-        }
+            "console": "integratedTerminal"
+        },
+        // {
+        //     "name": "Linux Launch (console)",
+        //     "type": "coreclr",
+        //     "request": "launch",
+        //     "preLaunchTask": "build",
+        //     "program": "${workspaceFolder}/usbprison.console/bin/Debug/net10.0/usbprison.dll", // Adjust the path and framework version if needed
+        //     "args": [],
+        //     "cwd": "${workspaceFolder}",
+        //     "stopAtEntry": false,
+        //     "console": "integratedTerminal",
+        //     "pipeTransport": {
+        //         "pipeProgram": "ssh",
+        //         "pipeArgs": [],
+        //         "debuggerPath": "sudo ~/vsdbg/vsdbg",
+        //         "pipeCwd": "${workspaceRoot}",
+        //     }
+        // }
     ]
 }

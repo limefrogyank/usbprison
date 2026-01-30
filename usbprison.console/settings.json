@@ -8,7 +8,7 @@
       "Pid": 1505,
       "Vid": 6473,
       "SerialNumber": "G001KT062397003L",
-      "Guid": "16a82678-aac5-452d-beeb-d050c99d8651",
+      "Guid": "5bf0f56c-245e-4fc2-b706-e8b452357250",
       "Id": "USB\\VID_6473\u0026PID_1505\\G001KT062397003L"
     },
     {
@@ -18,7 +18,7 @@
       "Pid": 20199,
       "Vid": 6353,
       "SerialNumber": "37031FDHS001HT",
-      "Guid": "995758a1-fd94-479b-97c2-e13526870858",
+      "Guid": "ed20a47b-2eb3-45ca-99e3-54a95e4942f7",
       "Id": "USB\\VID_6353\u0026PID_20199\\37031FDHS001HT"
     }
   ]

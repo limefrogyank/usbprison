@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using Serilog;
 
@@ -30,15 +31,20 @@ namespace usbprison
             //         break;
             //     }
             // }
-#if Linux
-            Log.Information($"Local IP Address: {address}");
-            var broadcast = IPAddress.Broadcast;
-            Log.Information($"Broadcast IP Address: {broadcast}");
-#else
-            Log.Information($"Local IP Address: {address}");
-            var broadcast = address?.GetBroadcastAddress(address.GetSubnetMask());
-            Log.Information($"Broadcast IP Address: {broadcast}");
-#endif
+
+            IPAddress? broadcast = null;
+            // if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            // {
+            //     Log.Information($"Local IP Address: {address}");
+            //     broadcast = IPAddress.Broadcast;
+            //     Log.Information($"Broadcast IP Address: {broadcast}");
+            // }
+            // else
+            {
+                Log.Information($"Local IP Address: {address}");
+                broadcast = address?.GetBroadcastAddress(address.GetSubnetMask());
+                Log.Information($"Broadcast IP Address: {broadcast}");
+            }
 
             return Task.FromResult(broadcast);
         }
