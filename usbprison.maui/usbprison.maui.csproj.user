@@ -14,8 +14,5 @@
     <None Update="App.xaml">
       <SubType>Designer</SubType>
     </None>
-    <None Update="Platforms\Windows\Package.appxmanifest">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
 </Project>
