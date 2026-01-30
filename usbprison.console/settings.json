@@ -10,7 +10,7 @@
       "Mi": 0,
       "SerialNumber": "G001KT062397003L",
       "Guid": "03210076-6ab4-4647-a127-6c9e6f7e783c",
-      "Id": "USB\\VID_6473\u0026PID_1505\\G001KT062397003L"
+      "Id": "USB\\VID_1949\u0026PID_05E1\\G001KT062397003L"
     },
     {
       "CustomText": null,
@@ -21,7 +21,7 @@
       "Mi": 0,
       "SerialNumber": "37031FDHS001HT",
       "Guid": "0bdaed59-7b27-4297-9495-5a52b629cba0",
-      "Id": "USB\\VID_6353\u0026PID_20199\\37031FDHS001HT"
+      "Id": "USB\\VID_18D1\u0026PID_4EE7\\37031FDHS001HT"
     }
   ]
 }
