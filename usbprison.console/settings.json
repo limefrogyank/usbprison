@@ -1,27 +1,63 @@
 {
-  "DailyScheduleList": [],
-  "TrackedDevicesList": [
+  "DailyScheduleList": [
     {
-      "CustomText": "Aurelie\u0027s Fire",
-      "WindowsId": null,
-      "Name": "Fire",
-      "Pid": 1505,
-      "Vid": 6473,
-      "Mi": 0,
-      "SerialNumber": "G001KT062397003L",
-      "Guid": "03210076-6ab4-4647-a127-6c9e6f7e783c",
-      "Id": "USB\\VID_1949\u0026PID_05E1\\G001KT062397003L"
+      "LockdownStart": "19:00:00",
+      "LockdownEnd": "08:00:00",
+      "DayOfWeek": 0
     },
     {
-      "CustomText": null,
-      "WindowsId": null,
+      "LockdownStart": "22:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 1
+    },
+    {
+      "LockdownStart": "22:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 2
+    },
+    {
+      "LockdownStart": "22:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 3
+    },
+    {
+      "LockdownStart": "22:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 4
+    },
+    {
+      "LockdownStart": "22:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 5
+    },
+    {
+      "LockdownStart": "22:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 6
+    }
+  ],
+  "TrackedDevicesList": [
+    {
+      "CustomText": "Lee\u0027s Pixel Fold",
+      "WindowsId": "USB\\VID_18D1\u0026PID_4EE7\\37031FDHS001HT",
       "Name": "Pixel Fold",
       "Pid": 20199,
       "Vid": 6353,
       "Mi": 0,
       "SerialNumber": "37031FDHS001HT",
-      "Guid": "0bdaed59-7b27-4297-9495-5a52b629cba0",
+      "Guid": "9ad41135-b716-49cd-8651-9b628f5acaa8",
       "Id": "USB\\VID_18D1\u0026PID_4EE7\\37031FDHS001HT"
+    },
+    {
+      "CustomText": "Aurelie\u0027s Fire Tablet",
+      "WindowsId": "USB\\VID_1949\u0026PID_05E1\\G001KT062397003L",
+      "Name": "Fire",
+      "Pid": 1505,
+      "Vid": 6473,
+      "Mi": 0,
+      "SerialNumber": "G001KT062397003L",
+      "Guid": "1de9a5b2-5396-4883-a1fc-07acfdec5ee3",
+      "Id": "USB\\VID_1949\u0026PID_05E1\\G001KT062397003L"
     }
   ]
 }
