@@ -24,13 +24,9 @@ namespace usbprison
         [JsonIgnore] public string PidHex => Pid.ToString("X4");
         public ushort Vid { get; set; }
         [JsonIgnore] public string VidHex => Vid.ToString("X4");
-        public ushort Mi { get; set; }
-        
+        public ushort Mi { get; set; }        
         public string? SerialNumber { get; set; }
-
-
-        public string Guid => System.Guid.NewGuid().ToString();
-
+        public string Guid { get;set; }
         public string Id
         {
             get
@@ -54,6 +50,7 @@ namespace usbprison
                 }
                 else
                 {
+                    Guid = System.Guid.NewGuid().ToString();
                     return Guid;
                 }
             }
