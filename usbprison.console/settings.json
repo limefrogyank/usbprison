@@ -7,8 +7,9 @@
       "Name": "Fire",
       "Pid": 1505,
       "Vid": 6473,
+      "Mi": 0,
       "SerialNumber": "G001KT062397003L",
-      "Guid": "5bf0f56c-245e-4fc2-b706-e8b452357250",
+      "Guid": "03210076-6ab4-4647-a127-6c9e6f7e783c",
       "Id": "USB\\VID_6473\u0026PID_1505\\G001KT062397003L"
     },
     {
@@ -17,8 +18,9 @@
       "Name": "Pixel Fold",
       "Pid": 20199,
       "Vid": 6353,
+      "Mi": 0,
       "SerialNumber": "37031FDHS001HT",
-      "Guid": "ed20a47b-2eb3-45ca-99e3-54a95e4942f7",
+      "Guid": "0bdaed59-7b27-4297-9495-5a52b629cba0",
       "Id": "USB\\VID_6353\u0026PID_20199\\37031FDHS001HT"
     }
   ]
