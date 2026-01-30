@@ -42,7 +42,7 @@ namespace usbprison
                 else if (Pid != 0 && Vid != 0 && SerialNumber != null)
                 {
                     // windows style ID so that we can potentially use multiple base stations that can recognize the same device 
-                    return $"USB\\VID_{Vid}&PID_{Pid}\\{SerialNumber}";
+                    return $"USB\\VID_{VidHex}&PID_{PidHex}\\{SerialNumber}";
                 }
                 else if (SerialNumber != null)
                 {
