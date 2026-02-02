@@ -14,6 +14,7 @@ using usbprison.lib.Models;
 using Serilog;
 using usbprison.lib.Services;
 using DynamicData.Binding;
+using System.Diagnostics;
 
 namespace usbprison
 {
@@ -23,10 +24,10 @@ namespace usbprison
 
         [ObservableAsProperty] private string _latestMessage = string.Empty;
 
-        SourceCache<SimpleTrackedDeviceViewModel, string> _devicesCache = new SourceCache<SimpleTrackedDeviceViewModel, string>(x=>x.Device.Id);
+        SourceCache<MultiTrackedDeviceViewModel, string> _devicesCache = new SourceCache<MultiTrackedDeviceViewModel, string>(x=>x.Device.Id);
 
         //public ReadOnlyObservableCollection<SimpleTrackedDeviceViewModel> Devices { get; }
-        public ReadOnlyObservableCollection<GroupedItems<SimpleTrackedDeviceViewModel,string,bool>> GroupedDevices { get; }
+        public ReadOnlyObservableCollection<GroupedMultiTrackedViewModel> GroupedDevices { get; }
 
         private readonly Interaction<UDPMessage, Task> testNotification = new Interaction<UDPMessage, Task>();
         public Interaction<UDPMessage, Task> TestNotification => this.testNotification;
@@ -36,13 +37,21 @@ namespace usbprison
             _udpService = udpservice!;
 
             _devicesCache.Connect()
-                
-                .ExpireAfter(x => TimeSpan.FromSeconds(5), RxSchedulers.MainThreadScheduler)
+                .OnItemAdded(x =>
+                {
+                    x.SelfClear(_devicesCache);
+                })
+                //.ExpireAfter(x => { 
+                    
+                //    return TimeSpan.FromSeconds(10);
+                //}, RxSchedulers.MainThreadScheduler)
                 .Group(x=>x.InPrison)
-                .Transform(x=>new GroupedItems<SimpleTrackedDeviceViewModel,string, bool>(x.Key ? "In Prison" : "Free", x, RxSchedulers.MainThreadScheduler))
-                
+                .Do(x=> Debug.WriteLine("New Groups formed?"))
+                .Transform(x=>new GroupedMultiTrackedViewModel(x.Key ? "In Prison" : "Free", x, RxSchedulers.MainThreadScheduler))
+                .Do(x => Debug.WriteLine("New Group Models made?"))
+
                 .ObserveOn(RxSchedulers.MainThreadScheduler)
-                .SortAndBind(out var devices, SortExpressionComparer<GroupedItems<SimpleTrackedDeviceViewModel, string,bool>>.Descending(x=>x.Name))
+                .SortAndBind(out var devices, SortExpressionComparer<GroupedMultiTrackedViewModel>.Descending(x=>x.Name))
                 .Subscribe();
             GroupedDevices = devices;
             Log.Information("ReceiverViewModel initialized");
@@ -52,6 +61,7 @@ namespace usbprison
             {
                
                 var lastDevices = _devicesCache.Items;
+                var currentDevices = devices.ToList();
                 //var toRemove = lastDevices.Where(ed => !devices.Any(dp => dp.Id == ed.Id)).ToList();
                 //var toAdd = devices.Where(ed => !lastDevices.Any(ld => ld.Id == ed.Id)).ToList();
                 //_devicesCache.Edit(updater =>
@@ -60,8 +70,28 @@ namespace usbprison
                 //    updater.AddOrUpdate(toAdd);
                 //});
 
+                var matchingPairs = devices.Join(lastDevices, x => x.Id, x => x.Id, (x, y) => new { Current = x, Previous = y });
 
-                _devicesCache.AddOrUpdate(devices);
+                foreach (var pair in matchingPairs)
+                {
+                    if (pair.Previous.InPrison == true && pair.Current.InPrison == false && pair.Previous.MachineId != pair.Current.MachineId)
+                    {
+                        // revert to previous state avoid wrong grouping
+                        //pair.Current.InPrison = true;
+                        //pair.Current.SetOnlyMachine(pair.Previous.MachineId);
+                        currentDevices.Remove(pair.Current);
+                    }
+                    else if (!pair.Previous.InPrison && !pair.Current.InPrison && pair.Previous.MachineId != pair.Current.MachineId)
+                    {
+                        pair.Current.AddMachines(pair.Previous.Machines);
+                    }
+                }
+
+
+
+
+
+                _devicesCache.AddOrUpdate(currentDevices);
 
                 //RxSchedulers.MainThreadScheduler.Schedule("TEST", (x,y) =>
                 //{

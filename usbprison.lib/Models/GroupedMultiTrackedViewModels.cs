@@ -14,10 +14,7 @@ using System.Text;
 namespace usbprison
 {
 
-    public class GroupedItems<T, TKey, TGroupKey> : ObservableCollectionExtended<T>, IDisposable
-        where T : class 
-        where TKey : notnull
-        where TGroupKey : notnull
+    public class GroupedMultiTrackedViewModel: ObservableCollectionExtended<MultiTrackedDeviceViewModel>, IDisposable
     {
         //public static IEnumerable<T> GetBoundItems(IObservableCache<T,TKey> cache)
         //{
@@ -29,19 +26,19 @@ namespace usbprison
 
         public string Name { get; set; } = string.Empty;
 
-        public Func<T, T, bool> IgnoreUpdateFunction { get; set; } = (current, previous) => false;
+        //public Func<T, T, bool> IgnoreUpdateFunction { get; set; } = (current, previous) => false;
 
-        public GroupedItems(string name, IGroup<T, TKey, TGroupKey> data, IScheduler scheduler, Func<T,T,bool> ignoreUpdateFunction) 
+        public GroupedMultiTrackedViewModel(string name, IGroup<MultiTrackedDeviceViewModel, string, bool> data, IScheduler scheduler)
         {
             Name = name;
-            IgnoreUpdateFunction = ignoreUpdateFunction;
+            //IgnoreUpdateFunction = ignoreUpdateFunction;
             //load and sort the grouped list
-            var dataLoader = data.Cache.Connect()
+            data.Cache.Connect()
                 //.IgnoreUpdateWhen(IgnoreUpdateFunction)
-                
+
                 .Do(x => Debug.WriteLine("New Items list triggered?"))
                 .ObserveOn(scheduler)
-                .Bind(this) //make the reset threshold large because xamarin is slow when reset is called (or at least I think it is @erlend, please enlighten me )
+                .Bind(this, updater: new CustomAdaptor()) //make the reset threshold large because xamarin is slow when reset is called (or at least I think it is @erlend, please enlighten me )
                 .Subscribe();
 
         }

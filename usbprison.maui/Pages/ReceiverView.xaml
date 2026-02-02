@@ -47,14 +47,33 @@
                     </Grid>
                 </DataTemplate>
             </CollectionView.HeaderTemplate>-->
+            <CollectionView.EmptyView>
+                <Label
+                    HorizontalOptions="Center"
+                    Text="No tracked devices found."
+                    VerticalOptions="Center" />
+
+            </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="vm:SimpleTrackedDeviceViewModel">
-                    <Border Stroke="White" StrokeShape="RoundRectangle 5" StrokeThickness="1" Margin="4" Padding="4" >
-                        <FlexLayout Wrap="Wrap">
+                <DataTemplate x:DataType="vm:MultiTrackedDeviceViewModel">
+                    <Border
+                        Margin="4"
+                        Padding="4"
+                        Stroke="White"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="1">
+                        <Grid RowDefinitions="*,*,Auto">
                             <Label Margin="0,0,20,0" Text="{Binding DisplayName}" />
-                            <Label Grid.Column="1" Text="{Binding Device.Id}" />
-                            <Label Grid.Column="2" Text="{Binding MachineId}" />
-                        </FlexLayout>
+                            <Label Grid.Row="1" Text="{Binding Device.Id}" />
+                            <!--<Label Grid.Column="2" Text="{Binding MachineId}" />-->
+                            <VerticalStackLayout Grid.Row="2" BindableLayout.ItemsSource="{Binding Machines}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Label Text="{Binding}" />
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                        </Grid>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

@@ -27,8 +27,8 @@ namespace usbprison.lib.Services
         private Subject<string> _notificationSubject = new Subject<string>();
         public IObservable<string> NotificationReceived => _notificationSubject.AsObservable();
 
-        private Subject<List<SimpleTrackedDeviceViewModel>> _lastestDevicesSubject = new Subject<List<SimpleTrackedDeviceViewModel>>();
-        public IObservable<List<SimpleTrackedDeviceViewModel>> LastestDevicesReceived => _lastestDevicesSubject.AsObservable();
+        private Subject<List<MultiTrackedDeviceViewModel>> _lastestDevicesSubject = new Subject<List<MultiTrackedDeviceViewModel>>();
+        public IObservable<List<MultiTrackedDeviceViewModel>> LastestDevicesReceived => _lastestDevicesSubject.AsObservable();
 
         private GenericDeviceInfo _deviceInfo;
         private readonly IIPService _ipService;
@@ -79,8 +79,8 @@ namespace usbprison.lib.Services
                                 _notificationSubject.OnNext(udpmessage.Message ?? "");
                                 break;
                             case UDPMessageType.List:
-                                var plugged = udpmessage.PluggedDevices?.Select(x => new SimpleTrackedDeviceViewModel(x, true, udpmessage.SenderId)).ToList() ?? new List<SimpleTrackedDeviceViewModel>();
-                                var unplugged = udpmessage.MissingDevices?.Select(x => new SimpleTrackedDeviceViewModel(x, false, udpmessage.SenderId)).ToList() ?? new List<SimpleTrackedDeviceViewModel>();
+                                var plugged = udpmessage.PluggedDevices?.Select(x => new MultiTrackedDeviceViewModel(x, true, udpmessage.SenderId)).ToList() ?? new List<MultiTrackedDeviceViewModel>();
+                                var unplugged = udpmessage.MissingDevices?.Select(x => new MultiTrackedDeviceViewModel(x, false, udpmessage.SenderId)).ToList() ?? new List<MultiTrackedDeviceViewModel>();
                                 _lastestDevicesSubject.OnNext(plugged.Concat(unplugged).ToList());
                                 break;
                             default:
