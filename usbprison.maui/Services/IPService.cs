@@ -17,7 +17,7 @@ namespace usbprison
             var response = await CrossWifiManager.Current.GetNetworkInfo();
             if (response.Data == null || response.Data.IpAddress == 0)
             {
-                return null;
+                return IPAddress.Broadcast;
                 // try using 255.255.255.255
             }
 
