@@ -54,6 +54,9 @@ using (Globals.App)
     var ipService = new IPService();
     Locator.CurrentMutable.RegisterConstant<IIPService>(ipService);
 
+    var databaseService = new DatabaseService("Data.sqlite");
+    Locator.CurrentMutable.RegisterConstant<DatabaseService>(databaseService);
+
     var settingsService = new SettingsService(true);
     Locator.CurrentMutable.RegisterConstant<ISettingsService>(settingsService);
 

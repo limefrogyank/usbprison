@@ -41,20 +41,13 @@ namespace usbprison
                 {
                     x.SelfClear(_devicesCache);
                 })
-                //.ExpireAfter(x => { 
-                    
-                //    return TimeSpan.FromSeconds(10);
-                //}, RxSchedulers.MainThreadScheduler)
                 .Group(x=>x.InPrison)
-                .Do(x=> Debug.WriteLine("New Groups formed?"))
                 .Transform(x=>new GroupedMultiTrackedViewModel(x.Key ? "In Prison" : "Free", x, RxSchedulers.MainThreadScheduler))
-                .Do(x => Debug.WriteLine("New Group Models made?"))
-
                 .ObserveOn(RxSchedulers.MainThreadScheduler)
                 .SortAndBind(out var devices, SortExpressionComparer<GroupedMultiTrackedViewModel>.Descending(x=>x.Name))
                 .Subscribe();
             GroupedDevices = devices;
-            Log.Information("ReceiverViewModel initialized");
+
             _latestMessageHelper = _udpService.NotificationReceived.ObserveOn(RxSchedulers.MainThreadScheduler).ToProperty(this, x => x.LatestMessage);
 
             _udpService.LastestDevicesReceived.ObserveOn(RxSchedulers.MainThreadScheduler).Subscribe(async devices =>
@@ -62,13 +55,7 @@ namespace usbprison
                
                 var lastDevices = _devicesCache.Items;
                 var currentDevices = devices.ToList();
-                //var toRemove = lastDevices.Where(ed => !devices.Any(dp => dp.Id == ed.Id)).ToList();
-                //var toAdd = devices.Where(ed => !lastDevices.Any(ld => ld.Id == ed.Id)).ToList();
-                //_devicesCache.Edit(updater =>
-                //{
-                //    updater.RemoveKeys(toRemove.Select(ed => ed.Id));
-                //    updater.AddOrUpdate(toAdd);
-                //});
+
 
                 var matchingPairs = devices.Join(lastDevices, x => x.Id, x => x.Id, (x, y) => new { Current = x, Previous = y });
 

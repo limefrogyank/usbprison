@@ -22,11 +22,11 @@ namespace usbprison.maui
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
-                .UseShiny() // THIS IS REQUIRED FOR SHINY ON MAUI
+                .UseShiny() // THIS IS REQUIRED FOR SHINY ON MAUI, Shiny is a library for simpler notifications
                 .UseMauiWifiManager() // needed to get IP address to calculate subnet mask for UDP broadcasting, helps get around virtual adapters which fail when using 255.255.255.255
-                .UseMauiCommunityToolkit()
-                .ConfigureSyncfusionToolkit()
-                .ConfigureSyncfusionCore()
+                .UseMauiCommunityToolkit()  // MAYBE NOT NEEDED
+                .ConfigureSyncfusionToolkit()  // MAYBE NOT NEEDED
+                .ConfigureSyncfusionCore()  // MAYBE NOT NEEDED
                 .ConfigureMauiHandlers(handlers =>
                 {
 #if WINDOWS
@@ -50,8 +50,12 @@ namespace usbprison.maui
     		builder.Logging.AddDebug();
     		builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
+            var databaseService = new DatabaseService(Path.Combine(FileSystem.CacheDirectory, "Data.sqlite"));
+            Locator.CurrentMutable.RegisterConstant<DatabaseService>(databaseService);
+
             var settingsService = new SettingsService(true);
             Locator.CurrentMutable.RegisterConstant<ISettingsService>(settingsService);
+
             var deviceInfo = new GenericDeviceInfo
             {
                 Name = DeviceInfo.Name,
@@ -65,17 +69,15 @@ namespace usbprison.maui
             };
             var ipService = new IPService();
             Locator.CurrentMutable.RegisterConstant<IIPService>(ipService);
+
             var udpService = new UDPService(deviceInfo, ipService);
             Locator.CurrentMutable.RegisterConstant<UDPService>(udpService);
+
 #if WINDOWS
             var usbService = new USBService();
             Locator.CurrentMutable.RegisterConstant<IUSBService>(usbService);
             Locator.CurrentMutable.RegisterConstant<BroadcastService>( new BroadcastService(settingsService, udpService));
-#endif
-
-            
-
-#if !WINDOWS
+#else            
             builder.Services.AddNotifications();
 #endif
 
@@ -111,13 +113,8 @@ namespace usbprison.maui
             var s = RxSchedulers.MainThreadScheduler.GetType();
 #elif ANDROID
             RxSchedulers.MainThreadScheduler = HandlerScheduler.MainThreadScheduler;
-
 #endif
-            //builder.Services.AddTransientWithShellRoute<ProjectDetailPage, ProjectDetailPageModel>("project");
-            //builder.Services.AddTransientWithShellRoute<TaskDetailPage, TaskDetailPageModel>("task");
-            //builder.Services.AddSingleton<RootViewModel>();
-
-            //            builder.Services.AddTransient<IViewFor<SingleDeviceViewModel>>(x=> new SingleDeviceView());
+           
 
             return builder.Build();
         }

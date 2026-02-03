@@ -10,16 +10,12 @@ namespace usbprison
 {
     public class CustomAdaptor : IObservableCollectionAdaptor<MultiTrackedDeviceViewModel, string>
     {
-        //private readonly ObservableCollection<MultiTrackedDeviceViewModel> _target;
-        private bool _loaded;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ObservableCollectionAdaptor{TObject, TKey}"/> class.
         /// </summary>
         /// <param name="options"> The binding options.</param>
         public CustomAdaptor()
         {
-            // _target = new ObservableCollection<MultiTrackedDeviceViewModel>();
         }
 
         /// <summary>

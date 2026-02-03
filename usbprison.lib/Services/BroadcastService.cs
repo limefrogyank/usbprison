@@ -25,7 +25,7 @@ namespace usbprison.lib.Services
                 .Transform(x => new DailyScheduleViewModel(x))
                 .AutoRefresh(x => x.StartTime)
                 .AutoRefresh(x => x.EndTime)
-                .Bind(out var dailySchedule)
+                .Bind(out var dailySchedules)
                 .Subscribe();
 
             var timer = new System.Timers.Timer(5000); //every 5 seconds
@@ -46,16 +46,26 @@ namespace usbprison.lib.Services
 
                 // background monitoring use
                 // check schedule before sending out message
-                
-                
-                await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage
-                {
-                    MessageType = lib.Models.UDPMessageType.Alert,
-                    Message = $"There are {trackedDevices.Where(x => x.IsPluggedIn).Count()} device(s) in prison",
-                    PluggedDevices = trackedDevices.Where(x => x.IsPluggedIn).Select(x => x.Device).ToList(),
-                    MissingDevices = trackedDevices.Where(x => !x.IsPluggedIn).Select(x => x.Device).ToList()
-                });
 
+                var date = DateTime.Now;
+                var time = date.TimeOfDay;
+                var dayOfWeek = date.DayOfWeek;
+                var schedule = dailySchedules.FirstOrDefault(x => x.DayOfWeek == dayOfWeek);
+                if (time < schedule.EndTime || time > schedule.StartTime)
+                {
+                    // are there any tracked devices that are free??
+                    var freeDevices = trackedDevices.Where(x => !x.IsPluggedIn);
+                    if (freeDevices.Any())
+                    {
+                        await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage
+                        {
+                            MessageType = lib.Models.UDPMessageType.Alert,
+                            Message = $"{freeDevices.Count()} device(s) have escaped lockdown!",
+                            PluggedDevices = trackedDevices.Where(x => x.IsPluggedIn).Select(x => x.Device).ToList(),
+                            MissingDevices = freeDevices.Select(x => x.Device).ToList()
+                        });
+                    }
+                }
 
             };
             timer.Enabled = true;

@@ -19,11 +19,11 @@
                         <Label
                             Grid.Column="1"
                             FontAttributes="Bold"
-                            Text="Lockdown Start" />
+                            Text="Lockdown End" />
                         <Label
                             Grid.Column="2"
                             FontAttributes="Bold"
-                            Text="Lockdown End" />
+                            Text="Lockdown Start" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.HeaderTemplate>
@@ -31,8 +31,8 @@
                 <DataTemplate x:DataType="vm:DailyScheduleViewModel">
                     <Grid ColumnDefinitions="*,2*,2*">
                         <Label Text="{Binding DayOfWeek}" />
-                        <TimePicker Grid.Column="1" Time="{Binding StartTime, Mode=TwoWay}" />
-                        <TimePicker Grid.Column="2" Time="{Binding EndTime, Mode=TwoWay}" />
+                        <TimePicker Grid.Column="1" Time="{Binding EndTime, Mode=TwoWay}" />
+                        <TimePicker Grid.Column="2" Time="{Binding StartTime, Mode=TwoWay}" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

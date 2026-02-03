@@ -38,6 +38,7 @@ namespace usbprison
                 else if (Pid != 0 && Vid != 0 && SerialNumber != null)
                 {
                     // windows style ID so that we can potentially use multiple base stations that can recognize the same device 
+                    // Why windows style? Why not!? Combines all the necessary elements.
                     return $"USB\\VID_{VidHex}&PID_{PidHex}\\{SerialNumber}";
                 }
                 else if (SerialNumber != null)
@@ -50,7 +51,7 @@ namespace usbprison
                 }
                 else
                 {
-                    Guid = System.Guid.NewGuid().ToString();
+                    //Guid = System.Guid.NewGuid().ToString();
                     return Guid;
                 }
             }
@@ -62,6 +63,7 @@ namespace usbprison
             Pid = 0;
             Vid = 0;
             SerialNumber = null;
+            Guid = System.Guid.NewGuid().ToString();
         }
 
         public DeviceModel(string name, ushort pid, ushort vid, string? serialNumber)
@@ -70,6 +72,7 @@ namespace usbprison
             Pid = pid;
             Vid = vid;
             SerialNumber = serialNumber;
+            Guid = System.Guid.NewGuid().ToString();
         }
     }
 }
