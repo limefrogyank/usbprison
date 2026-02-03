@@ -1,5 +1,41 @@
 {
-  "DailyScheduleList": [],
+  "DailyScheduleList": [
+    {
+      "LockdownStart": "23:00:00",
+      "LockdownEnd": "06:00:00",
+      "DayOfWeek": 0
+    },
+    {
+      "LockdownStart": "22:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 1
+    },
+    {
+      "LockdownStart": "22:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 2
+    },
+    {
+      "LockdownStart": "20:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 3
+    },
+    {
+      "LockdownStart": "22:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 4
+    },
+    {
+      "LockdownStart": "20:00:00",
+      "LockdownEnd": "08:00:00",
+      "DayOfWeek": 5
+    },
+    {
+      "LockdownStart": "20:00:00",
+      "LockdownEnd": "07:00:00",
+      "DayOfWeek": 6
+    }
+  ],
   "TrackedDevicesList": [
     {
       "CustomText": "Aurelie\u0027s Fire",
@@ -7,9 +43,10 @@
       "Name": "Fire",
       "Pid": 1505,
       "Vid": 6473,
+      "Mi": 0,
       "SerialNumber": "G001KT062397003L",
       "Guid": "8972bd95-d43f-4ddc-a324-aec38eeb9e2a",
-      "Id": "USB\\VID_6473\u0026PID_1505\\G001KT062397003L"
+      "Id": "USB\\VID_1949\u0026PID_05E1\\G001KT062397003L"
     }
   ]
 }

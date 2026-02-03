@@ -7,7 +7,7 @@ namespace usbprison
 {
     public partial class SettingsService : SettingsServiceBase
     {
-       
+
         protected override void LoadSettings()
         {
             if (!System.IO.File.Exists("settings.json"))
@@ -26,7 +26,23 @@ namespace usbprison
             var settingsJson = System.IO.File.ReadAllText("settings.json");
             var settings = System.Text.Json.JsonSerializer.Deserialize<SettingsService>(settingsJson);
             if (settings != null)
-            {                
+            {
+                if (settings.DailyScheduleList == null || settings.DailyScheduleList.Count == 0)
+                {
+                    // not initialized yet, do it now
+                    settings.DailyScheduleList = new List<DailySchedule>
+                        {
+                            new DailySchedule{DayOfWeek=DayOfWeek.Sunday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Monday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Tuesday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Wednesday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Thursday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Friday},
+                            new DailySchedule{DayOfWeek=DayOfWeek.Saturday}
+                        };
+                }
+                this.DailyScheduleList = settings.DailyScheduleList;
+
                 this.TrackedDevicesList = settings.TrackedDevicesList;
             }
         }

@@ -1,27 +1,27 @@
 {
   "DailyScheduleList": [
     {
-      "LockdownStart": "19:00:00",
-      "LockdownEnd": "08:00:00",
+      "LockdownStart": "22:00:00",
+      "LockdownEnd": "07:00:00",
       "DayOfWeek": 0
     },
     {
-      "LockdownStart": "22:00:00",
+      "LockdownStart": "20:00:00",
       "LockdownEnd": "07:00:00",
       "DayOfWeek": 1
     },
     {
-      "LockdownStart": "22:00:00",
+      "LockdownStart": "20:00:00",
       "LockdownEnd": "07:00:00",
       "DayOfWeek": 2
     },
     {
-      "LockdownStart": "22:00:00",
+      "LockdownStart": "20:00:00",
       "LockdownEnd": "07:00:00",
       "DayOfWeek": 3
     },
     {
-      "LockdownStart": "22:00:00",
+      "LockdownStart": "20:00:00",
       "LockdownEnd": "07:00:00",
       "DayOfWeek": 4
     },

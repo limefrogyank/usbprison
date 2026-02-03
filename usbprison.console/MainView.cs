@@ -22,7 +22,7 @@ namespace usbprison
     public class MainView : Terminal.Gui.Views.Window, IViewFor<MainViewModel>
     {
         readonly CompositeDisposable _disposable = new CompositeDisposable();
-        private DeviceListView deviceListView = new DeviceListView();
+
         //private ObservableCollection<string> data = new ObservableCollection<string> { "Device 1", "Device 2", "Device 3" };
         //public ObservableCollection<DeviceModel> Devices = new ObservableCollection<DeviceModel>();
         //        private Terminal.Gui.Views.Label label;
@@ -78,6 +78,12 @@ namespace usbprison
             devicesTab.View.Height = Dim.Fill();
             tabView.AddTab(devicesTab, false);
 
+            var scheduleTab = new Terminal.Gui.Views.Tab();
+            scheduleTab.DisplayText = "Schedule";
+            scheduleTab.View = new ScheduleView(new ScheduleViewModel());
+            scheduleTab.View.Width = Dim.Fill();
+            scheduleTab.View.Height = Dim.Fill();
+            tabView.AddTab(scheduleTab, false);
 
             // var textview = new Terminal.Gui.Views.TextView();
             // textview.X = 0;

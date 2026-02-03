@@ -24,6 +24,8 @@ namespace usbprison
 
         public DynamicData.Binding.ObservableCollectionExtended<TrackedDeviceViewModel> TrackedDevices { get; } = new DynamicData.Binding.ObservableCollectionExtended<TrackedDeviceViewModel>();
         
+        public IObservable<IReadOnlyCollection<TrackedDeviceViewModel>> TrackedDevicesObservable {get;set;}
+
         private Subject<Unit> _manualRefreshSubject = new Subject<Unit>();
         public IObservable<Unit> ManualRefreshRequested => _manualRefreshSubject.AsObservable();
 
@@ -41,69 +43,24 @@ namespace usbprison
             var transformedTrackedDevices = _settingsService.TrackedDevices.Connect()
                 .Transform(dev => new TrackedDeviceViewModel(dev))
                 .AutoRefresh(x => x.IsPluggedIn)
+                
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Publish();
+
+            transformedTrackedDevices
+                .Bind(TrackedDevices)
                 .Do(x =>
                 {
                     _manualRefreshSubject.OnNext(Unit.Default);
                     Log.Information("TrackingViewModel detected changed to tracked devices: " + x.Count);
-                }).Publish();
-
-            transformedTrackedDevices.ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(TrackedDevices)
+                })
                 .Subscribe();
 
-            //transformedTrackedDevices.GroupOnProperty(x=>x.IsPluggedIn)
-            //    .Transform(g =>
-            //    {
-            //        //g.Cache.Connect()
-            //        //    .ToCollection()
-            //        //    .Subscribe(x =>
-            //        //    {
-            //        //        Debug.WriteLine($"Got {x.Count} items");
-            //        //    });
 
-            //        DynamicData.Binding.ObservableCollectionExtended<TrackedDeviceViewModel> grouped = new  DynamicData.Binding.ObservableCollectionExtended<TrackedDeviceViewModel>();
-            //        var sub = g.Cache.Connect()
-            //        //    .ObserveOn(RxSchedulers.MainThreadScheduler)
-            //            .SortAndBind(grouped, SortExpressionComparer<TrackedDeviceViewModel>.Ascending(x => x.DisplayName))
-            //            .Subscribe();
-            //        return new GroupedItems<TrackedDeviceViewModel>(g.Key ? "Imprisoned" : "Free", grouped);
-            //    })
-            //     //   .Sort(SortExpressionComparer<TrackedDeviceViewModel>.Ascending(x=>x.DisplayName))))
-            //    .ObserveOn(RxSchedulers.MainThreadScheduler)
-            //    .Bind(out var groups)
-            //    .Subscribe();
-            //Groups = groups;
+            TrackedDevicesObservable = transformedTrackedDevices.ToCollection();
 
             transformedTrackedDevices.Connect();
-
-            //var timer = new System.Timers.Timer(5000); //every 5 seconds
-            //timer.Elapsed += async (s, e) =>
-            //{
-            //    // regular app use
-            //    await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage
-            //    {
-            //        MessageType = lib.Models.UDPMessageType.Notify,
-            //        Message = $"There are {TrackedDevices.Where(x => x.IsPluggedIn).Count()} device(s) in prison"
-            //    });
-            //    await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage 
-            //    { 
-            //        MessageType = lib.Models.UDPMessageType.List, 
-            //        PluggedDevices = TrackedDevices.Where(x => x.IsPluggedIn).Select(x=> x.Device).ToList(),
-            //        MissingDevices = TrackedDevices.Where(x => !x.IsPluggedIn).Select(x => x.Device).ToList()
-            //    });
-
-            //    // background monitoring use
-            //    await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage
-            //    {
-            //        MessageType = lib.Models.UDPMessageType.Alert,
-            //        Message = $"There are {TrackedDevices.Where(x => x.IsPluggedIn).Count()} device(s) in prison",
-            //        PluggedDevices = TrackedDevices.Where(x => x.IsPluggedIn).Select(x => x.Device).ToList(),
-            //        MissingDevices = TrackedDevices.Where(x => !x.IsPluggedIn).Select(x => x.Device).ToList()
-            //    });
-               
-
-            //};
-            //timer.Enabled = true;
+            
         }
     }
 }

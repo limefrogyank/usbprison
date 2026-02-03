@@ -20,86 +20,50 @@ namespace usbprison
     using DynamicData.Binding;
     using Serilog;
 
-    public class TrackingView : Terminal.Gui.Views.FrameView, IViewFor<TrackingViewModel>
+    public class TrackingView : ReactiveFrameView<TrackingViewModel>
     {
-        readonly CompositeDisposable _disposable = new CompositeDisposable();
-        private DeviceListView deviceListView = new DeviceListView();
-        //private ObservableCollection<string> data = new ObservableCollection<string> { "Device 1", "Device 2", "Device 3" };
-        //public ObservableCollection<DeviceModel> Devices = new ObservableCollection<DeviceModel>();
-        //        private Terminal.Gui.Views.Label label;
-        //      private Terminal.Gui.Views.Button button1;
-
-        private Terminal.Gui.Views.ListView listView = new ListView();
-
-
-
-        public TrackingViewModel? ViewModel { get; set; }
-        object IViewFor.ViewModel
-        {
-            get => ViewModel;
-            set => ViewModel = (TrackingViewModel)value;
-        }
+        private Terminal.Gui.Views.ListView _listView = new ListView();
 
         public TrackingView(TrackingViewModel viewModel)
         {
             ViewModel = viewModel;
             InitializeComponent();
 
+            this.WhenActivated(d =>
+            {
+                if (ViewModel != null)
+                {
+                    ViewModel.ManualRefreshRequested.ObserveOn(RxSchedulers.MainThreadScheduler).Subscribe(x =>
+                    {
+                        Log.Information("Manual refresh requested in TrackingView");
+                        _listView.SetNeedsDraw();
+                    }).DisposeWith(d);
+
+                    ViewModel.WhenAnyValue(x => x.TrackedDevices)
+                        .Select(x =>
+                        {
+                            var collection = new CollectionEx<TrackedDeviceViewModel>(x, s => (s.DisplayName ?? s.Device.Name) + (s.IsPluggedIn ? " (Plugged In)" : ""));
+                            return collection;
+                        })
+                        .ObserveOn(RxApp.MainThreadScheduler)
+                        .BindTo(_listView, x => x.Source)
+                        .DisposeWith(d);
+
+                    
+                }
+            });
         }
 
         private void InitializeComponent()
         {
-            var listView = new Terminal.Gui.Views.ListView();
-            listView.Width = Dim.Fill();
-            listView.Height = Dim.Fill();
-            ViewModel.WhenAnyValue(x => x.TrackedDevices)
-                .Select(x =>
-                {
-                    var collection = new CollectionEx<TrackedDeviceViewModel>(x, s => (s.DisplayName ?? s.Device.Name) + (s.IsPluggedIn ? " (Plugged In)" : ""));
-                    return collection;
-                })
-
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .BindTo(listView, x => x.Source)
-                .DisposeWith(_disposable);
-
-            ViewModel.ManualRefreshRequested.Subscribe(x =>
-            {
-                Log.Information("Manual refresh requested in TrackingView");
-                listView.SetNeedsDraw();
-            });
-
-            this.Add(listView);
+            _listView = new Terminal.Gui.Views.ListView();
+            _listView.X = 0;
+            _listView.Y = 0;
+            _listView.Width = Dim.Fill();
+            _listView.Height = Dim.Fill();
+            this.Add(_listView);
         }
+      
 
-        private void GetInfoForDevice(DeviceModel selectedDevice, FrameView rightView)
-        {
-            rightView.RemoveAll();
-            var name = new Terminal.Gui.Views.Label();
-            name.Text = selectedDevice.Name;
-            name.Y = 1;
-            var vid = new Terminal.Gui.Views.Label();
-            vid.Text = $"VID: {selectedDevice.Vid:X4}";
-            vid.Y = 2;
-            var pid = new Terminal.Gui.Views.Label();
-            pid.Text = $"PID: {selectedDevice.Pid:X4}";
-            pid.Y = 3;
-
-
-            var button = new Terminal.Gui.Views.Button();
-            button.Text = "Track Device on Main Screen";
-
-
-            rightView.Add(name, vid, pid);
-        }
-
-        private void OnRegisterDevice()
-        {
-            Terminal.Gui.Views.MessageBox.Query(Globals.App, "Register", "Register Device clicked!", "Ok");
-        }
-        private void OnUnregisterDevice()
-        {
-            Terminal.Gui.Views.MessageBox.Query(Globals.App, "Unregister", "Unregister Device clicked!", "Ok");
-        }
-    }
+   }
 }

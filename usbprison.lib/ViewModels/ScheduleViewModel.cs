@@ -15,6 +15,7 @@ namespace usbprison
         private readonly ISettingsService _settingsService;
 
         public ReadOnlyObservableCollection<DailyScheduleViewModel> DailySchedules { get; }
+        public IObservableCache<DailyScheduleViewModel, DayOfWeek> TransformedCache { get; }
 
         public ScheduleViewModel()
         {
@@ -24,6 +25,10 @@ namespace usbprison
             var list = _settingsService.DailySchedule.Connect()
                 .Transform(x => new DailyScheduleViewModel(x))
                 .Publish();
+
+            TransformedCache = list.AsObservableCache();// _settingsService.DailySchedule.Connect()
+                // .Transform(x => new DailyScheduleViewModel(x))
+                // .AsObservableCache();
 
             list.SortAndBind(out var dailySchedules, SortExpressionComparer<DailyScheduleViewModel>.Ascending(x=>x.DayOfWeek))
                 .Subscribe();

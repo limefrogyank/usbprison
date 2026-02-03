@@ -26,7 +26,7 @@ namespace usbprison
     public partial class SingleDeviceView : ReactiveFrameView<SingleDeviceViewModel>
     {
         readonly CompositeDisposable _disposable = new CompositeDisposable();
-        private DeviceListView deviceListView = new DeviceListView();
+
 
         private Terminal.Gui.Views.ListView listView = new ListView();
         private Label _vid = null!;
@@ -39,27 +39,11 @@ namespace usbprison
 
         public SingleDeviceView()
         {
-            //ViewModel = viewModel;
             InitializeComponent();
-
-            // var test = _activationFetcherCache;
-            // var test2 = AppLocator.Current
-            //            .GetServices<IActivationForViewFetcher?>()
-            //            .Aggregate((count: 0, viewFetcher: default(IActivationForViewFetcher?)), (acc, x) =>
-            //            {
-            //                var score = x?.GetAffinityForView(this.GetType()) ?? 0;
-            //                return score > acc.count ? (score, x) : acc;
-            //            });
-            // DOESN'T WORK
+            
             this.WhenActivated(disposables =>
             {
-                // Bindings go here
-                // Globals.App.Invoke(() =>
-                // {
-                //     Terminal.Gui.Views.MessageBox.Query(Globals.App, "3333", "Register 3333 clicked!", "Ok");
-                // });
                 this.WhenAnyValue(x=>x.ViewModel!.Device.Name).Select(x=> $"Device Details - {x}").BindTo(this, x=>x.Title).DisposeWith(disposables);
-                //this.Title = $"Device Details - {ViewModel!.Device.Name}";
 
                 this.WhenAnyValue(x=>x.ViewModel!.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(_name, view=> view.Text).DisposeWith(disposables);
                 this.WhenAnyValue(x=>x.ViewModel!.Device.VidHex).Select(x => "VID: " + x).BindTo(_vid, view=> view.Text).DisposeWith(disposables);
@@ -74,12 +58,6 @@ namespace usbprison
 
             });
 
-            this.Activated.Subscribe(x =>
-            {
-                Log.Information("SingleDeviceView Activated");
-            });
-
-            this.Activate();
         }
 
 

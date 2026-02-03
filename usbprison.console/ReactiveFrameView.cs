@@ -36,7 +36,9 @@ namespace usbprison
         object IViewFor.ViewModel
         {
             get => ViewModel!;
+#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
             set => ViewModel = (T)value;
+#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         }
 
         public IObservable<Unit> Activated => _initSubject.AsObservable();
@@ -66,6 +68,8 @@ namespace usbprison
 
         public ReactiveFrameView()
         {
+            this.Border?.Thickness = new Terminal.Gui.Drawing.Thickness(0);
+
             if (ViewModel is IActivatableViewModel avm)
             {
                 Activated.Subscribe(_ => avm.Activator.Activate()).DisposeWith(_compositeDisposable);
