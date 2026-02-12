@@ -24,7 +24,7 @@ namespace usbprison
 
         [ObservableAsProperty] private string _latestMessage = string.Empty;
 
-        SourceCache<MultiTrackedDeviceViewModel, string> _devicesCache = new SourceCache<MultiTrackedDeviceViewModel, string>(x=>x.Device.Id);
+        SourceCache<MultiTrackedDeviceViewModel, string> _devicesCache = new SourceCache<MultiTrackedDeviceViewModel, string>(x => x.Device.Id);
 
         //public ReadOnlyObservableCollection<SimpleTrackedDeviceViewModel> Devices { get; }
         public ReadOnlyObservableCollection<GroupedMultiTrackedViewModel> GroupedDevices { get; }
@@ -41,10 +41,20 @@ namespace usbprison
                 {
                     x.SelfClear(_devicesCache);
                 })
-                .Group(x=>x.InPrison)
-                .Transform(x=>new GroupedMultiTrackedViewModel(x.Key ? "In Prison" : "Free", x, RxSchedulers.MainThreadScheduler))
+                .Group(x =>
+                {
+                    if (x.IsLockdown)
+                    {
+                        return (x.InPrison ? "Locked Up" : "Escaped");
+                    }
+                    else
+                    {
+                        return (x.InPrison ? "Plugged-In" : "Free");
+                    }
+                })
+                .Transform(x => new GroupedMultiTrackedViewModel(x.Key, x, RxSchedulers.MainThreadScheduler))
                 .ObserveOn(RxSchedulers.MainThreadScheduler)
-                .SortAndBind(out var devices, SortExpressionComparer<GroupedMultiTrackedViewModel>.Descending(x=>x.Name))
+                .SortAndBind(out var devices, SortExpressionComparer<GroupedMultiTrackedViewModel>.Descending(x => x.Name))
                 .Subscribe();
             GroupedDevices = devices;
 
@@ -52,7 +62,7 @@ namespace usbprison
 
             _udpService.LastestDevicesReceived.ObserveOn(RxSchedulers.MainThreadScheduler).Subscribe(async devices =>
             {
-               
+
                 var lastDevices = _devicesCache.Items;
                 var currentDevices = devices.ToList();
 
@@ -89,9 +99,9 @@ namespace usbprison
                 //    Message = $"There are {Devices.Count()} device(s) in prison",
                 //    Devices = Devices.Select(x => x.Device).ToList()
                 //});
-                
+
                 //.Subscribe();
-               // });
+                // });
             });
 
 

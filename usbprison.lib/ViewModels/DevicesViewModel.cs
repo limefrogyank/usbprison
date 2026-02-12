@@ -5,59 +5,46 @@ using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.SourceGenerators;
+using System.Collections.ObjectModel;
 
 namespace usbprison
 {
     public partial class DevicesViewModel : ReactiveObject
     {
         private readonly IUSBService uSBService;
-        private readonly ISettingsService _settingsService;
+       // private readonly ISettingsService _settingsService;
 
         public ReactiveCommand<int?, Unit> ListViewSelectionChangedCommand { get; private set; }
        
 
-        public ObservableCollectionExtended<DeviceModel> Devices => uSBService.Devices;
+        public ObservableCollectionExtended<DeviceModel> Devices1 => uSBService.Devices;
 
-        [Reactive] private DeviceModel? _selectedDevice;
+        public ReadOnlyObservableCollection<SingleDeviceViewModel> Devices { get; set; }
+
+        [Reactive] private DeviceModel? _selectedDevice1;
+        [Reactive] private SingleDeviceViewModel? _selectedDevice;
 
         [ObservableAsProperty] private SingleDeviceViewModel? _singleDeviceViewModel = null;
-
-        // public DeviceModel? SelectedDevice
-        // {
-        //     get => _selectedDevice;
-        //     set => this.RaiseAndSetIfChanged(ref _selectedDevice, value);
-        // }
-
-
-
-        // public bool IsSelectedDeviceTracked
-        // {
-        //     get
-        //     {
-        //         if (SelectedDevice == null) return false;
-        //         return _settingsService.TrackedDevices.Lookup(SelectedDevice.Id ?? string.Empty).HasValue;
-        //     }
-        // }
 
         public DevicesViewModel()
         {
             var service = Splat.Locator.Current.GetService(typeof (IUSBService)) as IUSBService;
             uSBService = service!;
-            var settingsService = Splat.Locator.Current.GetService(typeof(ISettingsService)) as ISettingsService;
-            _settingsService = settingsService!;
 
-            // _isSelectedDeviceTrackedHelper = this.WhenAnyValue(x => x.SelectedDevice).Select(x =>
-            //     {
-            //         if (x == null) return false;
-            //         return _settingsService.TrackedDevices.Lookup(x.Id ?? string.Empty).HasValue;
-            //     })
-            //     .ToProperty(this, x => x.IsSelectedDeviceTracked);
+            uSBService.DeviceCache.Connect()
+                .Transform(x => new SingleDeviceViewModel(x))
+                .ObserveOn(RxSchedulers.MainThreadScheduler)
+                .Bind(out var devices)
+                .Subscribe();
+            Devices = devices;
+
 
             ListViewSelectionChangedCommand = ReactiveCommand.Create<int?>((index) =>
             {
                 if (index.HasValue)
                 {
-                    SelectedDevice = uSBService.Devices[index.Value];
+                    SelectedDevice = Devices[index.Value];
+                    //SelectedDevice = uSBService.Devices[index.Value];
                 }
                 else
                 {
@@ -67,11 +54,11 @@ namespace usbprison
 
             _singleDeviceViewModelHelper = this.WhenAnyValue(x => x.SelectedDevice)
                 .WhereNotNull()
-                .Select(x =>
-                {
-                    var viewModel = new SingleDeviceViewModel(x);
-                    return viewModel;
-                })
+                //.Select(x =>
+                //{
+                //    var viewModel = new SingleDeviceViewModel(x);
+                //    return viewModel;
+                //})
                 .ToProperty(this, x => x.SingleDeviceViewModel);
 
         }

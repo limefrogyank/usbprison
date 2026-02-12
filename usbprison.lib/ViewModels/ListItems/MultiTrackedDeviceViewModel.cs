@@ -19,6 +19,8 @@ namespace usbprison
 
         [ObservableAsProperty] private string _displayName = "";
         public string Id => Device.Id;
+
+        public bool IsLockdown { get; set; }
         public bool InPrison { get; set; }
         public string MachineId { get; set; }
 
@@ -60,10 +62,11 @@ namespace usbprison
             _update.Select(x => Observable.Timer(TimeSpan.FromSeconds(10))).Switch().Subscribe(_ => cache.Remove(this));
         }
 
-        public MultiTrackedDeviceViewModel(TrackedDeviceModel device, bool inPrison, string machineId)
+        public MultiTrackedDeviceViewModel(TrackedDeviceModel device, bool inPrison, bool isLockdown, string machineId)
         {
             Device = device;
             InPrison = inPrison;
+            IsLockdown = isLockdown;
             MachineId = machineId;
 
             _timeout = Observable.Timer(TimeSpan.FromSeconds(10));

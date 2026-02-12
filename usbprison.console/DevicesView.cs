@@ -52,12 +52,13 @@ namespace usbprison
             // this.listView.X = 2;
             // this.listView.Y = 10;
             this.listView.Visible = true;
-            ViewModel
-                .WhenAnyValue(x => x.Devices)
-                .Select(x => new Collection<DeviceModel>(x, s => s.Name))
-                .Cast<IListDataSource>()
-                .BindTo(this.listView, x => x.Source)
-                .DisposeWith(_disposable);
+            //// FIX THIS!!!!
+            //ViewModel
+            //    .WhenAnyValue(x => x.Devices)
+            //    .Select(x => new Collection<SingleDeviceViewModel>(x, s => s.Name))
+            //    .Cast<IListDataSource>()
+            //    .BindTo(this.listView, x => x.Source)
+            //    .DisposeWith(_disposable);
             //this.listView.Source  = new Collection<DeviceModel>(uSBService.Devices, s=> s.Name);
 
             this.Add(this.listView);
@@ -83,12 +84,12 @@ namespace usbprison
             ViewModel
                  .WhenAnyValue(x => x.SelectedDevice)
                  .WhereNotNull()
-                 .Select(x =>
-                 {
-                    //Log.Information($"Selected device changed in DevicesView: {x.Name}", x);
-                     var viewModel = new SingleDeviceViewModel(x);
-                        return viewModel;
-                 })
+                 //.Select(x =>
+                 //{
+                 //   //Log.Information($"Selected device changed in DevicesView: {x.Name}", x);
+                 //    var viewModel = new SingleDeviceViewModel(x);
+                 //       return viewModel;
+                 //})
                  .BindTo(singleDeviceView, x => x.ViewModel)
                  .DisposeWith(_disposable);
 

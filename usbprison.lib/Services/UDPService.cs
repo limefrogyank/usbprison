@@ -79,8 +79,8 @@ namespace usbprison.lib.Services
                                 _notificationSubject.OnNext(udpmessage.Message ?? "");
                                 break;
                             case UDPMessageType.List:
-                                var plugged = udpmessage.PluggedDevices?.Select(x => new MultiTrackedDeviceViewModel(x, true, udpmessage.SenderId)).ToList() ?? new List<MultiTrackedDeviceViewModel>();
-                                var unplugged = udpmessage.MissingDevices?.Select(x => new MultiTrackedDeviceViewModel(x, false, udpmessage.SenderId)).ToList() ?? new List<MultiTrackedDeviceViewModel>();
+                                var plugged = udpmessage.PluggedDevices?.Select(x => new MultiTrackedDeviceViewModel(x, true, udpmessage.IsLockdown, udpmessage.SenderId)).ToList() ?? new List<MultiTrackedDeviceViewModel>();
+                                var unplugged = udpmessage.MissingDevices?.Select(x => new MultiTrackedDeviceViewModel(x, false, udpmessage.IsLockdown, udpmessage.SenderId)).ToList() ?? new List<MultiTrackedDeviceViewModel>();
                                 _lastestDevicesSubject.OnNext(plugged.Concat(unplugged).ToList());
                                 break;
                             default:
@@ -167,7 +167,7 @@ namespace usbprison.lib.Services
             try
             {
                 //add on deviceinfo before sending message
-                message.SenderId = string.Join(',', _deviceInfo.Name, _deviceInfo.Version);
+                message.SenderId = _deviceInfo.SenderId;
                 byte[] data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
 
                 using var udpClient = new UdpClient() { EnableBroadcast = true, ExclusiveAddressUse=false, MulticastLoopback=false };

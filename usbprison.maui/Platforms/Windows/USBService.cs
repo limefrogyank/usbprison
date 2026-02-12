@@ -47,6 +47,7 @@ namespace usbprison
         public USBService()
         {
             _deviceCache.Connect()
+                
                 //.ObserveOn(scheduler)
                 .Bind(Devices)
                 .Subscribe();

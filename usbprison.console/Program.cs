@@ -57,6 +57,7 @@ using (Globals.App)
     var databaseService = new DatabaseService("Data.sqlite");
     Locator.CurrentMutable.RegisterConstant<DatabaseService>(databaseService);
 
+    
     var settingsService = new SettingsService(true);
     Locator.CurrentMutable.RegisterConstant<ISettingsService>(settingsService);
 
@@ -77,7 +78,12 @@ using (Globals.App)
     Splat.Locator.CurrentMutable.RegisterConstant<DebugService>(new DebugService());
     Splat.Locator.CurrentMutable.RegisterConstant<IUSBService>(new USBService());
 
-    Splat.Locator.CurrentMutable.RegisterConstant<BroadcastService>(new BroadcastService(settingsService, udpService));
+    var monitoringService = new MonitoringService(deviceInfo, settingsService, udpService, databaseService);
+    Splat.Locator.CurrentMutable.RegisterConstant<MonitoringService>(monitoringService);
+
+    var reportService = new ReportService(databaseService, monitoringService);
+    Locator.CurrentMutable.RegisterConstant<ReportService>(reportService);
+
 
     Splat.Locator.CurrentMutable.Register<SingleDeviceView>(() => new SingleDeviceView());
 

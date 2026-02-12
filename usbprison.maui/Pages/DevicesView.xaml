@@ -11,22 +11,30 @@
     Title="Live Devices"
     x:DataType="{x:Type vm:DevicesViewModel}"
     x:TypeArguments="vm:DevicesViewModel">
-    <Grid ColumnDefinitions="2*,3*" RowDefinitions="*,Auto">
-
+    <Grid ColumnDefinitions="2*,3*" RowDefinitions="Auto,*">
+        <Label
+            Grid.ColumnSpan="2"
+            Margin="5"
+            Style="{StaticResource Title2}"
+            Text="Select a device to see more info..." />
         <sflist:SfListView
+            Grid.Row="1"
             ItemsSource="{Binding Devices}"
             SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
             SelectionMode="Single">
             <sflist:SfListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="vm:SingleDeviceViewModel">
                     <StackLayout Margin="5">
                         <Label Text="{Binding Name}" />
-                        <Label FontSize="Caption" Text="{Binding Id}" />
+                        <Label Style="{StaticResource Caption2}" Text="{Binding Device.Id}" />
                     </StackLayout>
                 </DataTemplate>
             </sflist:SfListView.ItemTemplate>
         </sflist:SfListView>
-        <rxui:ViewModelViewHost Grid.Column="1" ViewModel="{Binding SingleDeviceViewModel}" />
+        <rxui:ViewModelViewHost
+            Grid.Row="1"
+            Grid.Column="1"
+            ViewModel="{Binding SingleDeviceViewModel}" />
         <!--<local:SingleDeviceView Grid.Column="1" ViewModel="{Binding SingleDeviceViewModel, Mode=OneWay}" />-->
 
     </Grid>

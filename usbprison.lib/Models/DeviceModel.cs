@@ -1,3 +1,4 @@
+using SQLite;
 using System.Text.Json.Serialization;
 
 namespace usbprison
@@ -12,7 +13,10 @@ namespace usbprison
             Pid = device.Pid;
             Vid = device.Vid;
             SerialNumber = device.SerialNumber;
+            Id = base.Id;
         }
+        [PrimaryKey] public new string Id { get; set; }
+
         public string? CustomText { get; set; }
     }
 

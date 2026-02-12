@@ -5,6 +5,8 @@ using DynamicData;
 using ReactiveUI;
 using ReactiveUI.SourceGenerators;
 using Serilog;
+using Splat;
+using usbprison.lib.Services;
 
 namespace usbprison
 {
@@ -27,7 +29,7 @@ namespace usbprison
             Device = device;
             //var debugService = Splat.Locator.Current.GetService(typeof(DebugService)) as DebugService;
             Log.Information("created device: " + this.Device.Name);
-            var service = Splat.Locator.Current.GetService(typeof (IUSBService)) as IUSBService;
+            var service = Splat.Locator.Current.GetService<IUSBService>();
             _usbService = service!;
 
             
@@ -49,8 +51,11 @@ namespace usbprison
 
             RemoveCommand = ReactiveCommand.Create(() =>
             {
-                var settingsService = Splat.Locator.Current.GetService(typeof(ISettingsService)) as ISettingsService;
-                settingsService!.TrackedDevices.Remove(Device);
+                var monitoringService = Splat.Locator.Current.GetService<MonitoringService>();
+                monitoringService!.TrackedDevicesCache.Remove(Device);
+
+                //var settingsService = Splat.Locator.Current.GetService(typeof(ISettingsService)) as ISettingsService;
+                //settingsService!.TrackedDevices.Remove(Device);
             }, outputScheduler: RxSchedulers.MainThreadScheduler);
         }
 

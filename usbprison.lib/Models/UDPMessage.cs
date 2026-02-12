@@ -21,6 +21,7 @@ namespace usbprison.lib.Models
         public string SenderId { get; set; } = string.Empty;
         public UDPMessageType MessageType { get; set; }
         public string? Message { get; set; }
+        public bool IsLockdown { get; set; }
         public List<TrackedDeviceModel>? MissingDevices { get; set; }
         public List<TrackedDeviceModel>? PluggedDevices { get; set; }
 

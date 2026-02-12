@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:data="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
     xmlns:local="clr-namespace:usbprison.maui.Pages"
+    xmlns:mi="http://www.aathifmahir.com/dotnet/2022/maui/icons"
     xmlns:rxui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
     xmlns:sflist="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
     xmlns:vm="clr-namespace:usbprison;assembly=usbprison.lib"
@@ -27,7 +28,7 @@
             </CollectionView.GroupHeaderTemplate>-->
             <sflist:SfListView.HeaderTemplate>
                 <DataTemplate>
-                    <Grid Margin="5" ColumnDefinitions="2*, *, 90">
+                    <Grid Margin="5" ColumnDefinitions="2*, *, 50">
                         <Label FontAttributes="Bold" Text="Device Name/Id" />
                         <Label
                             Grid.Column="1"
@@ -41,20 +42,27 @@
 
                     <Grid
                         Margin="5"
-                        ColumnDefinitions="2*, *, 90"
+                        ColumnDefinitions="2*, *, 50"
                         RowDefinitions="*,*">
 
                         <Label Text="{Binding DisplayName}" />
                         <Label
                             Grid.Row="1"
-                            FontSize="Caption"
+                            Style="{StaticResource Caption2}"
                             Text="{Binding Device.Id}" />
-                        <Label Grid.Column="1" Text="{Binding IsPluggedIn}" />
-                        <Button
+
+                        <Label
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            Text="{Binding IsPluggedIn}" />
+
+                        <ImageButton
                             Grid.RowSpan="2"
                             Grid.Column="2"
                             Command="{Binding RemoveCommand}"
-                            Text="Delete" />
+                            Source="{mi:Material Icon=DeleteForever,
+                                                 IconColor={AppThemeBinding Dark=White,
+                                                                            Light=Gray}}" />
                     </Grid>
 
                 </DataTemplate>

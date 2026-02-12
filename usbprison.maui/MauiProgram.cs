@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Maui;
+using MauiIcons.Material;
+using MauiIcons.SegoeFluent;
 using MauiWifiManager;
 using Microsoft.Extensions.Logging;
-
+using Microsoft.Maui.LifecycleEvents;
 using ReactiveUI;
 using ReactiveUI.Builder;
 using Serilog;
@@ -27,6 +29,8 @@ namespace usbprison.maui
                 .UseMauiCommunityToolkit()  // MAYBE NOT NEEDED
                 .ConfigureSyncfusionToolkit()  // MAYBE NOT NEEDED
                 .ConfigureSyncfusionCore()  // MAYBE NOT NEEDED
+                .UseSegoeFluentMauiIcons()
+                .UseMaterialMauiIcons()
                 .ConfigureMauiHandlers(handlers =>
                 {
 #if WINDOWS
@@ -35,6 +39,7 @@ namespace usbprison.maui
     					handler.PlatformView.SingleSelectionFollowsFocus = false;
     				});
 
+                   
 
 #endif
                 })
@@ -47,11 +52,20 @@ namespace usbprison.maui
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
-    		builder.Services.AddLogging(configure => configure.AddDebug());
+            builder.Logging.AddDebug();
+            builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
+
+#if WINDOWS
+            // // This is a really interesting way to run ASPNETCORE on the windows side of a maui app.  Was going to use it for push notifications but failed.
+            //builder.Services.AddSingleton<usbprison.aspnetcore.MessageDispatcher>();
+            //builder.Services.AddSingleton<usbprison.aspnetcore.CallbackLoggerProvider>();
+            //builder.Services.AddSingleton<WebAppHost>();
+#endif
+
             var databaseService = new DatabaseService(Path.Combine(FileSystem.CacheDirectory, "Data.sqlite"));
             Locator.CurrentMutable.RegisterConstant<DatabaseService>(databaseService);
+
 
             var settingsService = new SettingsService(true);
             Locator.CurrentMutable.RegisterConstant<ISettingsService>(settingsService);
@@ -76,8 +90,16 @@ namespace usbprison.maui
 #if WINDOWS
             var usbService = new USBService();
             Locator.CurrentMutable.RegisterConstant<IUSBService>(usbService);
-            Locator.CurrentMutable.RegisterConstant<BroadcastService>( new BroadcastService(settingsService, udpService));
-#else            
+
+            var monitoringService =new MonitoringService(deviceInfo, settingsService, udpService, databaseService);
+            Locator.CurrentMutable.RegisterConstant<MonitoringService>(monitoringService);
+
+               var reportService = new ReportService(databaseService, monitoringService);
+            Locator.CurrentMutable.RegisterConstant<ReportService>(reportService);
+
+
+
+#else
             builder.Services.AddNotifications();
 #endif
 
@@ -97,8 +119,9 @@ namespace usbprison.maui
                 locator.RegisterLazySingleton<DevicesViewModel>(()=> new DevicesViewModel());
                 locator.RegisterLazySingleton<TrackingViewModel>(() => new TrackingViewModel());
                 locator.RegisterLazySingleton<ScheduleViewModel>(() => new ScheduleViewModel());
+                locator.RegisterLazySingleton<ReportViewModel>(()=>new ReportViewModel());
 #endif
-                locator.RegisterLazySingleton<ReceiverViewModel> (()=> new ReceiverViewModel());
+                locator.RegisterLazySingleton<ReceiverViewModel>(() => new ReceiverViewModel());
                 locator.RegisterLazySingleton<LogViewModel>(() => new LogViewModel());
                 //locator.RegisterViewForViewModel<RootPage,RootViewModel>();
                 //locator.RegisterViewForViewModel<MainView, MainViewModel>(); 
@@ -114,9 +137,17 @@ namespace usbprison.maui
 #elif ANDROID
             RxSchedulers.MainThreadScheduler = HandlerScheduler.MainThreadScheduler;
 #endif
-           
+
 
             return builder.Build();
         }
+
+
+       
+
     }
+
+
+    
+
 }

@@ -73,9 +73,13 @@ namespace usbprison.maui.Platforms.Android
                 Log.Information("BackgroundService received alert notification: {0}", message.Message);
                 await SendNotificationAsync(message);
             }
+            else if (message != null && message.MessageType == UDPMessageType.OK)
+            {
+                Log.Information("BackgroundService received an OK.");
+            }
             else
             {
-                Log.Information("BackgroundService received no valid notification.");
+                Log.Information("BackgroundService didn't receive a message.");
             }
 
 #pragma warning disable CS8603 // Possible null reference return.
@@ -90,9 +94,10 @@ namespace usbprison.maui.Platforms.Android
                 Log.Error("NotificationManager is null, cannot send notification.");
                 return;
             }
-            var notification = new AndroidNotification { Ticker = "Ticker Value", UseBigTextStyle = true };
-            notification.Title = "USB Prison ALERT";
-            notification.Message = message?.Message ?? "No message received";
+            var notification = new AndroidNotification {  UseBigTextStyle = true };
+            //notification.LargeIconResourceName
+            notification.Title = $"USBPrison: {message.MissingDevices!.Count} escaped!";
+            notification.Message = "Missing: \n" + message.MissingDevices!.Aggregate("", (x, y) => x + (!string.IsNullOrEmpty(x) ? "\n" : "") + (y.CustomText ?? y.Name));
             var result = await _notificationManager.RequestRequiredAccess(notification);
             if (result != Shiny.AccessState.Available)
             {

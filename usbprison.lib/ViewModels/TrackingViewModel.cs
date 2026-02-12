@@ -18,9 +18,10 @@ namespace usbprison
 {
     public class TrackingViewModel : ReactiveObject
     {
-        private readonly IUSBService _usbService;
-        private readonly ISettingsService _settingsService;
-        private readonly UDPService _udpService;
+        //private readonly IUSBService _usbService;
+        //private readonly ISettingsService _settingsService;
+        private readonly MonitoringService _monitoringService;
+        //private readonly UDPService _udpService;
 
         public DynamicData.Binding.ObservableCollectionExtended<TrackedDeviceViewModel> TrackedDevices { get; } = new DynamicData.Binding.ObservableCollectionExtended<TrackedDeviceViewModel>();
         
@@ -33,14 +34,16 @@ namespace usbprison
 
         public TrackingViewModel()
         {
-            var service = Splat.Locator.Current.GetService(typeof (IUSBService)) as IUSBService;
-            _usbService = service!;
-            var settingsService = Splat.Locator.Current.GetService(typeof(ISettingsService)) as ISettingsService;
-            _settingsService = settingsService!;
-            var udpservice = Locator.Current.GetService<UDPService>();
-            _udpService = udpservice!;
+            //var service = Splat.Locator.Current.GetService(typeof (IUSBService)) as IUSBService;
+            //_usbService = service!;
+            //var settingsService = Splat.Locator.Current.GetService(typeof(ISettingsService)) as ISettingsService;
+            //_settingsService = settingsService!;
+            var monitoringService = Splat.Locator.Current.GetService<MonitoringService>();
+            _monitoringService = monitoringService!;
+            //var udpservice = Locator.Current.GetService<UDPService>();
+            //_udpService = udpservice!;
 
-            var transformedTrackedDevices = _settingsService.TrackedDevices.Connect()
+            var transformedTrackedDevices = _monitoringService.TrackedDevicesCache.Connect()
                 .Transform(dev => new TrackedDeviceViewModel(dev))
                 .AutoRefresh(x => x.IsPluggedIn)
                 

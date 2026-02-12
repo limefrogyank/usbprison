@@ -18,5 +18,7 @@ namespace usbprison.lib.Models
         public string Idiom { get; set; } = string.Empty;
 
         public string DeviceType { get; set; } = string.Empty;
+
+        public string SenderId => string.Join(',', this.Name, this.Version);
     }
 }

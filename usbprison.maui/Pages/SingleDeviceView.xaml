@@ -13,6 +13,10 @@
         <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
     </local:ViewBase.Resources>
     <VerticalStackLayout>
+        <Label
+            Margin="0,0,0,5"
+            Style="{StaticResource Title2}"
+            Text="Device Details" />
         <Label>
             <Label.FormattedText>
                 <FormattedString>
@@ -47,14 +51,16 @@
         </Label>
 
 
-        <Label Text="Readable Label:" />
+        <Label Margin="0,5" Text="Readable Label:" />
         <Entry Text="{Binding CustomText, Mode=TwoWay}" />
 
         <Button
+            Margin="0,5"
             Command="{Binding ActivateDeviceCommand}"
             IsVisible="{Binding IsDeviceTracked, Converter={StaticResource InvertedBoolConverter}}"
             Text="Track Device on Tracking Tab" />
         <Button
+            Margin="0,5"
             Command="{Binding DeactivateDeviceCommand}"
             IsVisible="{Binding IsDeviceTracked}"
             Text="Untrack Device" />

@@ -1,0 +1,13 @@
+C:\code\usbprison\usbprison.aspnetcore\bin\Debug\net10.0\usbprison.aspnetcore.deps.json
+C:\code\usbprison\usbprison.aspnetcore\bin\Debug\net10.0\usbprison.aspnetcore.dll
+C:\code\usbprison\usbprison.aspnetcore\bin\Debug\net10.0\usbprison.aspnetcore.pdb
+C:\code\usbprison\usbprison.aspnetcore\obj\Debug\net10.0\usbprison.aspnetcore.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\usbprison\usbprison.aspnetcore\obj\Debug\net10.0\usbprison.aspnetcore.AssemblyInfoInputs.cache
+C:\code\usbprison\usbprison.aspnetcore\obj\Debug\net10.0\usbprison.aspnetcore.AssemblyInfo.cs
+C:\code\usbprison\usbprison.aspnetcore\obj\Debug\net10.0\usbprison.aspnetcore.csproj.CoreCompileInputs.cache
+C:\code\usbprison\usbprison.aspnetcore\obj\Debug\net10.0\usbprison.aspnetcore.sourcelink.json
+C:\code\usbprison\usbprison.aspnetcore\obj\Debug\net10.0\usbprison.aspnetcore.dll
+C:\code\usbprison\usbprison.aspnetcore\obj\Debug\net10.0\refint\usbprison.aspnetcore.dll
+C:\code\usbprison\usbprison.aspnetcore\obj\Debug\net10.0\usbprison.aspnetcore.pdb
+C:\code\usbprison\usbprison.aspnetcore\obj\Debug\net10.0\ref\usbprison.aspnetcore.dll
+C:\code\usbprison\usbprison.aspnetcore\obj\Debug\net10.0\usbprison.aspnetcore.csproj.AssemblyReference.cache

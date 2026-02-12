@@ -28,7 +28,7 @@ namespace usbprison
 
         //public Func<T, T, bool> IgnoreUpdateFunction { get; set; } = (current, previous) => false;
 
-        public GroupedMultiTrackedViewModel(string name, IGroup<MultiTrackedDeviceViewModel, string, bool> data, IScheduler scheduler)
+        public GroupedMultiTrackedViewModel(string name, IGroup<MultiTrackedDeviceViewModel, string, string> data, IScheduler scheduler)
         {
             Name = name;
             //IgnoreUpdateFunction = ignoreUpdateFunction;

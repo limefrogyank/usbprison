@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "q/LIndbG9CM=",
+  "success": true,
+  "projectFilePath": "C:\\code\\usbprison\\usbprison.aspnetcore\\usbprison.aspnetcore.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\leemc\\.nuget\\packages\\lib.aspnetcore.webpush\\2.2.2\\lib.aspnetcore.webpush.2.2.2.nupkg.sha512",
+    "C:\\Users\\leemc\\.nuget\\packages\\lib.net.http.encryptedcontentencoding\\2.1.1\\lib.net.http.encryptedcontentencoding.2.1.1.nupkg.sha512",
+    "C:\\Users\\leemc\\.nuget\\packages\\lib.net.http.webpush\\3.3.1\\lib.net.http.webpush.3.3.1.nupkg.sha512",
+    "C:\\Users\\leemc\\.nuget\\packages\\sqlite-net-pcl\\1.9.172\\sqlite-net-pcl.1.9.172.nupkg.sha512",
+    "C:\\Users\\leemc\\.nuget\\packages\\sqlitepclraw.bundle_green\\2.1.2\\sqlitepclraw.bundle_green.2.1.2.nupkg.sha512",
+    "C:\\Users\\leemc\\.nuget\\packages\\sqlitepclraw.core\\2.1.2\\sqlitepclraw.core.2.1.2.nupkg.sha512",
+    "C:\\Users\\leemc\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.2\\sqlitepclraw.lib.e_sqlite3.2.1.2.nupkg.sha512",
+    "C:\\Users\\leemc\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.2\\sqlitepclraw.provider.e_sqlite3.2.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}

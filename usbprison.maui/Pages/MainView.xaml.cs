@@ -14,6 +14,7 @@ namespace usbprison.maui.Pages
             this.Children.Add(new TrackingView());
             this.Children.Add(new DevicesView());
             this.Children.Add(new ScheduleView());
+            this.Children.Add(new ReportView());
         }
     }
 }
