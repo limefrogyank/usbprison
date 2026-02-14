@@ -85,6 +85,13 @@ namespace usbprison
             scheduleTab.View.Height = Dim.Fill();
             tabView.AddTab(scheduleTab, false);
 
+             var reportTab = new Terminal.Gui.Views.Tab();
+            reportTab.DisplayText = "Reports";
+            reportTab.View = new ReportView(new ReportViewModel());
+            reportTab.View.Width = Dim.Fill();
+            reportTab.View.Height = Dim.Fill();
+            tabView.AddTab(reportTab, false);
+
             // var textview = new Terminal.Gui.Views.TextView();
             // textview.X = 0;
             // textview.Y = Pos.Bottom(tabView);

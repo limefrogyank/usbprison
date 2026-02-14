@@ -22,22 +22,10 @@ namespace usbprison
     using Serilog;
     using Splat;
 
-    public class DevicesView : Terminal.Gui.Views.FrameView, IViewFor<DevicesViewModel>
+    public class DevicesView : ReactiveFrameView<DevicesViewModel>
     {
         readonly CompositeDisposable _disposable = new CompositeDisposable();
         private Terminal.Gui.Views.ListView listView = new ListView();
-        //private FrameView rightView;
-
-#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
-        public DevicesViewModel ViewModel { get; set; }
-#pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
-        object IViewFor.ViewModel
-        {
-            get => ViewModel;
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
-            set => ViewModel = (DevicesViewModel)value;
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
-        }
         
         public DevicesView(DevicesViewModel viewModel)
         {
@@ -53,13 +41,13 @@ namespace usbprison
             // this.listView.Y = 10;
             this.listView.Visible = true;
             //// FIX THIS!!!!
-            //ViewModel
-            //    .WhenAnyValue(x => x.Devices)
-            //    .Select(x => new Collection<SingleDeviceViewModel>(x, s => s.Name))
-            //    .Cast<IListDataSource>()
-            //    .BindTo(this.listView, x => x.Source)
-            //    .DisposeWith(_disposable);
-            //this.listView.Source  = new Collection<DeviceModel>(uSBService.Devices, s=> s.Name);
+            ViewModel
+               .WhenAnyValue(x => x.Devices)
+               .Select(x => new Collection<SingleDeviceViewModel>(x, s => s.Name))
+               .Cast<IListDataSource>()
+               .BindTo(this.listView, x => x.Source)
+               .DisposeWith(_disposable);
+            //this.listView.Source  = new Collection<SingleDeviceViewModel>(ViewModel.Devices, s=> s.Name);
 
             this.Add(this.listView);
 

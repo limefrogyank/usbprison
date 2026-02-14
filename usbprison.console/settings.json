@@ -38,6 +38,7 @@
   ],
   "TrackedDevicesList": [
     {
+      "Id": "USB\\VID_18D1\u0026PID_4EE7\\37031FDHS001HT",
       "CustomText": "Lee\u0027s Pixel Fold",
       "WindowsId": "USB\\VID_18D1\u0026PID_4EE7\\37031FDHS001HT",
       "Name": "Pixel Fold",
@@ -45,10 +46,10 @@
       "Vid": 6353,
       "Mi": 0,
       "SerialNumber": "37031FDHS001HT",
-      "Guid": "9ad41135-b716-49cd-8651-9b628f5acaa8",
-      "Id": "USB\\VID_18D1\u0026PID_4EE7\\37031FDHS001HT"
+      "Guid": "9ad41135-b716-49cd-8651-9b628f5acaa8"
     },
     {
+      "Id": "USB\\VID_1949\u0026PID_05E1\\G001KT062397003L",
       "CustomText": "Aurelie\u0027s Fire Tablet",
       "WindowsId": "USB\\VID_1949\u0026PID_05E1\\G001KT062397003L",
       "Name": "Fire",
@@ -56,8 +57,7 @@
       "Vid": 6473,
       "Mi": 0,
       "SerialNumber": "G001KT062397003L",
-      "Guid": "1de9a5b2-5396-4883-a1fc-07acfdec5ee3",
-      "Id": "USB\\VID_1949\u0026PID_05E1\\G001KT062397003L"
+      "Guid": "1de9a5b2-5396-4883-a1fc-07acfdec5ee3"
     }
   ]
 }

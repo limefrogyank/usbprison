@@ -6,6 +6,7 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.SourceGenerators;
 using System.Collections.ObjectModel;
+using Serilog;
 
 namespace usbprison
 {
@@ -19,7 +20,7 @@ namespace usbprison
 
         public ObservableCollectionExtended<DeviceModel> Devices1 => uSBService.Devices;
 
-        public ReadOnlyObservableCollection<SingleDeviceViewModel> Devices { get; set; }
+        public ObservableCollectionExtended<SingleDeviceViewModel> Devices {get; private set; } = new ObservableCollectionExtended<SingleDeviceViewModel>();
 
         [Reactive] private DeviceModel? _selectedDevice1;
         [Reactive] private SingleDeviceViewModel? _selectedDevice;
@@ -34,9 +35,10 @@ namespace usbprison
             uSBService.DeviceCache.Connect()
                 .Transform(x => new SingleDeviceViewModel(x))
                 .ObserveOn(RxSchedulers.MainThreadScheduler)
-                .Bind(out var devices)
+                .OnItemAdded(x=> Log.Information("Device Added: " + x.Name))
+                .Bind(Devices)
                 .Subscribe();
-            Devices = devices;
+            //Devices = devices;
 
 
             ListViewSelectionChangedCommand = ReactiveCommand.Create<int?>((index) =>

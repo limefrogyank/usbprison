@@ -44,23 +44,27 @@ namespace usbprison.lib.Services
             _ = Task.Run(async () =>
             {
                 var trackedDevices = await _databaseService.DB.Table<TrackedDeviceModel>().ToListAsync();
-                TrackedDevicesCache.AddOrUpdate(trackedDevices);
-
+                using (TrackedDevicesCache.SuspendNotifications())
+                {
+                    TrackedDevicesCache.Clear();
+                    TrackedDevicesCache.AddOrUpdate(trackedDevices);
+                }
+                
             //now create a mechanism that updates the database for new adds and removes and updates
             //TrackedDevicesCache.CountChanged.Take(1).Subscribe(x =>
             TrackedDevicesCache.Connect()
-                .SkipInitial()
+                
                 .OnItemAdded(async x =>
                 {
-                    await _databaseService.DB.InsertAsync(x);
+                    var t = await _databaseService.DB.InsertAsync(x);
                 })
                 .OnItemRemoved(async x =>
                 {
-                    await _databaseService.DB.DeleteAsync(x);
+                    var t = await _databaseService.DB.DeleteAsync(x);
                 })
                 .OnItemUpdated(async (curr, prev) =>
                 {
-                    await _databaseService.DB.UpdateAsync(curr);
+                    var t = await _databaseService.DB.UpdateAsync(curr);
                 })
                 .Subscribe();
                     //);

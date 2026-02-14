@@ -1,5 +1,7 @@
 ﻿using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,11 +14,14 @@ namespace usbprison.lib.Services
     {
         private readonly DatabaseService _databaseService;
         private readonly MonitoringService _monitoringService;
-        
-        SourceList<PrisonLog> _logCache = new SourceList<PrisonLog>();
-        public ReadOnlyObservableCollection<GroupedDeviceLogViewModel> GroupedLogs { get; }
 
-        public ReportService(DatabaseService databaseService, MonitoringService monitoringService) 
+        SourceList<PrisonLog> _logCache = new SourceList<PrisonLog>();
+        public ReadOnlyObservableCollection<GroupedDeviceLogViewModel> GroupedLogs1 { get; }
+        public ObservableCollectionExtended<GroupedDeviceLogViewModel> GroupedLogs { get; private set; } = new ObservableCollectionExtended<GroupedDeviceLogViewModel>();
+
+        public ObservableCollectionExtended<PrisonLog> FlattenedLogs { get; private set; } = new ObservableCollectionExtended<PrisonLog>();
+
+        public ReportService(DatabaseService databaseService, MonitoringService monitoringService)
         {
             _databaseService = databaseService;
             _monitoringService = monitoringService;
@@ -25,18 +30,40 @@ namespace usbprison.lib.Services
                 .GroupOn(x => x.DeviceId)
                 .Transform(x => new GroupedDeviceLogViewModel(x))
                 .ObserveOn(RxSchedulers.MainThreadScheduler)
-                .Bind(out var groupedlogs)
+                .Bind(GroupedLogs)
                 .Subscribe();
-            GroupedLogs = groupedlogs;
+
+            _logCache.Connect()
+                .GroupOn(x=> x.DeviceId)
+                // .OnItemAdded(x =>
+                // {
+                //     Log.Information($"Log Added for Device {x.GroupKey}: {x.List.Count} items");
+                //     x.List.
+                // })
+                .TransformMany(x =>
+                {
+                    var bindingList = new System.ComponentModel.BindingList<PrisonLog>();
+                    x.List.Connect()
+                    
+                    .ObserveOn(RxSchedulers.MainThreadScheduler)
+                    .Bind(bindingList)
+                    .Subscribe();
+                    bindingList.Insert(0, new PrisonLog { DeviceId = x.GroupKey, MachineId="__GROUP__" });
+                    return bindingList;
+                })
+                .ObserveOn(RxSchedulers.MainThreadScheduler)
+                .Bind(FlattenedLogs)
+                .Subscribe();
+            //GroupedLogs = groupedlogs;
 
             _ = InitializeAsync();
 
         }
 
-        
+
 
         public async Task InitializeAsync()
-        {            
+        {
             var dic = await _databaseService.GetLogsByTrackedDeviceAsync(DateTime.Now - TimeSpan.FromDays(1));
             _monitoringService.TrackedDevicesCache.Connect()
                 .Transform(async trackedDevice =>
