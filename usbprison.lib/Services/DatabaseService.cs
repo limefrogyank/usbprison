@@ -74,6 +74,17 @@ namespace usbprison.lib.Services
             return replaySubject.AsObservable();
         }
 
+        public async Task<IObservable<PrisonLog>> GetLogsForTrackedDeviceAsync(string deviceId)
+        {
+            var list = await _db.Table<PrisonLog>().Where(x => x.DeviceId == deviceId).OrderBy(x => x.Timestamp).ToListAsync();
+
+            ReplaySubject<PrisonLog> replaySubject = new ReplaySubject<PrisonLog>();
+            foreach (var item in list)
+                replaySubject.OnNext(item);
+            replaySubject.OnCompleted();
+
+            return replaySubject.AsObservable();
+        }
         public async Task<IObservable<PrisonLog>> GetLogsForTrackedDeviceAsync(string deviceId, DateTime since)
         {
             var list = await _db.Table<PrisonLog>().Where(x => x.DeviceId == deviceId && x.Timestamp >= since).OrderBy(x => x.Timestamp).ToListAsync();

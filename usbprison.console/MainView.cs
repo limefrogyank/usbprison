@@ -49,18 +49,20 @@ namespace usbprison
 
         private void InitializeComponent()
         {
+            this.BorderStyle = LineStyle.None;
             
             var tabView = new Terminal.Gui.Views.TabView();
             tabView.X = 0;
             tabView.Y = 0;
             tabView.Width = Dim.Fill();
             tabView.Height = Dim.Fill();
+            tabView.BorderStyle = LineStyle.None;
             //tabView.Border.Thickness = new Thickness(0);
             this.Add(tabView);
 
             var mainTab = new Terminal.Gui.Views.Tab();
             //mainTab.Title = "_Main";
-            mainTab.DisplayText = "Main";
+            mainTab.DisplayText = "Tracking";
             mainTab.View = new TrackingView(new TrackingViewModel());
             mainTab.View.Width = Dim.Fill();
             mainTab.View.Height = Dim.Fill();

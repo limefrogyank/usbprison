@@ -28,11 +28,13 @@ namespace usbprison.lib.Services
             _udpService = udpService;
             _databaseService = databaseService;
 
-            TrackedDevicesCache.Connect()
-               .Transform(dev => new TrackedDeviceViewModel(dev))
+            var trackedDeviceCachePublication = TrackedDevicesCache.Connect().Publish();
+               
+               trackedDeviceCachePublication.Transform(dev => new TrackedDeviceViewModel(dev))
                .AutoRefresh(x => x.IsPluggedIn)
                .Bind(out var trackedDevices)
                .Subscribe();
+               
 
             _settingsService.DailySchedule.Connect()
                 .Transform(x => new DailyScheduleViewModel(x))
@@ -47,15 +49,16 @@ namespace usbprison.lib.Services
                 using (TrackedDevicesCache.SuspendNotifications())
                 {
                     TrackedDevicesCache.Clear();
+                    Log.Information($"Loaded {trackedDevices.Count} tracked devices from database.");
                     TrackedDevicesCache.AddOrUpdate(trackedDevices);
                 }
                 
             //now create a mechanism that updates the database for new adds and removes and updates
             //TrackedDevicesCache.CountChanged.Take(1).Subscribe(x =>
-            TrackedDevicesCache.Connect()
-                
+            trackedDeviceCachePublication                
                 .OnItemAdded(async x =>
                 {
+                    Log.Information($"Adding device with id {x.Id} to database. {x.Name}");
                     var t = await _databaseService.DB.InsertAsync(x);
                 })
                 .OnItemRemoved(async x =>
@@ -69,6 +72,8 @@ namespace usbprison.lib.Services
                 .Subscribe();
                     //);
             });
+
+            trackedDeviceCachePublication.Connect();
 
             var timer = new System.Timers.Timer(5000); //every 5 seconds
             timer.Elapsed += async (s, e) =>

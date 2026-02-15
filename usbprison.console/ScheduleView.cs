@@ -69,10 +69,18 @@ namespace usbprison
 
         private void InitializeComponent()
         {
+            var label = new FaintReverseLabel();
+            label.Text = "Set the lockdown schedule for each day of the week.  Use Tab to switch between fields and Up/Down to change the time.  Use 24-hour format!";
+            label.X = 0;
+            label.Y = 0;
+            label.Width = Dim.Fill();
+            label.Height = 2;
+            this.Add(label);
+
             _startTimeLabel = new Terminal.Gui.Views.Label()
             {
                 X = 20,
-                Y = 1,
+                Y = 3,
                 Width = 15,
                 Height = 1,
                 Text = "Start Lockdown"
@@ -81,7 +89,7 @@ namespace usbprison
             _endTimeLabel = new Terminal.Gui.Views.Label()
             {
                 X = 40,
-                Y = 1,
+                Y = 3,
                 Width = 15,
                 Height = 1,
                 Text = "End Lockdown"
@@ -93,7 +101,7 @@ namespace usbprison
                 var dayLabel = new Terminal.Gui.Views.Label()
                 {
                     X = 0,
-                    Y = i * 2 + 3,
+                    Y = i * 2 + 5,
                     Width = 15,
                     Height = 1,
                     Text = ((DayOfWeek)i).ToString()
@@ -103,7 +111,7 @@ namespace usbprison
                 var startTimeField = new TimeField()
                 {
                     X = 20,
-                    Y = i * 2 + 3,
+                    Y = i * 2 + 5,
                     Width = 15,
                     Height = 1,
                 };
@@ -113,7 +121,7 @@ namespace usbprison
                 var endTimeField = new TimeField()
                 {
                     X = 40,
-                    Y = i * 2 + 3,
+                    Y = i * 2 + 5,
                     Width = 15,
                     Height = 1,
                 };

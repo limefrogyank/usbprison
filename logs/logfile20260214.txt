@@ -1,0 +1,12 @@
+2026-02-14 09:50:53.971 -05:00 [INF] Created a new collection
+2026-02-14 09:50:54.113 -05:00 [INF] Created a new collection
+2026-02-14 09:50:54.403 -05:00 [INF] Device Added: Unknown
+2026-02-14 09:50:54.403 -05:00 [INF] Device Added: MYSTIC LIGHT 
+2026-02-14 09:50:54.403 -05:00 [INF] Device Added: ROCCAT Vulcan Pro
+2026-02-14 09:50:54.403 -05:00 [INF] Device Added: Back-UPS ES 550 FW:843.K2 .D USB FW:K2 
+2026-02-14 09:50:54.403 -05:00 [INF] Device Added: 
+2026-02-14 09:50:54.403 -05:00 [INF] Device Added: Unknown
+2026-02-14 09:50:54.403 -05:00 [INF] Device Added: Fire
+2026-02-14 09:50:54.403 -05:00 [INF] Device Added: Unknown
+2026-02-14 09:50:58.822 -05:00 [INF] Local IP Address: 192.168.50.20
+2026-02-14 09:50:59.031 -05:00 [INF] Broadcast IP Address: 192.168.50.255

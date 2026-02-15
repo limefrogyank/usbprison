@@ -1,11 +1,14 @@
 ﻿using DynamicData;
 using DynamicData.Binding;
+using DynamicData.List;
+
 using ReactiveUI;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Text;
 
 namespace usbprison.lib.Services
@@ -19,44 +22,68 @@ namespace usbprison.lib.Services
         public ReadOnlyObservableCollection<GroupedDeviceLogViewModel> GroupedLogs1 { get; }
         public ObservableCollectionExtended<GroupedDeviceLogViewModel> GroupedLogs { get; private set; } = new ObservableCollectionExtended<GroupedDeviceLogViewModel>();
 
-        public ObservableCollectionExtended<PrisonLog> FlattenedLogs { get; private set; } = new ObservableCollectionExtended<PrisonLog>();
+        public ObservableCollectionExtended<FlatDeviceLogViewModel> FlattenedLogs { get; private set; } = new ObservableCollectionExtended<FlatDeviceLogViewModel>();
+
+        private BehaviorSubject<DateTime> _dateSubject = new BehaviorSubject<DateTime>(DateTime.Now.Date);
+        public IObservable<DateTime> DateSelected => _dateSubject.AsObservable();
+
+        public void SetDate(DateTime date)
+        {
+            _dateSubject.OnNext(date);
+        }
 
         public ReportService(DatabaseService databaseService, MonitoringService monitoringService)
         {
             _databaseService = databaseService;
             _monitoringService = monitoringService;
 
-            _logCache.Connect()
+            var logCachePublication = _logCache.Connect()
+                .FilterOnObservable(x=> DateSelected.Select(date => x.Timestamp.ToLocalTime().Date == date  || x.Timestamp == DateTime.MinValue))
                 .GroupOn(x => x.DeviceId)
+                .Publish();
+
+            logCachePublication
                 .Transform(x => new GroupedDeviceLogViewModel(x))
                 .ObserveOn(RxSchedulers.MainThreadScheduler)
                 .Bind(GroupedLogs)
                 .Subscribe();
 
-            _logCache.Connect()
-                .GroupOn(x=> x.DeviceId)
-                // .OnItemAdded(x =>
-                // {
-                //     Log.Information($"Log Added for Device {x.GroupKey}: {x.List.Count} items");
-                //     x.List.
-                // })
+            logCachePublication
+                //.GroupOn(x=> x.DeviceId)
+                .OnItemAdded(x =>
+                {
+                    _logCache.Add(new PrisonLog { DeviceId = x.GroupKey, MachineId="__GROUP__" });
+                })
+                .OnItemRemoved(x =>
+                {
+                    // this never seems to run...
+                    var exiting = _logCache.Items.FirstOrDefault(existing=> existing.MachineId == "__GROUP__" && x.GroupKey == existing.DeviceId);
+                    if (exiting != null)
+                    {
+                        Log.Information("Group removed : " + x.GroupKey);
+                        _logCache.Remove(exiting);
+                    }
+                })
+                .FilterOnObservable(x => x.List.CountChanged.Select(x=> x > 1))  // this removes the group header with the group doesn't have any logs
                 .TransformMany(x =>
                 {
-                    var bindingList = new System.ComponentModel.BindingList<PrisonLog>();
-                    x.List.Connect()
-                    
-                    .ObserveOn(RxSchedulers.MainThreadScheduler)
-                    .Bind(bindingList)
-                    .Subscribe();
-                    bindingList.Insert(0, new PrisonLog { DeviceId = x.GroupKey, MachineId="__GROUP__" });
-                    return bindingList;
+                    return x.List;
                 })
+                .Transform(x => new FlatDeviceLogViewModel(x))
+                .Sort(SortExpressionComparer<FlatDeviceLogViewModel>.Ascending(x => x.Log.DeviceId).ThenByAscending(x=>x.Log.Timestamp))
                 .ObserveOn(RxSchedulers.MainThreadScheduler)
                 .Bind(FlattenedLogs)
                 .Subscribe();
-            //GroupedLogs = groupedlogs;
+
+            this.WhenAnyValue(x => x.DateSelected).Subscribe(date =>
+            {
+                
+            });
+            
 
             _ = InitializeAsync();
+            
+            logCachePublication.Connect();
 
         }
 
@@ -64,11 +91,11 @@ namespace usbprison.lib.Services
 
         public async Task InitializeAsync()
         {
-            var dic = await _databaseService.GetLogsByTrackedDeviceAsync(DateTime.Now - TimeSpan.FromDays(1));
+            //var dic = await _databaseService.GetLogsByTrackedDeviceAsync(DateTime.Now - TimeSpan.FromDays(1));
             _monitoringService.TrackedDevicesCache.Connect()
                 .Transform(async trackedDevice =>
                 {
-                    var logsObs = await _databaseService.GetLogsForTrackedDeviceAsync(trackedDevice.Id, DateTime.Now - TimeSpan.FromDays(1));
+                    var logsObs = await _databaseService.GetLogsForTrackedDeviceAsync(trackedDevice.Id);//, DateTime.Now - TimeSpan.FromDays(1));
                     return logsObs.Merge(_monitoringService.PrisonLog.Where(x => x.DeviceId == trackedDevice.Id))
                         .Scan(new PrisonLog(), (x, y) =>
                         {

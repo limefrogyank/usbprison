@@ -45,6 +45,7 @@ namespace usbprison
             {
                 this.WhenAnyValue(x=>x.ViewModel!.Device.Name).Select(x=> $"Device Details - {x}").BindTo(this, x=>x.Title).DisposeWith(disposables);
 
+                this.WhenAnyValue(x=>x.ViewModel!.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(this, view=> view.Title).DisposeWith(disposables);
                 this.WhenAnyValue(x=>x.ViewModel!.Device.Name).Select(x => "Name: " + (x != null ? x : "")).BindTo(_name, view=> view.Text).DisposeWith(disposables);
                 this.WhenAnyValue(x=>x.ViewModel!.Device.VidHex).Select(x => "VID: " + x).BindTo(_vid, view=> view.Text).DisposeWith(disposables);
                 this.WhenAnyValue(x=>x.ViewModel!.Device.PidHex).Select(x => "PID: " + x).BindTo(_pid, view=> view.Text).DisposeWith(disposables);
@@ -63,10 +64,12 @@ namespace usbprison
 
         private void InitializeComponent()
         {
+           this.Border?.Thickness = new Terminal.Gui.Drawing.Thickness(1);
            
+
             _name = new Terminal.Gui.Views.Label();
             _name.Y = 1;
-            _name.Text = "TEST";
+            _name.Text = "";
 
             _vid = new Terminal.Gui.Views.Label();
             _vid.Y = 2;

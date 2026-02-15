@@ -1,6 +1,7 @@
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
+using ReactiveUI.SourceGenerators;
 using Serilog;
 using Splat;
 using System.Collections.ObjectModel;
@@ -16,7 +17,7 @@ using usbprison.lib.Services;
 
 namespace usbprison
 {
-    public class TrackingViewModel : ReactiveObject
+    public partial class TrackingViewModel : ReactiveObject
     {
         //private readonly IUSBService _usbService;
         //private readonly ISettingsService _settingsService;
@@ -30,7 +31,8 @@ namespace usbprison
         private Subject<Unit> _manualRefreshSubject = new Subject<Unit>();
         public IObservable<Unit> ManualRefreshRequested => _manualRefreshSubject.AsObservable();
 
-        //public ReadOnlyObservableCollection<GroupedItems<TrackedDeviceViewModel, string,bool>> Groups { get; }
+        [Reactive] private TrackedDeviceViewModel? _selectedDevice;
+       
 
         public TrackingViewModel()
         {
