@@ -19,21 +19,21 @@ namespace usbprison.lib.Services
         //private readonly UdpClient _udpClient;
         //private readonly IPEndPoint _mainEndpoint;
         //private readonly IPEndPoint _backgroundEndpoint;
-        private CancellationTokenSource? _cancelTokenForListen;
+        protected CancellationTokenSource? _cancelTokenForListen;
 
-        private Subject<string> _rawMessageSubject = new Subject<string>();
+        protected Subject<string> _rawMessageSubject = new();
         public IObservable<string> RawMessageReceived => _rawMessageSubject.AsObservable();
 
-        private Subject<string> _notificationSubject = new Subject<string>();
+        protected Subject<string> _notificationSubject = new();
         public IObservable<string> NotificationReceived => _notificationSubject.AsObservable();
 
-        private Subject<List<MultiTrackedDeviceViewModel>> _lastestDevicesSubject = new Subject<List<MultiTrackedDeviceViewModel>>();
+        protected Subject<List<MultiTrackedDeviceViewModel>> _lastestDevicesSubject = new();
         public IObservable<List<MultiTrackedDeviceViewModel>> LastestDevicesReceived => _lastestDevicesSubject.AsObservable();
 
-        private GenericDeviceInfo _deviceInfo;
-        private readonly IIPService _ipService;
+        protected GenericDeviceInfo _deviceInfo;
+        protected readonly IIPService _ipService;
 
-        private IPAddress? _broadcastAddress = null;
+        protected IPAddress? _broadcastAddress = null;
 
         public UDPService(GenericDeviceInfo info, IIPService iPService)
         {
@@ -44,7 +44,12 @@ namespace usbprison.lib.Services
             //_backgroundEndpoint = new IPEndPoint(IPAddress.Broadcast, UDPService.BackgroundPort);
         }
 
-        public async Task StartListening()
+        public virtual void InitializeJS(object jsRuntime)
+        {
+
+        }
+
+        public async virtual Task StartListening()
         {
             if (_broadcastAddress == null)
             {
@@ -59,14 +64,17 @@ namespace usbprison.lib.Services
             await Task.Run(() => ReceiveLoopAsync(_cancelTokenForListen.Token));
         }
 
-        private async Task ReceiveLoopAsync(CancellationToken token)
+        protected async virtual Task ReceiveLoopAsync(CancellationToken token)
         {
+            Log.Information("Starting UDP receive loop...");
+            Log.Information($"Starting UDP receive loop on address {_broadcastAddress} port {MainPort}");
             using var udpClient = new UdpClient(new IPEndPoint(_broadcastAddress!, MainPort)) { EnableBroadcast = true };
             try
             {
                 while (!token.IsCancellationRequested)
                 {
                     var result = await udpClient.ReceiveAsync(token);
+                    Log.Information($"Received UDP message from {result.RemoteEndPoint}");
                     var message = Encoding.UTF8.GetString(result.Buffer, 0, result.Buffer.Length);
                     _rawMessageSubject.OnNext(message);
                     var udpmessage = JsonSerializer.Deserialize<UDPMessage>(message);
@@ -91,11 +99,12 @@ namespace usbprison.lib.Services
             }
             catch (ObjectDisposedException) when (token.IsCancellationRequested)
             {
-                // Socket has been closed, exit the loop
+                // Socket has been closed
+                Log.Information("UDP receive loop stopped.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Receive error: {ex.Message}");
+                Log.Error($"Receive error.  {ex.Message}");
             }
         }
 
@@ -139,10 +148,11 @@ namespace usbprison.lib.Services
             catch (ObjectDisposedException) when (token.IsCancellationRequested)
             {
                 // Socket has been closed
+                Log.Information("UDP receive loop stopped.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Receive error: {ex.Message}");
+                Log.Error($"Receive error.  {ex.Message}");
             }
             return null;
         }

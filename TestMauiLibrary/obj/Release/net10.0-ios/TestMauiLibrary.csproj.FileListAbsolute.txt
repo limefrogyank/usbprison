@@ -1,0 +1,14 @@
+C:\code\usbprison\TestMauiLibrary\bin\Release\net10.0-ios\TestMauiLibrary.dll
+C:\code\usbprison\TestMauiLibrary\bin\Release\net10.0-ios\TestMauiLibrary.pdb
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\_ProcessedBundleResourcesPath.items
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\_ProcessedContentPath.items
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\TestMauiLibrary.csproj.AssemblyReference.cache
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\TestMauiLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\TestMauiLibrary.AssemblyInfoInputs.cache
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\TestMauiLibrary.AssemblyInfo.cs
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\TestMauiLibrary.csproj.CoreCompileInputs.cache
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\TestMauiLibrary.sourcelink.json
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\TestMauiLibrary.dll
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\refint\TestMauiLibrary.dll
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\TestMauiLibrary.pdb
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-ios\ref\TestMauiLibrary.dll

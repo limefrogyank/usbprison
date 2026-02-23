@@ -19,11 +19,17 @@ namespace usbprison.maui
         //    // Start web app server.
         //    _ = Task.Run(() => webAppHost.StartAsync());
         //}
+#elif ANDROID
+        public App()
+        {
+            InitializeComponent();
+            MainActivity.StartBackgroundService();
+
+        }
 #else
         public App()
         {
             InitializeComponent();
-
         }
 #endif
 

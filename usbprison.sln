@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "usbprison.lib", "usbprison.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "usbprison.aspnetcore", "usbprison.aspnetcore\usbprison.aspnetcore.csproj", "{D8671034-59D6-442B-9BDB-14778CC36B46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMauiLibrary", "TestMauiLibrary\TestMauiLibrary.csproj", "{E84126B3-DE6D-4A7B-B392-110A3A403A13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "usbprison.blazor", "usbprison.blazor\usbprison.blazor.csproj", "{E51AE13B-C56C-4618-B47A-B47865394D44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,7 @@ Global
 		{480D17A4-CAC7-48F4-B153-EE84FAC36BB4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{480D17A4-CAC7-48F4-B153-EE84FAC36BB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{480D17A4-CAC7-48F4-B153-EE84FAC36BB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{480D17A4-CAC7-48F4-B153-EE84FAC36BB4}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{34114019-8093-41F7-810F-E9E1B81A23E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{34114019-8093-41F7-810F-E9E1B81A23E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34114019-8093-41F7-810F-E9E1B81A23E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +38,14 @@ Global
 		{D8671034-59D6-442B-9BDB-14778CC36B46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8671034-59D6-442B-9BDB-14778CC36B46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8671034-59D6-442B-9BDB-14778CC36B46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E84126B3-DE6D-4A7B-B392-110A3A403A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E84126B3-DE6D-4A7B-B392-110A3A403A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E84126B3-DE6D-4A7B-B392-110A3A403A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E84126B3-DE6D-4A7B-B392-110A3A403A13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E51AE13B-C56C-4618-B47A-B47865394D44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E51AE13B-C56C-4618-B47A-B47865394D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E51AE13B-C56C-4618-B47A-B47865394D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E51AE13B-C56C-4618-B47A-B47865394D44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

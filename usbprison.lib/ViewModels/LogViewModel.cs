@@ -3,6 +3,8 @@ using ReactiveUI.SourceGenerators;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Text;
 
 namespace usbprison
@@ -50,8 +52,13 @@ namespace usbprison
 
         private async Task ReadMoreAsync()
         {
-            if (_streamReader != null)
-                LogContents += await _streamReader.ReadToEndAsync();
+            RxSchedulers.MainThreadScheduler.ScheduleAsync(async (s, c) =>
+            {
+                if (_streamReader != null)
+                    LogContents += await _streamReader.ReadToEndAsync();
+                return Disposable.Empty;
+            });
+            
         }
     }
 }

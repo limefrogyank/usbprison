@@ -15,7 +15,7 @@ namespace usbprison
             SerialNumber = device.SerialNumber;
             Id = base.Id;
         }
-        [PrimaryKey] public new string Id { get; set; }
+        [PrimaryKey] public new string Id { get; set; } = string.Empty;
 
         public string? CustomText { get; set; }
     }

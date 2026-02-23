@@ -49,7 +49,7 @@ namespace usbprison
                 .Transform(dev => new TrackedDeviceViewModel(dev))
                 .AutoRefresh(x => x.IsPluggedIn)
                 
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .ObserveOn(RxSchedulers.MainThreadScheduler)
                 .Publish();
 
             transformedTrackedDevices

@@ -6,7 +6,6 @@
     xmlns:local="clr-namespace:usbprison.maui.Pages"
     xmlns:model="clr-namespace:usbprison;assembly=usbprison.lib"
     xmlns:rxui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
-    xmlns:sflist="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
     xmlns:vm="clr-namespace:usbprison;assembly=usbprison.lib"
     Title="Live Devices"
     x:DataType="{x:Type vm:DevicesViewModel}"
@@ -17,20 +16,20 @@
             Margin="5"
             Style="{StaticResource Title2}"
             Text="Select a device to see more info..." />
-        <sflist:SfListView
+        <CollectionView
             Grid.Row="1"
             ItemsSource="{Binding Devices}"
             SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
             SelectionMode="Single">
-            <sflist:SfListView.ItemTemplate>
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:SingleDeviceViewModel">
-                    <StackLayout Margin="5">
+                    <StackLayout Margin="5" Padding="15,5">
                         <Label Text="{Binding Name}" />
                         <Label Style="{StaticResource Caption2}" Text="{Binding Device.Id}" />
                     </StackLayout>
                 </DataTemplate>
-            </sflist:SfListView.ItemTemplate>
-        </sflist:SfListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
         <rxui:ViewModelViewHost
             Grid.Row="1"
             Grid.Column="1"

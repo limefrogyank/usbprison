@@ -14,7 +14,12 @@ namespace usbprison
 
         public async Task<IPAddress?> GetBroadcastAddress()
         {
-            var response = await CrossWifiManager.Current.GetNetworkInfo();
+            if (CrossWifiManager.Current == null)
+            {
+                Log.Error("CrossWifiManager.Current is null.  Cannot determine broadcast address.");
+                await Task.Delay(2000);
+            }
+            var response = await CrossWifiManager.Current!.GetNetworkInfo();
             if (response.Data == null || response.Data.IpAddress == 0)
             {
                 return IPAddress.Broadcast;

@@ -1,0 +1,16 @@
+C:\code\usbprison\TestMauiLibrary\bin\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.deps.json
+C:\code\usbprison\TestMauiLibrary\bin\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.dll
+C:\code\usbprison\TestMauiLibrary\bin\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.pdb
+C:\code\usbprison\TestMauiLibrary\bin\Release\net10.0-windows10.0.19041.0\Microsoft.Web.WebView2.Core.dll
+C:\code\usbprison\TestMauiLibrary\bin\Release\net10.0-windows10.0.19041.0\Microsoft.Web.WebView2.Core.Projection.dll
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.csproj.AssemblyReference.cache
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.AssemblyInfoInputs.cache
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.AssemblyInfo.cs
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.csproj.CoreCompileInputs.cache
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.sourcelink.json
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\TestMaui.D7203689.Up2Date
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.dll
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\refint\TestMauiLibrary.dll
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\TestMauiLibrary.pdb
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-windows10.0.19041.0\ref\TestMauiLibrary.dll

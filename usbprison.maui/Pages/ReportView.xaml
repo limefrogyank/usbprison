@@ -4,9 +4,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:usbprison"
+    xmlns:mi="http://www.aathifmahir.com/dotnet/2022/maui/icons"
     xmlns:model="clr-namespace:usbprison;assembly=usbprison.lib"
     xmlns:rxui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
-    xmlns:sflist="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
     xmlns:vm="clr-namespace:usbprison;assembly=usbprison.lib"
     Title="Reports"
     x:DataType="{x:Type vm:ReportViewModel}"
@@ -14,18 +14,40 @@
     <Grid RowDefinitions="Auto,Auto,*">
         <Label Style="{StaticResource Title2}" Text="Daily Log" />
         <!--<Label Grid.Row="1" Text="Test" />-->
+
+        <HorizontalStackLayout Grid.Row="1">
+            <!--<ImageButton Clicked="ImageButton_Clicked_Left" Source="{mi:Material Icon=ArrowLeft, IconColor={AppThemeBinding Dark=White, Light=Gray}}" />-->
+            <Label
+                Margin="5,0"
+                Text="Choose Date for Report:"
+                VerticalTextAlignment="Center" />
+            <DatePicker x:Name="datePicker" Grid.Row="1" />
+            <!--<ImageButton Clicked="ImageButton_Clicked_Right" Source="{mi:Material Icon=ArrowRight, IconColor={AppThemeBinding Dark=White, Light=Gray}}" />-->
+        </HorizontalStackLayout>
         <CollectionView
             Grid.Row="2"
+            EmptyView="This day has no records."
             IsGrouped="True"
             ItemsSource="{Binding GroupedLogs}">
             <CollectionView.GroupHeaderTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="vm:GroupedDeviceLogViewModel">
                     <Label
                         Padding="0,5,0,0"
                         Style="{StaticResource Title3}"
                         Text="{Binding Name}" />
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
+            <!--<CollectionView.EmptyViewTemplate>
+                <DataTemplate>
+                    <Border
+                        Background="Aqua"
+                        BackgroundColor="Red"
+                        HeightRequest="40"
+                        WidthRequest="50">
+                        <Label Text="This day has no records." />
+                    </Border>
+                </DataTemplate>
+            </CollectionView.EmptyViewTemplate>-->
             <!--<CollectionView.HeaderTemplate>
                 <DataTemplate>
                     <Grid ColumnDefinitions="*,*">
@@ -35,7 +57,7 @@
                 </DataTemplate>
             </CollectionView.HeaderTemplate>-->
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="vm:DeviceLogViewModel">
                     <Grid Padding="10,0" ColumnDefinitions="*,*">
                         <Label Text="{Binding LocalDateTime}" />
                         <Label Grid.Column="1" Text="{Binding PrisonLog.Status}" />

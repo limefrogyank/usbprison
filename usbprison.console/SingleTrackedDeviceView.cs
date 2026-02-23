@@ -42,7 +42,7 @@ namespace usbprison
                 this.WhenAnyValue(x=>x.ViewModel!.DisplayName).Select(x => "Name: " + (x != null ? x : "")).BindTo(this, view=> view.Title).DisposeWith(disposables);
                 
                 this.WhenAnyValue(x=>x.ViewModel).Select(x=>x != null).BindTo(this, view=>view._disableButton.Visible).DisposeWith(disposables);
-                _disableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x => x.ViewModel!.RemoveCommand).DisposeWith(disposables);
+                _disableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxSchedulers.MainThreadScheduler).InvokeCommand(this, x => x.ViewModel!.RemoveCommand).DisposeWith(disposables);
 
             });
 

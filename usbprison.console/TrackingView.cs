@@ -49,7 +49,7 @@ namespace usbprison
                             var collection = new CollectionEx<TrackedDeviceViewModel>(x, s => (s.DisplayName ?? s.Device.Name) + (s.IsPluggedIn ? " (Plugged In)" : ""));
                             return collection;
                         })
-                        .ObserveOn(RxApp.MainThreadScheduler)
+                        .ObserveOn(RxSchedulers.MainThreadScheduler)
                         .BindTo(_listView, x => x.Source)
                         .DisposeWith(d);
 

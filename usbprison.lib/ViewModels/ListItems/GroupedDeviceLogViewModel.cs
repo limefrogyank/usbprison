@@ -3,6 +3,7 @@ using DynamicData.Binding;
 using DynamicData.List;
 using ReactiveUI;
 using ReactiveUI.SourceGenerators;
+using Serilog;
 using Splat;
 using System;
 using System.Collections.Generic;

@@ -6,7 +6,6 @@
     xmlns:local="clr-namespace:usbprison"
     xmlns:model="clr-namespace:usbprison;assembly=usbprison.lib"
     xmlns:rxui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
-    xmlns:sflist="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
     xmlns:vm="clr-namespace:usbprison;assembly=usbprison.lib"
     Title="USB Prison"
     x:DataType="{x:Type vm:ReceiverViewModel}"
@@ -73,6 +72,10 @@
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </VerticalStackLayout>
+                            <!--<ProgressBar
+                                Grid.ColumnSpan="2"
+                                IsEnabled="True"
+                                Progress="{Binding TimeLeftDouble}" />-->
                         </Grid>
                     </Border>
                 </DataTemplate>

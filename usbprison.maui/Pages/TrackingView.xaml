@@ -3,32 +3,22 @@
     x:Class="usbprison.maui.Pages.TrackingView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:data="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
     xmlns:local="clr-namespace:usbprison.maui.Pages"
     xmlns:mi="http://www.aathifmahir.com/dotnet/2022/maui/icons"
     xmlns:rxui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
-    xmlns:sflist="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
     xmlns:vm="clr-namespace:usbprison;assembly=usbprison.lib"
     Title="Tracked Devices"
     x:DataType="{x:Type vm:TrackingViewModel}"
     x:TypeArguments="vm:TrackingViewModel">
     <Grid>
-        <sflist:SfListView ItemsSource="{Binding TrackedDevices}" SelectionMode="None">
-            <!--<sflist:SfListView.DataSource>
-                <data:DataSource>
-                    <data:DataSource.GroupDescriptors>
-                        <data:GroupDescriptor PropertyName="IsPluggedIn" />
-                    </data:DataSource.GroupDescriptors>
-                </data:DataSource>
-            </sflist:SfListView.DataSource>-->
-            <!--<CollectionView.GroupHeaderTemplate>
+        <CollectionView ItemsSource="{Binding TrackedDevices}" SelectionMode="None">
+
+            <CollectionView.HeaderTemplate>
                 <DataTemplate>
-                    <Label Style="{StaticResource Title1}" Text="{Binding Name}" />
-                </DataTemplate>
-            </CollectionView.GroupHeaderTemplate>-->
-            <sflist:SfListView.HeaderTemplate>
-                <DataTemplate>
-                    <Grid Margin="5" ColumnDefinitions="2*, *, 50">
+                    <Grid
+                        Margin="5"
+                        Padding="15,3"
+                        ColumnDefinitions="2*, *, 50">
                         <Label FontAttributes="Bold" Text="Device Name/Id" />
                         <Label
                             Grid.Column="1"
@@ -36,12 +26,13 @@
                             Text="Is Plugged In" />
                     </Grid>
                 </DataTemplate>
-            </sflist:SfListView.HeaderTemplate>
-            <sflist:SfListView.ItemTemplate>
+            </CollectionView.HeaderTemplate>
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:TrackedDeviceViewModel">
 
                     <Grid
                         Margin="5"
+                        Padding="15,3"
                         ColumnDefinitions="2*, *, 50"
                         RowDefinitions="*,*">
 
@@ -66,7 +57,7 @@
                     </Grid>
 
                 </DataTemplate>
-            </sflist:SfListView.ItemTemplate>
-        </sflist:SfListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </Grid>
 </rxui:ReactiveContentPage>

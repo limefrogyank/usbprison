@@ -48,7 +48,7 @@ namespace usbprison
 
             TrackedDevices.Connect()
                 .ToCollection()
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .ObserveOn(RxSchedulers.MainThreadScheduler)
                 .Subscribe(
                     async x =>
                     {
@@ -57,7 +57,7 @@ namespace usbprison
                 );
             DailySchedule.Connect()
                 .ToCollection()
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .ObserveOn(RxSchedulers.MainThreadScheduler)
                 .Subscribe(
                     async x =>
                     {

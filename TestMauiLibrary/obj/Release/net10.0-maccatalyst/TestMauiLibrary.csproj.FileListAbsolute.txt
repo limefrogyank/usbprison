@@ -1,0 +1,14 @@
+C:\code\usbprison\TestMauiLibrary\bin\Release\net10.0-maccatalyst\TestMauiLibrary.dll
+C:\code\usbprison\TestMauiLibrary\bin\Release\net10.0-maccatalyst\TestMauiLibrary.pdb
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\_ProcessedBundleResourcesPath.items
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\_ProcessedContentPath.items
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\TestMauiLibrary.csproj.AssemblyReference.cache
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\TestMauiLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\TestMauiLibrary.AssemblyInfoInputs.cache
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\TestMauiLibrary.AssemblyInfo.cs
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\TestMauiLibrary.csproj.CoreCompileInputs.cache
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\TestMauiLibrary.sourcelink.json
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\TestMauiLibrary.dll
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\refint\TestMauiLibrary.dll
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\TestMauiLibrary.pdb
+C:\code\usbprison\TestMauiLibrary\obj\Release\net10.0-maccatalyst\ref\TestMauiLibrary.dll

@@ -18,13 +18,12 @@ namespace usbprison.lib.Services
         private readonly DatabaseService _databaseService;
         private readonly MonitoringService _monitoringService;
 
-        SourceList<PrisonLog> _logCache = new SourceList<PrisonLog>();
-        public ReadOnlyObservableCollection<GroupedDeviceLogViewModel> GroupedLogs1 { get; }
+        SourceList<PrisonLog> _logCache = new();
         public ObservableCollectionExtended<GroupedDeviceLogViewModel> GroupedLogs { get; private set; } = new ObservableCollectionExtended<GroupedDeviceLogViewModel>();
 
         public ObservableCollectionExtended<FlatDeviceLogViewModel> FlattenedLogs { get; private set; } = new ObservableCollectionExtended<FlatDeviceLogViewModel>();
 
-        private BehaviorSubject<DateTime> _dateSubject = new BehaviorSubject<DateTime>(DateTime.Now.Date);
+        private BehaviorSubject<DateTime> _dateSubject = new(DateTime.Now.Date);
         public IObservable<DateTime> DateSelected => _dateSubject.AsObservable();
 
         public void SetDate(DateTime date)
@@ -32,7 +31,7 @@ namespace usbprison.lib.Services
             _dateSubject.OnNext(date);
         }
 
-        public ReportService(DatabaseService databaseService, MonitoringService monitoringService)
+        public ReportService(DatabaseService databaseService, MonitoringService monitoringService, bool flattenGroups = false)
         {
             _databaseService = databaseService;
             _monitoringService = monitoringService;
@@ -42,44 +41,45 @@ namespace usbprison.lib.Services
                 .GroupOn(x => x.DeviceId)
                 .Publish();
 
-            logCachePublication
+            if (!flattenGroups)
+            {
+                logCachePublication
                 .Transform(x => new GroupedDeviceLogViewModel(x))
+                .DisposeMany()
                 .ObserveOn(RxSchedulers.MainThreadScheduler)
                 .Bind(GroupedLogs)
                 .Subscribe();
-
-            logCachePublication
-                //.GroupOn(x=> x.DeviceId)
-                .OnItemAdded(x =>
-                {
-                    _logCache.Add(new PrisonLog { DeviceId = x.GroupKey, MachineId="__GROUP__" });
-                })
-                .OnItemRemoved(x =>
-                {
-                    // this never seems to run...
-                    var exiting = _logCache.Items.FirstOrDefault(existing=> existing.MachineId == "__GROUP__" && x.GroupKey == existing.DeviceId);
-                    if (exiting != null)
-                    {
-                        Log.Information("Group removed : " + x.GroupKey);
-                        _logCache.Remove(exiting);
-                    }
-                })
-                .FilterOnObservable(x => x.List.CountChanged.Select(x=> x > 1))  // this removes the group header with the group doesn't have any logs
-                .TransformMany(x =>
-                {
-                    return x.List;
-                })
-                .Transform(x => new FlatDeviceLogViewModel(x))
-                .Sort(SortExpressionComparer<FlatDeviceLogViewModel>.Ascending(x => x.Log.DeviceId).ThenByAscending(x=>x.Log.Timestamp))
-                .ObserveOn(RxSchedulers.MainThreadScheduler)
-                .Bind(FlattenedLogs)
-                .Subscribe();
-
-            this.WhenAnyValue(x => x.DateSelected).Subscribe(date =>
+            }
+            if (flattenGroups)
             {
-                
-            });
-            
+                logCachePublication
+
+                    .OnItemAdded(x =>
+                    {
+                        _logCache.Add(new PrisonLog { DeviceId = x.GroupKey, MachineId = "__GROUP__" });
+                    })
+                    .OnItemRemoved(x =>
+                    {
+                        // this never seems to run...
+                        var exiting = _logCache.Items.FirstOrDefault(existing => existing.MachineId == "__GROUP__" && x.GroupKey == existing.DeviceId);
+                        if (exiting != null)
+                        {
+                            Log.Information("Group removed : " + x.GroupKey);
+                            _logCache.Remove(exiting);
+                        }
+                    })
+                    .FilterOnObservable(x => x.List.CountChanged.Select(x => x > 1))  // this removes the group header with the group doesn't have any logs
+                    .TransformMany(x =>
+                    {
+                        return x.List;
+                    })
+                    .Transform(x => new FlatDeviceLogViewModel(x))
+                    .Sort(SortExpressionComparer<FlatDeviceLogViewModel>.Ascending(x => x.Log.DeviceId).ThenByAscending(x => x.Log.Timestamp))
+                    .ObserveOn(RxSchedulers.MainThreadScheduler)
+                    .Bind(FlattenedLogs)
+                    .Subscribe();
+            }
+
 
             _ = InitializeAsync();
             

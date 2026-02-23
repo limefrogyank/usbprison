@@ -23,7 +23,7 @@ namespace usbprison
         private DatabaseService _databaseService;
         private readonly MonitoringService _monitoringService;
 
-        [ObservableAsProperty] private string _name;
+        [ObservableAsProperty] private string _name = string.Empty;
 
         public SingleDeviceViewModel(DeviceModel device)
         {
@@ -66,12 +66,12 @@ namespace usbprison
             {
                 _monitoringService.TrackedDevicesCache.AddOrUpdate(new TrackedDeviceModel(Device) { CustomText = CustomText });
                 //_settingsService.TrackedDevices.AddOrUpdate(new TrackedDeviceModel(Device) { CustomText = CustomText});
-            }, outputScheduler: RxApp.MainThreadScheduler);
+            }, outputScheduler: RxSchedulers.MainThreadScheduler);
             DeactivateDeviceCommand = ReactiveCommand.Create(() =>
             {
                 _monitoringService.TrackedDevicesCache.RemoveKey(Device.Id);
                 //_settingsService.TrackedDevices.RemoveKey(Device.Id);
-            }, outputScheduler: RxApp.MainThreadScheduler);
+            }, outputScheduler: RxSchedulers.MainThreadScheduler);
         }
     }
 }

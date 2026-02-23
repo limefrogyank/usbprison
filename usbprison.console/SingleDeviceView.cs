@@ -53,9 +53,9 @@ namespace usbprison
                 this.WhenAnyValue(x=>x.ViewModel!.CustomText).BindTo(_custom, view=> view.Text).DisposeWith(disposables);
                                                 
                 this.WhenAnyValue(x => x.ViewModel!.IsDeviceTracked).Select(x => !x).BindTo(_enableButton, x => x.Visible).DisposeWith(disposables);
-                _enableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x =>x.ViewModel!.ActivateDeviceCommand).DisposeWith(disposables);
+                _enableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxSchedulers.MainThreadScheduler).InvokeCommand(this, x =>x.ViewModel!.ActivateDeviceCommand).DisposeWith(disposables);
                 this.WhenAnyValue(x => x.ViewModel!.IsDeviceTracked).BindTo(_disableButton, x => x.Visible).DisposeWith(disposables);
-                _disableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxApp.MainThreadScheduler).InvokeCommand(this, x => x.ViewModel!.DeactivateDeviceCommand).DisposeWith(disposables);
+                _disableButton.Events().Accepting.Select(x => Unit.Default).ObserveOn(RxSchedulers.MainThreadScheduler).InvokeCommand(this, x => x.ViewModel!.DeactivateDeviceCommand).DisposeWith(disposables);
 
             });
 

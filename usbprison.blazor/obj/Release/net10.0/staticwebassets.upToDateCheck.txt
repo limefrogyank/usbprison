@@ -1,0 +1,6 @@
+wwwroot\css\app.css
+wwwroot\icon-192.png
+wwwroot\icon-512.png
+wwwroot\manifest.webmanifest
+C:\code\usbprison\usbprison.blazor\wwwroot\css\app.css
+C:\code\usbprison\usbprison.blazor\wwwroot\manifest.webmanifest

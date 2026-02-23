@@ -20,6 +20,8 @@ namespace usbprison
 {
     public partial class ReceiverViewModel : ReactiveObject
     {
+        public static int TimeoutSeconds = 60;
+
         private readonly UDPService _udpService;
 
         [ObservableAsProperty] private string _latestMessage = string.Empty;
@@ -31,8 +33,9 @@ namespace usbprison
 
         private readonly Interaction<UDPMessage, Task> testNotification = new Interaction<UDPMessage, Task>();
         public Interaction<UDPMessage, Task> TestNotification => this.testNotification;
-        public ReceiverViewModel()
+        public ReceiverViewModel(bool delayListening = false)
         {
+            Log.Information("Initializing ReceiverViewModel...");
             var udpservice = Locator.Current.GetService<UDPService>();
             _udpService = udpservice!;
 
@@ -41,6 +44,7 @@ namespace usbprison
                 {
                     x.SelfClear(_devicesCache);
                 })
+                .ExpireAfter(x => TimeSpan.FromSeconds(TimeoutSeconds), RxSchedulers.MainThreadScheduler)
                 .Group(x =>
                 {
                     if (x.IsLockdown)
@@ -104,8 +108,19 @@ namespace usbprison
                 // });
             });
 
+                if (!delayListening)
+                {
+                    _ = _udpService.StartListening();
+                }
+        }
 
-            _ = _udpService.StartListening();
+        public void InitializeJS(object JSRuntime)
+        {
+            if (JSRuntime != null )
+            {
+                _udpService.InitializeJS(JSRuntime);
+                _ = _udpService.StartListening();
+            }
         }
     }
 }

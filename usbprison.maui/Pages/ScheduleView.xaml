@@ -5,7 +5,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:usbprison.maui.Pages"
     xmlns:model="clr-namespace:usbprison;assembly=usbprison.lib"
-    xmlns:sflist="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
     xmlns:vm="clr-namespace:usbprison;assembly=usbprison.lib"
     Title="Schedule"
     x:DataType="vm:ScheduleViewModel"

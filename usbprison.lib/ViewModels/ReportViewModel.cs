@@ -14,7 +14,6 @@ namespace usbprison
     public partial class ReportViewModel : ReactiveObject
     {
         private readonly ReportService? _reportService;
-        public ReadOnlyObservableCollection<GroupedDeviceLogViewModel> GroupedLogs1 { get; }
         public ObservableCollectionExtended<GroupedDeviceLogViewModel> GroupedLogs {get; private set; }
         public ObservableCollectionExtended<FlatDeviceLogViewModel> FlattenedLogs { get; private set; }
 

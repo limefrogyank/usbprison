@@ -23,6 +23,29 @@ Shiny.ShinyNotificationIntents.NotificationClickAction
         protected override void OnCreate(Bundle? savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            //#pragma warning disable CS8604 // Possible null reference argument.
+            //            Constraints constraints = new Constraints.Builder()
+            //        .SetRequiredNetworkType(NetworkType.Unmetered)
+            //        .Build();
+            //#pragma warning restore CS8604 // Possible null reference argument.
+
+            //#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            //            var request = PeriodicWorkRequest.Builder
+            //                .From<BackgroundService>(TimeSpan.FromMinutes(15))
+            //                .SetConstraints(constraints)
+            //                .SetInitialDelay(1, TimeUnit.Minutes)
+            //                .Build();
+            //#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            //            var workManager = WorkManager.GetInstance(this);
+            //            var op = workManager.EnqueueUniquePeriodicWork(
+            //                "BackgroundServiceWork",
+            //                ExistingPeriodicWorkPolicy.CancelAndReenqueue!,
+            //                (PeriodicWorkRequest)request
+            //            );
+        }
+
+        public static void StartBackgroundService()
+        {
 #pragma warning disable CS8604 // Possible null reference argument.
             Constraints constraints = new Constraints.Builder()
         .SetRequiredNetworkType(NetworkType.Unmetered)
@@ -36,12 +59,13 @@ Shiny.ShinyNotificationIntents.NotificationClickAction
                 .SetInitialDelay(1, TimeUnit.Minutes)
                 .Build();
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-            var workManager = WorkManager.GetInstance(this);
+            var workManager = WorkManager.GetInstance(Android.App.Application.Context);
             var op = workManager.EnqueueUniquePeriodicWork(
                 "BackgroundServiceWork",
                 ExistingPeriodicWorkPolicy.CancelAndReenqueue!,
                 (PeriodicWorkRequest)request
             );
+
         }
     }
 }

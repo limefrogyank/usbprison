@@ -45,8 +45,8 @@ using (Globals.App)
             })
             .BuildApp();
 
-    RxApp.MainThreadScheduler = TerminalScheduler.Default;
-    RxApp.TaskpoolScheduler = TaskPoolScheduler.Default;
+    RxSchedulers.MainThreadScheduler = TerminalScheduler.Default;
+    RxSchedulers.TaskpoolScheduler = TaskPoolScheduler.Default;
     //Splat.Locator.CurrentMutable.UseSerilogFullLogger();
     Splat.Locator.CurrentMutable.UnregisterAll<IActivationForViewFetcher>();
     Splat.Locator.CurrentMutable.RegisterConstant<IActivationForViewFetcher>(new ActivationForViewFetcher());
@@ -81,7 +81,7 @@ using (Globals.App)
     var monitoringService = new MonitoringService(deviceInfo, settingsService, udpService, databaseService);
     Splat.Locator.CurrentMutable.RegisterConstant<MonitoringService>(monitoringService);
 
-    var reportService = new ReportService(databaseService, monitoringService);
+    var reportService = new ReportService(databaseService, monitoringService, true);
     Locator.CurrentMutable.RegisterConstant<ReportService>(reportService);
 
 

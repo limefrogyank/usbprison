@@ -45,7 +45,7 @@ namespace usbprison
                     if (x == null) return false;
                     return x.FirstOrDefault(curr => curr.Id == this.Device.Id && curr.SerialNumber == this.Device.SerialNumber) != null;
                 })
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .ObserveOn(RxSchedulers.MainThreadScheduler)
                 .ToProperty(this, x => x.IsPluggedIn);
 
             _displayNameHelper = this.WhenAnyValue(x => x.Device.Name, x => x.Device.CustomText).Select(x => string.IsNullOrWhiteSpace(x.Item2) ? x.Item1 : x.Item2)

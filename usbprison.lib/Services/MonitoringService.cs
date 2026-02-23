@@ -16,7 +16,7 @@ namespace usbprison.lib.Services
         private readonly UDPService _udpService;
         private readonly DatabaseService _databaseService;
 
-        private Subject<PrisonLog> _prisonLogSubject = new Subject<PrisonLog>();
+        private Subject<PrisonLog> _prisonLogSubject = new();
         public IObservable<PrisonLog> PrisonLog => _prisonLogSubject.AsObservable();
 
         public SourceCache<TrackedDeviceModel, string> TrackedDevicesCache { get; } = new SourceCache<TrackedDeviceModel, string>(dev => dev.Id ?? System.Guid.NewGuid().ToString());
@@ -172,20 +172,20 @@ namespace usbprison.lib.Services
                 }
                 else
                 {
-                    // TESTING 
-                    var escapedDevices = trackedDevices.Where(x => !x.IsPluggedIn);
-                    await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage
-                    {
-                        MessageType = lib.Models.UDPMessageType.Alert,
-                        Message = $"{escapedDevices.Count()} device(s) have escaped lockdown!",
-                        PluggedDevices = trackedDevices.Where(x => x.IsPluggedIn).Select(x => x.Device).ToList(),
-                        MissingDevices = escapedDevices.Select(x => x.Device).ToList()
-                    });
-                    // not during lockdown, send OK
-                    //await _udpService.BroadcastMessageAsync(new UDPMessage
+                    //// TESTING 
+                    //var escapedDevices = trackedDevices.Where(x => !x.IsPluggedIn);
+                    //await _udpService.BroadcastMessageAsync(new lib.Models.UDPMessage
                     //{
-                    //    MessageType = UDPMessageType.OK
+                    //    MessageType = lib.Models.UDPMessageType.Alert,
+                    //    Message = $"{escapedDevices.Count()} device(s) have escaped lockdown!",
+                    //    PluggedDevices = trackedDevices.Where(x => x.IsPluggedIn).Select(x => x.Device).ToList(),
+                    //    MissingDevices = escapedDevices.Select(x => x.Device).ToList()
                     //});
+                    // not during lockdown, send OK
+                    await _udpService.BroadcastMessageAsync(new UDPMessage
+                    {
+                        MessageType = UDPMessageType.OK
+                    });
                 }
 
             };

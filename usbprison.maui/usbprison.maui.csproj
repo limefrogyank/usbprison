@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net10.0-android</TargetFrameworks>
+		<!--<TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>-->
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
 
 		<!-- Note for MacCatalyst:
@@ -20,27 +21,54 @@
 		<MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
 
 		<!-- Display name -->
-		<ApplicationTitle>usbprison.maui</ApplicationTitle>
+		<ApplicationTitle>UsbPrison</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.mcpherson.usbprison</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationVersion>2</ApplicationVersion>
 
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
-		<WindowsPackageType>None</WindowsPackageType>
+		<WindowsPackageType>MSIX</WindowsPackageType>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">23.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+		<AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+		<GenerateTestArtifacts>True</GenerateTestArtifacts>
+		<GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-android|AnyCPU'">
+	  <ApplicationTitle>UsbPrison</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationTitle>UsbPrison</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
+	  <ApplicationTitle>UsbPrison</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationTitle>UsbPrison</ApplicationTitle>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
+		<AndroidResource Include="Platforms\Android\Resources\drawable\recticon.png">
+		  <Color>#350035</Color>
+		</AndroidResource>
 		<MauiIcon Color="#350035" Include="Resources\AppIcon\appicon.svg" />
 
 		<!-- Splash Screen -->
@@ -56,32 +84,41 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AathifMahir.Maui.MauiIcons.Material" Version="5.0.0" />
-		<PackageReference Include="AathifMahir.Maui.MauiIcons.SegoeFluent" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.31" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.2" />
+	  <AndroidResource Remove="Platforms\Android\Resources\drawable\notificon.png" />
+	  <AndroidResource Remove="Platforms\Android\Resources\drawable\recticon.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+	  <MauiAsset Remove="Resources\raw\notificon.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AathifMahir.Maui.MauiIcons.Material" Version="6.0.0" />
+		<PackageReference Include="AathifMahir.Maui.MauiIcons.SegoeFluent" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.41" />
+      <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.41" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.3" />
+		<PackageReference Include="Microsoft.Maui.Core" Version="10.0.41" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="13.0.0" />
-		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.2" />
-		<PackageReference Include="ReactiveUI.Maui" Version="22.3.1" />
+		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.3" />
+		<PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.3.1" />
+		<PackageReference Include="ReactiveUI.Maui" Version="23.1.1" />
 		<PackageReference Include="ReactiveUI.SourceGenerators" Version="2.6.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Serilog" Version="4.3.0" />
+		<PackageReference Include="Serilog" Version="4.3.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
 		<PackageReference Include="Shiny.Hosting.Maui" Version="3.3.4" />
 		<PackageReference Include="Shiny.Jobs" Version="3.3.4" />
 		<PackageReference Include="Shiny.Notifications" Version="3.3.4" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
-		<PackageReference Include="Syncfusion.Maui.ListView" Version="32.2.3" />
-		<PackageReference Include="Syncfusion.Maui.Scheduler" Version="32.2.3" />
 		<PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.9" />
-		<PackageReference Include="System.Management" Version="10.0.2" />
+		<PackageReference Include="System.Management" Version="10.0.3" />
 		<PackageReference Include="WifiManager.Maui" Version="10.0.0" />
 	</ItemGroup>
 
@@ -96,7 +133,7 @@
 	</ItemGroup>-->
 	
 	<ItemGroup>
-		<ProjectReference Include="..\usbprison.lib\usbprison.lib.csproj" />
+      <ProjectReference Include="..\usbprison.lib\usbprison.lib.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -166,6 +203,16 @@
 		<PackageReference Include="Xamarin.AndroidX.Work.Runtime">
 			<Version>2.11.0.1</Version>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Update="Resources\Images\notificon.svg">
+	    <Color>#350035</Color>
+	  </MauiImage>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Platforms\Android\Resources\drawable\" />
 	</ItemGroup>
 
 </Project>
